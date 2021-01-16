@@ -1,0 +1,17 @@
+extends layout.pug 
+
+block content
+    img(class="full-bg-img" src="/assets/bg-masthead.jpg", alt="bg-image")
+    // Navigation
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-transparent
+        button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarToggler' aria-controls='navbarToggler' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+        a.navbar-brand(href='/')
+            img(src='/assets/webLogo.png' alt='Web logo' width='150' height='150')
+        #navbarToggler.collapse.navbar-collapse
+            ul.navbar-nav.mr-auto.mt-2.mt-lg-0
+                li.nav-item.active
+                    a.nav-link(href='/') Home
+                li.nav-item.active
+                    a.nav-link(href='/about') About
+                
