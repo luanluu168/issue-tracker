@@ -15,10 +15,10 @@ block content
                         a#navbarDropdown2.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
                             i.fa.fa-user-circle(aria-hidden='true').fa-lg
                         .dropdown-menu(aria-labelledby='navbarDropdown2').dropdown-menu-right
-                            a.dropdown-item(href='#') Sign-in
-                            a.dropdown-item(href='#') Sign-up
+                            a.dropdown-item(href='/signin') Sign-in
+                            a.dropdown-item(href='/signup') Sign-up
                             .dropdown-divider
-                            a.dropdown-item(href='#') 
+                            a.dropdown-item(href='/signout') Sign-out
 
         //- Intro
         div(class='container-fluid pt-3 intro-section')
@@ -31,4 +31,4 @@ block content
         //- footer
         div(class='pt-5 bg-transparent')
             div(class='footer')
-                | &copy; !{ div= year } All right reserved
+                | Copyright &copy; !{ div= year } All right reserved
