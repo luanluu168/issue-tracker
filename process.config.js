@@ -2,7 +2,12 @@ module.exports = {
     apps: [
         {
             name: "Api Server",
-            script: "./Server/apiServer.js",
+            script: "./server/apiServer.js",
+            watch: true,
+        },
+        {
+            name: "Auth Server",
+            script: "./server/authServer.js",
             watch: true,
         },
         {
