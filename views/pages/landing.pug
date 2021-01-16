@@ -1,29 +1,34 @@
 extends layout.pug
     
 block content
-    img(class="full-bg-img" src="/assets/bg-masthead.jpg", alt="bg-image")
-    // Navigation
-    nav.navbar.navbar-expand-lg.navbar-dark.bg-transparent
-        button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarToggler' aria-controls='navbarToggler' aria-expanded='false' aria-label='Toggle navigation')
-            span.navbar-toggler-icon
-        a.navbar-brand(href='/')
-            img(src='/assets/web-logo-landing.png' alt='Web logo' width='150' height='150')
-        #navbarToggler.collapse.navbar-collapse
-            ul.navbar-nav.ml-auto.mt-2.mt-lg-0
-                li.nav-item.active
-                    a.nav-link(href='/') Sign-in
-                li.nav-item.active
-                    a.nav-link(href='/about') Sign-up
+    div(class='body-wrapper')
+        img(class="full-bg-img" src="/assets/bg-masthead.jpg", alt="bg-image")
+        //- Navigation
+        nav.navbar.navbar-expand-lg.navbar-dark.bg-transparent
+            button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarToggler' aria-controls='navbarToggler' aria-expanded='false' aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            a.navbar-brand(href='/')
+                img(src='/assets/web-logo-landing.png' alt='Web logo' width='150' height='150')
+            #navbarToggler.collapse.navbar-collapse
+                ul.navbar-nav.ml-auto.mt-2.mt-lg-0
+                    li.nav-item.dropdown
+                        a#navbarDropdown2.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                            i.fa.fa-user-circle(aria-hidden='true').fa-lg
+                        .dropdown-menu(aria-labelledby='navbarDropdown2').dropdown-menu-right
+                            a.dropdown-item(href='#') Sign-in
+                            a.dropdown-item(href='#') Sign-up
+                            .dropdown-divider
+                            a.dropdown-item(href='#') 
 
-    // Intro
-    div(class='container-fluid pt-3 intro-section')
-        div(class='d-flex flex-column justify-content-center')
-            h1(class='big-heading-text') Issue Tracker
-            p(class='describe-app-text') use to track todos, bugs, and features for developers
-        div(class='d-flex flex-row justify-content-center mt-5')
-            a(class='start-button' href='/') Start Now
+        //- Intro
+        div(class='container-fluid pt-3 intro-section')
+            div(class='d-flex flex-column justify-content-center')
+                h1(class='big-heading-text') Issue Tracker
+                p(class='describe-app-text') use to track todos, bugs, and features for developers
+            div(class='d-flex flex-row justify-content-center mt-5')
+                a(class='start-button' href='/') START NOW
 
-    //- footer
-    div(class='pt-5 bg-transparent')
-        div(class='footer')
-            | &copy; !{ div= year } All right reserved
+        //- footer
+        div(class='pt-5 bg-transparent')
+            div(class='footer')
+                | &copy; !{ div= year } All right reserved

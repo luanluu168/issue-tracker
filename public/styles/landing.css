@@ -4,6 +4,11 @@ html, body {
   height: 100%;
 }
 
+.body-wrapper {
+    min-height: 100%;
+    position: relative;
+}
+
 .full-bg-img {
     position: fixed;
     top: 0;
@@ -118,3 +123,12 @@ ul.navbar-nav.ml-auto.mt-2.mt-lg-0 li a {
     }
 }
 
+.dropdown-toggle::after {
+    transition: transform 0.25s linear; 
+}
+.show.dropdown .dropdown-toggle::after {
+    transform: translateY(4px);
+}
+.dropdown-menu {
+    margin-top: 0;
+}
