@@ -35,32 +35,60 @@ ul.navbar-nav.ml-auto.mt-2.mt-lg-0 li a {
 
 .big-heading-text {
     font-weight: bold;
-    font-size: 8rem;
     text-align: center;
-    /* background: -webkit-linear-gradient(#cce, #442); */
     background: linear-gradient(to bottom, rgb(65, 65, 32),  rgb(228, 228, 235));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+@media (max-width: 850px) {
+    .big-heading-text {
+        font-size: 2.5rem;
+    }
+}
+@media (min-width: 851px) {
+    .big-heading-text {
+        font-size: 8rem;
+    }
+}
 
-.describe-text {
+.describe-app-text {
     font-weight: 500;
-    font-size: 2.3rem;
     text-align: center;
-    /* background: -webkit-linear-gradient(rgb(228, 228, 235), rgb(58, 58, 29)); */
     background: linear-gradient(to top, rgb(65, 65, 32),  rgb(228, 228, 235));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+@media (max-width: 850px) {
+    .describe-app-text {
+        font-size: 1rem;
+    }
+}
+@media (min-width: 851px) {
+    .describe-app-text {
+        font-size: 2.3rem;
+    }
 }
 
 .start-button {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.5rem;
-    min-height: 50px;
     border-radius: 25px;
     color: white;
-    min-width: 200px;
     background-color: rgb(0, 153, 255);
 }
+@media (max-width: 850px) {
+    .start-button {
+        font-size: 0.8rem;
+        min-height: 30px;
+        min-width: 150px;
+    }
+}
+@media (min-width: 851px) {
+    .start-button {
+        font-size: 1.5rem;
+        min-height: 50px;
+        min-width: 200px;
+    }
+}
+
