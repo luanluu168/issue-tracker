@@ -14,4 +14,39 @@ block content
                     a.nav-link(href='/') Home
                 li.nav-item.active
                     a.nav-link(href='/about') About
-                
+
+    // Sign in
+    div(class='container pt-3')
+        div(class='d-flex justify-content-center mb-3')
+            img(src='/assets/webLogo.png' alt='LogoImg')
+        div(class='d-flex justify-content-center')
+            div(class='card')
+                div(class='card-header bg-secondary')
+                    h3(class='text-center text-white') Sign In
+                div(class='card-body')
+                    form(name='signinForm' onsubmit='')
+                        div(class='input-group form-group')
+                            div(class='input-group-prepend')
+                            span(class='input-group-text')
+                                i(class='fas fa-user')
+                            input(type='email' class='form-control' name='userEmail' placeholder='Enter your email' required='')
+                        div(class='input-group form-group')
+                            div(class='input-group-prepend')
+                            span(class='input-group-text')
+                                i(class='fas fa-key')
+                            input(type='password' class='form-control' name='userPass' placeholder='Enter your password' required='')
+                            //- passwordstatusfield(name='userPassword')
+                        div(class='form-group row justify-content-center')
+                            input(type='submit' value='Sign-in' class='btn btn-primary rounded-pill w-75')
+
+                    p(class='cross-middle-line-text') Or
+                    div(class='text-center mb-3')
+                        a(href='/') Home
+                    p(class='cross-middle-line-text') Do not have an account yet?
+                    div(class='text-center')
+                        a(href='/signup') Sign-up
+
+    //- footer
+    div(class='pt-5 bg-transparent')
+        #footer(class='text-center text-white py-2 footer')
+            | &copy; !{ div= year } All right reserved
