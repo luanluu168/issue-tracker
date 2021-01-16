@@ -14,10 +14,13 @@ proxy.on('error', (err, req, res) => {
     res.status(500).send(`Proxy error: ${err}`);
 });
 
+let       today = new Date();
+let currentYear = today ? today.getFullYear() : 2020;
+
 // home route
 app.all('/', (req, res) => {
     console.log('gateway api is called');
-    res.render('pages/landing', {message: ''});
+    res.render('pages/landing', {year: currentYear});
 });
 
 // api server
