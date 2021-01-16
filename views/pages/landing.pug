@@ -1,0 +1,29 @@
+extends layout.pug
+    
+block content
+    img(class="full-bg-img" src="/assets/bg-masthead.jpg", alt="bg-image")
+    // Navigation
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-transparent
+        button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarToggler' aria-controls='navbarToggler' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+        a.navbar-brand(href='/')
+            img(src='/assets/webLogo.png' alt='Web logo' width='150' height='150')
+        #navbarToggler.collapse.navbar-collapse
+            ul.navbar-nav.ml-auto.mt-2.mt-lg-0
+                li.nav-item.active
+                    a.nav-link(href='/') Sign-in
+                li.nav-item.active
+                    a.nav-link(href='/about') Sign-up
+
+    // Sign in
+    div(class='container-fluid pt-3')
+        div(class='d-flex flex-column justify-content-center')
+            h1(class='big-heading-text') Issue Tracker
+            p(class='describe-text') use to track todos, bugs, feature for developers
+        div(class='d-flex flex-row justify-content-center mt-5')
+            a(class='start-button' href='/') Start Now
+
+    //- footer
+    div(class='pt-5 bg-transparent')
+        #footer(class='text-center text-white py-2 footer')
+            | &copy; !{ div= year } All right reserved

@@ -17,7 +17,7 @@ proxy.on('error', (err, req, res) => {
 // home route
 app.all('/', (req, res) => {
     console.log('gateway api is called');
-    res.render('auth/signin', {message: ''});
+    res.render('pages/landing', {message: ''});
 });
 
 // api server
