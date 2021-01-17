@@ -1,0 +1,62 @@
+html {
+    font-size: 1rem;
+}
+  
+@include media-breakpoint-up(sm) {
+    html {
+        font-size: 1.2rem;
+    }
+}
+  
+@include media-breakpoint-up(md) {
+    html {
+        font-size: 1.4rem;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    html {
+        font-size: 1.6rem;
+    }
+}
+
+.auth-button {
+    border-radius: 0.3rem;
+    border-width: 0px;
+    width: 100%;
+    padding: 0px;
+    min-height: 40px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #15cd72;
+}
+.auth-button:hover {
+    background-color: #44d88e;
+}
+
+
+.d-flex.justify-content-center .card {
+   opacity: 0.75;
+   background-color: #e2e6eb;
+}
+@media (max-width: 850px) {
+    .d-flex.justify-content-center .card {
+        padding: 15px;
+    }
+}
+@media (min-width: 851px) {
+    .d-flex.justify-content-center .card {
+        padding: 50px;
+    }
+}
+
+.input-group.form-group .input-group-text, .input-group.form-group .form-control {
+    border-width: 0px 0px 2px 0px;
+    background-color: #fff;
+}
+.input-group.form-group .input-group-text{
+    border-radius: 5px 0px 0px 5px;
+}
+.input-group.form-group .form-control {
+    border-radius: 0px 5px 5px 0px;
+}

@@ -40,10 +40,11 @@ ul.navbar-nav.ml-auto.mt-2.mt-lg-0 li a {
 
 .cross-middle-line-text {
     position: relative;
-    font-size: 20px;
+    font-size: 1rem;
     z-index: 1;
     overflow: hidden;
     text-align: center;
+    color: #5b6987;
 }
 .cross-middle-line-text:before, .cross-middle-line-text:after {
     position: absolute;
@@ -52,7 +53,7 @@ ul.navbar-nav.ml-auto.mt-2.mt-lg-0 li a {
     width: 50%;
     height: 1px;
     content: '\a0';
-    background-color: gray;
+    background-color: #5b6987;
 }
 .cross-middle-line-text:before {
     margin-left: -50%;

@@ -22,11 +22,11 @@ block content
                                 a.dropdown-item(href='/signout') Sign-out
 
         //-  Sign up
-        div(class='container pt-3')
+        div(class='container-sm pt-3 pb-5 mr-5 ml-5')
             div(class='d-flex justify-content-center')
                 div(class='card')
-                    div(class='card-header bg-secondary')
-                        h3(class='text-center text-white') Sign up
+                    div(class='lead')
+                        h3(class='text-center text-dark') Sign up
                     div(class='card-body')
                         form(name='signinForm' onsubmit='')
                             div(class='input-group form-group')
@@ -39,15 +39,15 @@ block content
                                 span(class='input-group-text')
                                     i(class='fas fa-key')
                                 input(type='password' class='form-control' name='userPass' placeholder='Enter your password' required='')
-                            div(class='form-group row justify-content-center')
-                                input(type='submit' value='Sign-in' class='btn btn-primary rounded-pill w-75')
+                            div(class='input-group form-group')
+                                button(type='submit' name="submit" class='auth-button') Sign-up &#8594;
 
-                        p(class='cross-middle-line-text') Or
+                        p(class='cross-middle-line-text') or sign-up with
                         div(class='text-center mb-3')
-                            a(href='/') Home
-                        p(class='cross-middle-line-text') Do not have an account yet?
+                            a(href='/') Google
+                        p(class='cross-middle-line-text') already have an account?
                         div(class='text-center')
-                            a(href='/signup') Sign-up
+                            a(href='/auth/server/signin') Sign-in
 
         //- footer
         div(class='pt-5 bg-transparent')
