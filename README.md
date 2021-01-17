@@ -6,11 +6,11 @@
 ```
 npm i
 ```
-#### 2. Install pm2
+#### 2. Install pm2 if not do it yet
 ```
 npm install pm2 -g
 ```
-#### 3.
+#### 3. Run the app
 ```
 npm start
 ```
@@ -29,4 +29,4 @@ pm2 kill
 ```
 
 ## Frontend: PUG
-## Backend: Express
+## Microservices in backend: Express Redis
