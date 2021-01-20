@@ -16,8 +16,8 @@ block content
                             i.fa.fa-user-circle(aria-hidden='true').fa-lg
                         .dropdown-menu(aria-labelledby='navbarDropdown2').dropdown-menu-right
                             if !isLoggedin
-                                a.dropdown-item(href='/signin') Sign-in
-                                a.dropdown-item(href='/signup') Sign-up
+                                a.dropdown-item(href='/auth/server/signin') Sign-in
+                                a.dropdown-item(href='/auth/server/signup') Sign-up
                             if isLoggedin
                                 a.dropdown-item(href='/signout') Sign-out
 
@@ -42,9 +42,11 @@ block content
                             div(class='input-group form-group')
                                 button(type='submit' name="submit" class='auth-button') Sign-up &#8594;
 
-                        p(class='cross-middle-line-text') or sign-up with
+                        p(class='cross-middle-line-text') or
                         div(class='text-center mb-3')
-                            a(href='/') Google
+                            a(class='google-auth-button' href='/users/googleauth' role='button')
+                                img(class='google-auth-img' alt='google-auth-img' src='/assets/Google__G__Logo.svg.webp')
+                                div(class='ml-2') Sign-in with Google
                         p(class='cross-middle-line-text') already have an account?
                         div(class='text-center')
                             a(href='/auth/server/signin') Sign-in

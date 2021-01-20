@@ -16,8 +16,8 @@ block content
                             i.fa.fa-user-circle(aria-hidden='true').fa-lg
                         .dropdown-menu(aria-labelledby='navbarDropdown2').dropdown-menu-right
                             if !isLoggedin
-                                a.dropdown-item(href='/signin') Sign-in
-                                a.dropdown-item(href='/signup') Sign-up
+                                a.dropdown-item(href='/auth/server/signin') Sign-in
+                                a.dropdown-item(href='/auth/server/signup') Sign-up
                             if isLoggedin
                                 a.dropdown-item(href='/signout') Sign-out
 

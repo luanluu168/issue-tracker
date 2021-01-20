@@ -111,15 +111,15 @@ ul.navbar-nav.ml-auto.mt-2.mt-lg-0 li a {
 }
 @media (max-width: 850px) {
     .start-button {
-        font-size: 0.8rem;
-        min-height: 30px;
+        font-size: 1rem;
+        min-height: 50px;
         min-width: 150px;
     }
 }
 @media (min-width: 851px) {
     .start-button {
         font-size: 1.5rem;
-        min-height: 50px;
+        min-height: 70px;
         min-width: 200px;
     }
 }
