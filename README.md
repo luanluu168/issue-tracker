@@ -12,7 +12,7 @@ npm install pm2 -g
 ```
 #### 3. Run the app
 ```
-npm start
+npm test
 ```
 #### Or
 ```
