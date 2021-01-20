@@ -2,6 +2,7 @@ const express = require('express');
 const     app = express();
 const    PORT = 4002;
 
+app.set('views', '../views');
 app.set('view engine', 'pug');
 
 let       today = new Date();
