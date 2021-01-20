@@ -1,13 +1,18 @@
 {
   "name": "issue-tracker",
   "version": "1.0.0",
-  "description": "",
+  "description": "use to track bugs, features, and more",
   "main": "gateway.js",
-  "proxy": "http://localhost:4000",
+  "engines": {
+    "npm": "6.14.6",
+    "node": "12.18.4"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "pm2 start process.config.js",
-    "stop": "pm2 kill"
+    "dev-start": "pm2 start process.config.js",
+    "dev-stop": "pm2 kill",
+    "start": "concurrently \"node gateway.js\" \"cd server && PORT=4001 node apiServer.js\" \"cd server && PORT=4002 node authServer.js\"",
+    "heroku-postbuild": "npm install pm2 -g && pm2 start process.config.js"
   },
   "author": "luan",
   "license": "ISC",
