@@ -2,7 +2,7 @@
   "name": "issue-tracker",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "gateway.js",
   "proxy": "http://localhost:4000",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
