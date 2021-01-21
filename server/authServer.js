@@ -2,7 +2,7 @@ const express = require('express');
 const     app = express();
 const    PORT = 4002;
 
-app.set('views', '../views');
+app.set('views', 'views');      // TODO: fix this views path in heroku app or mv to a new frontend server
 app.set('view engine', 'pug');
 
 let       today = new Date();
