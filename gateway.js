@@ -1,3 +1,4 @@
+require('dotenv').config();
 const   express = require('express');
 const      path = require('path');
 const httpProxy = require('http-proxy');
@@ -27,14 +28,14 @@ app.all('/', (req, res) => {
 // api server
 app.all('/api/server*', (req, res) => {
     proxy.web(req, res, {
-        target: 'http://localhost:4001'
+        target: `http://localhost:${process.env.API_SERVER_PORT}`
     });
 });
 
 // auth server
 app.all('/auth/server*', (req, res) => {
     proxy.web(req, res, {
-        target: 'http://localhost:4002'
+        target: `http://localhost:${process.env.AUTH_SERVER_PORT}`
     });
 });
 
