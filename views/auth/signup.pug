@@ -1,57 +1,32 @@
 extends layout.pug 
 
 block content
-    div(class='body-wrapper')
-        img(class="full-bg-img" src="/assets/bg-masthead.jpg", alt="bg-image")
-        //- Navigation
-        nav.navbar.navbar-expand-lg.navbar-dark.bg-transparent
-            button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarToggler' aria-controls='navbarToggler' aria-expanded='false' aria-label='Toggle navigation')
-                span.navbar-toggler-icon
-            a.navbar-brand(href='/')
-                img(src='/assets/web-logo-landing.png' alt='Web logo' width='150' height='150')
-            #navbarToggler.collapse.navbar-collapse
-                ul.navbar-nav.ml-auto.mt-2.mt-lg-0
-                    li.nav-item.dropdown
-                        a#navbarDropdown2.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
-                            i.fa.fa-user-circle(aria-hidden='true').fa-lg
-                        .dropdown-menu(aria-labelledby='navbarDropdown2').dropdown-menu-right
-                            if !isLoggedin
-                                a.dropdown-item(href='/auth/server/signin') Sign-in
-                                a.dropdown-item(href='/auth/server/signup') Sign-up
-                            if isLoggedin
-                                a.dropdown-item(href='/signout') Sign-out
+    //-  Sign up
+    div(class='container-sm pt-3 pb-5 mr-5 ml-5')
+        div(class='d-flex justify-content-center')
+            div(class='card')
+                div(class='lead')
+                    h3(class='text-center text-dark') Sign up
+                div(class='card-body')
+                    form(name='signinForm' onsubmit='')
+                        div(class='input-group form-group')
+                            div(class='input-group-prepend')
+                            span(class='input-group-text')
+                                i(class='fas fa-user')
+                            input(type='email' class='form-control' name='userEmail' placeholder='Enter your email' required='')
+                        div(class='input-group form-group')
+                            div(class='input-group-prepend')
+                            span(class='input-group-text')
+                                i(class='fas fa-key')
+                            input(type='password' class='form-control' name='userPass' placeholder='Enter your password' required='')
+                        div(class='input-group form-group')
+                            button(type='submit' name="submit" class='auth-button') Sign-up &#8594;
 
-        //-  Sign up
-        div(class='container-sm pt-3 pb-5 mr-5 ml-5')
-            div(class='d-flex justify-content-center')
-                div(class='card')
-                    div(class='lead')
-                        h3(class='text-center text-dark') Sign up
-                    div(class='card-body')
-                        form(name='signinForm' onsubmit='')
-                            div(class='input-group form-group')
-                                div(class='input-group-prepend')
-                                span(class='input-group-text')
-                                    i(class='fas fa-user')
-                                input(type='email' class='form-control' name='userEmail' placeholder='Enter your email' required='')
-                            div(class='input-group form-group')
-                                div(class='input-group-prepend')
-                                span(class='input-group-text')
-                                    i(class='fas fa-key')
-                                input(type='password' class='form-control' name='userPass' placeholder='Enter your password' required='')
-                            div(class='input-group form-group')
-                                button(type='submit' name="submit" class='auth-button') Sign-up &#8594;
-
-                        p(class='cross-middle-line-text') or
-                        div(class='text-center mb-3')
-                            a(class='google-auth-button' href='/users/googleauth' role='button')
-                                img(class='google-auth-img' alt='google-auth-img' src='/assets/Google__G__Logo.svg.webp')
-                                div(class='ml-2') Sign-in with Google
-                        p(class='cross-middle-line-text') already have an account?
-                        div(class='text-center')
-                            a(href='/auth/server/signin') Sign-in
-
-        //- footer
-        div(class='pt-5 bg-transparent')
-            div(class='footer')
-                | Copyright &copy; !{ div= year } All right reserved
+                    p(class='cross-middle-line-text') or
+                    div(class='text-center mb-3')
+                        a(class='google-auth-button' href='/users/googleauth' role='button')
+                            img(class='google-auth-img' alt='google-auth-img' src='/assets/Google__G__Logo.svg.webp')
+                            div(class='ml-2') Sign-up with Google
+                    p(class='cross-middle-line-text') already have an account?
+                    div(class='text-center')
+                        a(href='/auth/server/signin') Sign-in
