@@ -24,14 +24,9 @@ block content
 
                     p(class='cross-middle-line-text') or
                     div(class='text-center mb-3')
-                        //- button(class='btn btn-social btn-google' href='/') Google
-                        //- .btn.btn-social.btn-google.bg-primary
-                        //-     span.fab.fa-google
-                        //-     |  Sign in with Google
-
-                        a(class='google-auth-button' href='/users/googleauth' role='button')
+                        a(class='google-auth-button' href='/auth/server/login/google' role='button')
                             img(class='google-auth-img' alt='google-auth-img' src='/assets/Google__G__Logo.svg.webp')
                             div(class='ml-2') Sign-in with Google
-                    p(class='cross-middle-line-text') do not have an account yet?
+                    p(class='cross-middle-line-text') not have an account yet?
                     div(class='text-center')
                         a(href='/auth/server/signup') Sign-up
