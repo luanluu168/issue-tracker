@@ -61,7 +61,7 @@ ul.navbar-nav.ml-auto.mt-2.mt-lg-0 li a {
 }
 
 .big-heading-text {
-    font-weight: bold;
+    font-weight: 900;
     text-align: center;
     background: linear-gradient(to bottom, rgb(65, 65, 32),  rgb(228, 228, 235));
     -webkit-background-clip: text;
@@ -69,7 +69,7 @@ ul.navbar-nav.ml-auto.mt-2.mt-lg-0 li a {
 }
 @media (max-width: 850px) {
     .big-heading-text {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
 }
 @media (min-width: 851px) {
@@ -81,18 +81,18 @@ ul.navbar-nav.ml-auto.mt-2.mt-lg-0 li a {
 .describe-app-text {
     font-weight: 500;
     text-align: center;
-    background: linear-gradient(to top, rgb(65, 65, 32),  rgb(228, 228, 235));
+    background: linear-gradient(to right, rgb(65, 65, 32),  rgb(228, 228, 235));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 @media (max-width: 850px) {
     .describe-app-text {
-        font-size: 1rem;
+        font-size: 1.7rem;
     }
 }
 @media (min-width: 851px) {
     .describe-app-text {
-        font-size: 2.3rem;
+        font-size: 4rem;
     }
 }
 
