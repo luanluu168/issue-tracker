@@ -4,6 +4,7 @@ const      express = require('express');
 const dbConnection = require('../database/db');
 const { findUser } = require('../database/users')
 const       bcrypt = require('bcrypt');
+const       morgan = require('morgan');
 const    NUM_SALTS = 8;
 const cookieParser = require('cookie-parser');
 const      session = require('express-session');
@@ -49,6 +50,7 @@ app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(morgan('dev'));
 
 (process.env.PRODUCTION === 'NO') ? app.set('views', 'views') : app.set('views', '../views');
 app.set('view engine', 'pug');
@@ -91,7 +93,8 @@ app.post('/auth/server/signin/query', (req, res) => {
         console.log(`Error signin @ authServer: ${e}`);
         if (e.code == '404')
             return res.render('auth/signin', { year: currentYear, actionType: 'signin', status: e.status, error: 'Email is not existed' });
-        res.render('pages/error', { year: currentYear, actionType: 'signin', status: e.status, error: e });
+        let strError = JSON.stringify(e);
+        res.render('pages/error', { year: currentYear, actionType: 'signin', status: e.status, error: strError });
     });
 });
 
