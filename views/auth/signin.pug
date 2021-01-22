@@ -3,12 +3,14 @@ extends layout.pug
 block content
     //- Sign in
     div(class='container-sm pt-3 pb-5 mr-5 ml-5')
-        div(class='d-flex justify-content-center')
+        if error
+            h4.d-flex.justify-content-center.alert.alert-secondary.font-weight-bold.text-danger !{error}
+        div(class='d-flex justify-content-center align-items-center')
             div(class='card')
-                div(class='')
+                div
                     h3(class='text-center') Sign In
                 div(class='card-body')
-                    form(name='signinForm' onsubmit='')
+                    form(name='signinForm' action='/auth/server/signin/query' method='POST')
                         div(class='input-group form-group')
                             div(class='input-group-prepend')
                             span(class='input-group-text')
@@ -18,13 +20,13 @@ block content
                             div(class='input-group-prepend')
                             span(class='input-group-text')
                                 i(class='fas fa-key')
-                            input(type='password' class='form-control' name='userPass' placeholder='Enter your password' required='')
+                            input(type='password' class='form-control' name='userPassword' placeholder='Enter your password' required='')
                         div(class='input-group form-group')
                             button(type='submit' name="submit" class='auth-button') Sign-in &#8594;
 
                     p(class='cross-middle-line-text') or
                     div(class='text-center mb-3')
-                        a(class='google-auth-button' href='/auth/server/login/google' role='button')
+                        a(class='google-auth-button' href='/auth/server/auth/google' role='button')
                             img(class='google-auth-img' alt='google-auth-img' src='/assets/Google__G__Logo.svg.webp')
                             div(class='ml-2') Sign-in with Google
                     p(class='cross-middle-line-text') not have an account yet?
