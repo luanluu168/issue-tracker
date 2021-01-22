@@ -9,13 +9,12 @@ const cookieParser = require('cookie-parser');
 const      session = require('express-session');
 const     passport = require('passport');
 const { Strategy } = require('passport-google-oauth20');
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, SESSION_SECRET } = process.env;
-const    PORT = process.env.AUTH_SERVER_PORT || 4002;
-const     app = express();
+const         PORT = process.env.AUTH_SERVER_PORT || 4002;
+const          app = express();
 
 passport.use(new Strategy({
-        clientID: GOOGLE_CLIENT_ID,
-        clientSecret: GOOGLE_CLIENT_SECRET,
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: '/auth/server/auth/google/done'
     },
     (accessToken, refreshToken, profile, callback) => {
@@ -40,7 +39,7 @@ passport.deserializeUser((object, callback) => {
 });
 
 app.use(session({ 
-    secret: SESSION_SECRET,
+    secret: process.env.SESSION_SECRET,
     resave: true, 
     saveUninitialized: true,
     cookie: { maxAge: 2 * 60 * 60 * 1000 }
@@ -54,22 +53,21 @@ app.use(cookieParser());
 (process.env.PRODUCTION === 'NO') ? app.set('views', 'views') : app.set('views', '../views');
 app.set('view engine', 'pug');
 
-let       today = new Date();
-let currentYear = today ? today.getFullYear() : 2020;
+const       today = new Date();
+const currentYear = today ? today.getFullYear() : 2020;
 
 app.get('/auth/server/signin', (req, res) => {
     res.render('auth/signin', { year: currentYear, actionType: 'signin', error: '' });
 });
 app.post('/auth/server/signin/query', (req, res) => {
-    let    loginEmail = `'${req.body.userEmail}'`;
-    let loginPassword = `'${req.body.userPassword}'`;
-    let query = `SELECT id, email, password, role FROM "Users" WHERE email=${loginEmail}`;
+    const    loginEmail = `'${req.body.userEmail}'`;
+    const loginPassword = `'${req.body.userPassword}'`;
+    const         query = `SELECT id, email, password, role FROM "Users" WHERE email=${loginEmail}`;
     console.log(`query: ${query}`);
-    let body = JSON.stringify(req.body);
 
-    let promise = findUser(query);
+    const promise = findUser(query);
     promise.then((data) => {
-        let userPassword = `'${data.password}'`;
+        const       userPassword = `'${data.password}'`;
         const isValidatePassword = bcrypt.compareSync(loginPassword, userPassword);
         // users can be created directly in PG or through the app that use bcrypt, so need to check 2 cases: with and without bcrypt
         if ((data.role == 'user' || data.role == 'admin') && (userPassword == loginPassword || isValidatePassword)) {
@@ -83,7 +81,7 @@ app.post('/auth/server/signin/query', (req, res) => {
             };
             res.cookie("userLoginInfo", 
                         JSON.stringify(req.session.User), 
-                        { maxAge: 2 * 60 * 60 * 100 });
+                        { maxAge: 2 * 60 * 60 * 1000 });
             res.render('pages/home', { year: currentYear, actionType: 'signin', status: 'success', error: 'None' });
         } else {
             res.render('auth/signin', { year: currentYear, actionType: 'signin', status: 'fail', error: 'Password is wrong' });
@@ -93,7 +91,7 @@ app.post('/auth/server/signin/query', (req, res) => {
         console.log(`Error signin @ authServer: ${e}`);
         if (e.code == '404')
             return res.render('auth/signin', { year: currentYear, actionType: 'signin', status: e.status, error: 'Email is not existed' });
-            res.render('pages/error', { year: currentYear, actionType: 'signin', status: e.status, error: e });
+        res.render('pages/error', { year: currentYear, actionType: 'signin', status: e.status, error: e });
     });
 });
 
