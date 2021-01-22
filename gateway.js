@@ -3,7 +3,7 @@ const      path = require('path');
 const   express = require('express');
 const httpProxy = require('http-proxy');
 const    morgan = require('morgan');
-const      PORT = 4000;
+const      PORT = process.env.PORT || 4000;
 
 const       app = express();
 const     proxy = httpProxy.createProxyServer();
