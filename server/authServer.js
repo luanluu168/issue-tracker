@@ -67,7 +67,7 @@ app.post('/auth/server/signin/query', (req, res) => {
     console.log(`query: ${query}`);
     let body = JSON.stringify(req.body);
 
-    let promise = findUser(`email`, loginEmail);
+    let promise = findUser(query);
     promise.then((data) => {
         let userPassword = `'${data.password}'`;
         const isValidatePassword = bcrypt.compareSync(loginPassword, userPassword);

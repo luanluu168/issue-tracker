@@ -1,9 +1,8 @@
 const dbConnection = require('./db');
 
-const findUser = (condition, value) => {
+const findUser = (query) => {
     return new Promise((resolve, reject) => {
-        let query = `SELECT * FROM "Users" WHERE ${condition}=${value}`;
-        console.log(`query: ${query}`);
+        console.log(`------ query: ${query}`);
         dbConnection.any(query)
                     .then((data) => {
                         console.log(`Testing 1 pass...`);
