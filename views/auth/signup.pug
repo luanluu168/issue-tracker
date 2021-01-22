@@ -3,6 +3,8 @@ extends layout.pug
 block content
     //-  Sign up
     div(class='container-sm pt-3 pb-5 mr-5 ml-5')
+        if error
+            h4.d-flex.justify-content-center.alert.alert-secondary.font-weight-bold.text-danger !{error}
         div(class='d-flex justify-content-center')
             div(class='card')
                 div(class='lead')
@@ -24,7 +26,7 @@ block content
 
                     p(class='cross-middle-line-text') or
                     div(class='text-center mb-3')
-                        a(class='google-auth-button' href='/auth/server/login/google' role='button')
+                        a(class='google-auth-button' href='/auth/server/auth/google' role='button')
                             img(class='google-auth-img' alt='google-auth-img' src='/assets/Google__G__Logo.svg.webp')
                             div(class='ml-2') Sign-up with Google
                     p(class='cross-middle-line-text') already have an account?
