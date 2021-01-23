@@ -2,10 +2,9 @@ require('dotenv').config();
 const         path = require('path');
 const      express = require('express');
 const dbConnection = require('../database/db');
-const { findUser } = require('../database/users')
-const       bcrypt = require('bcrypt');
+const { findUser, registerUser, compareHash } = require('../database/users');
+const { bc, SALT } = require('../database/encrypt');
 const       morgan = require('morgan');
-const    NUM_SALTS = 8;
 const cookieParser = require('cookie-parser');
 const      session = require('express-session');
 const     passport = require('passport');
@@ -30,12 +29,25 @@ passport.use(new Strategy({
 ));
 
 passport.serializeUser((user, callback) => {
-    console.log(`serializeUser, user: ${user}`);
+    console.log(`serializeUser, user: ${JSON.stringify(user)}`);
+
+    req.session.valid = true;
+    req.session.User = {
+        aId:   user.id,
+        role:  'user',
+        name:  `${user.name.givenName} ${user.name.familyName}`,
+        email: user.id,
+        isLoggedin: true
+    };
+    res.cookie("userLoginInfo", 
+                JSON.stringify(req.session.User), 
+                { maxAge: 2 * 60 * 60 * 1000 });
+
     callback(null, user);
 });
 
 passport.deserializeUser((object, callback) => {
-    console.log(`deserializeUser, object: ${object}`);
+    console.log(`deserializeUser, object: ${JSON.stringify(object)}`);
     callback(null, object);
 });
 
@@ -68,26 +80,33 @@ app.post('/auth/server/signin/query', (req, res) => {
     console.log(`query: ${query}`);
 
     const promise = findUser(query);
-    promise.then((data) => {
-        const       userPassword = `'${data.password}'`;
-        const isValidatePassword = bcrypt.compareSync(loginPassword, userPassword);
-        // users can be created directly in PG or through the app that use bcrypt, so need to check 2 cases: with and without bcrypt
-        if ((data.role == 'user' || data.role == 'admin') && (userPassword == loginPassword || isValidatePassword)) {
-            req.session.valid = true;
-            req.session.User = {
-                aId:   data.id,
-                role:  data.role,
-                name:  data.name,
-                email: loginEmail,
-                isLoggedin: true
+    promise
+        .then((data) => {
+            const       userPassword = `'${data.password}'`;
+            console.log(`loginPass: ${loginPassword}, userPass: ${userPassword}, data.password: ${data.password}`);
+
+            const callback = (err, isSameHashPassword) => {
+                if(err) {console.log(`Error: ${err}`)};
+                console.log(`!!!!!!!!!!!! isSameHashPassword= ${isSameHashPassword}`);
+                // users can be created directly in PG or through the app that use bcrypt, so need to check 2 cases: with and without bcrypt
+                if ((data.role == 'user' || data.role == 'admin') && (userPassword == loginPassword || isSameHashPassword)) {
+                    req.session.valid = true;
+                    req.session.User = {
+                        aId:   data.id,
+                        role:  data.role,
+                        name:  data.name,
+                        email: loginEmail,
+                        isLoggedin: true
+                    };
+                    res.cookie("userLoginInfo", 
+                                JSON.stringify(req.session.User), 
+                                { maxAge: 2 * 60 * 60 * 1000 });
+                    res.render('pages/home', { year: currentYear, actionType: 'signin', status: 'success', error: 'None', isLoggedin: true });
+                } else {
+                    res.render('auth/signin', { year: currentYear, actionType: 'signin', status: 'fail', error: 'Wrong password', isLoggedin: false });
+                }
             };
-            res.cookie("userLoginInfo", 
-                        JSON.stringify(req.session.User), 
-                        { maxAge: 2 * 60 * 60 * 1000 });
-            res.render('pages/home', { year: currentYear, actionType: 'signin', status: 'success', error: 'None' });
-        } else {
-            res.render('auth/signin', { year: currentYear, actionType: 'signin', status: 'fail', error: 'Password is wrong' });
-        }
+            compareHash(req.body.userPassword, data.password, callback);
     })
     .catch( (e) => {
         console.log(`Error signin @ authServer: ${e}`);
@@ -101,11 +120,33 @@ app.post('/auth/server/signin/query', (req, res) => {
 app.get('/auth/server/signup', (req, res) => {
     res.render('auth/signup', { year: currentYear, actionType: 'signup', error: ''});
 });
+app.post('/auth/server/signup/query', (req, res) => {
+    const    signupEmail = `'${req.body.userEmail}'`;
+    const signupPassword = `'${req.body.userPassword}'`;
+    const     signupName = `'${req.body.userName}'`;
+    const     signupRole = `'user'`;
+    let user = {
+        userName: signupName,
+        userEmail: signupEmail,
+        userPassword: signupPassword,
+        userRole: signupRole
+    };
+    const promise = registerUser(user);
+    promise.then((data) => {
+                res.render('auth/signin', { year: currentYear, actionType: 'signup', status: 'success', error: 'Register successfully' });
+            })
+            .catch( (e) => {
+                console.log(`Error signup @ authServer: ${e}`);
+                let strError = e.error;
+                res.render('auth/signup', { year: currentYear, actionType: 'singup', status: 'fail', error: strError });
+            });
+});
 
 
 app.get('/auth/server/auth/google', passport.authenticate('google', { scope: ['profile'] }));
 
-app.get('/auth/server/auth/google/done', passport.authenticate('google', { failureRedirect: '/' }), (req, res, next) => {
+app.get('/auth/server/auth/google/done', passport.authenticate('google', { failureRedirect: '/auth/server/signin' }), (req, res, next) => {
+    console.log(`!!!!!!!! google oauth success`);
     res.render('pages/home', { year: currentYear, actionType: 'Google-auth', status: 'success', error: ''});
 });
 
