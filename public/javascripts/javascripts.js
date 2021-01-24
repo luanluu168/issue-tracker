@@ -39,3 +39,8 @@ window.onload = () => {
 };
 // ------- end dropdown menu hover ---------
 
+// ------- signup password requirement text ---------
+window.onload = () => {
+  $("#signup-password-input").attr("aria-expanded", "true");
+};
+// ------- end signup password requirement text ---------
