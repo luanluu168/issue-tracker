@@ -2,7 +2,7 @@ require('dotenv').config();
 const         path = require('path');
 const      express = require('express');
 const dbConnection = require('../database/db');
-const { bc, SALT } = require('../database/encrypt');
+const  { bc, SALT_ROUNDS, SALT } = require('../database/hash');
 const { findUser, registerUser } = require('../database/users');
 const       morgan = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -128,7 +128,7 @@ app.post('/auth/server/signup/query', (req, res) => {
         userRole: 'user'
     };
     
-    const promise = registerUser(user, bc, SALT);
+    const promise = registerUser(user, bc, SALT_ROUNDS);
     promise.then((data) => {
                 res.render('auth/signin', { year: currentYear, actionType: 'signup', status: 'success', error: 'Register successfully' });
             })

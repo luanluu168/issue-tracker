@@ -22,7 +22,7 @@ const findUser = (query) => {
     });
 };
 
-const registerUser = (user, bc, SALT) => {
+const registerUser = (user, bc, SALT_ROUNDS) => {
     return new Promise((resolve, reject) => {
         const { userName, userEmail, userPassword, userRole } = user;
 
@@ -43,7 +43,7 @@ const registerUser = (user, bc, SALT) => {
                         }); 
         };
         // use async bcrypt function to hash
-        bc.hash(userPassword, SALT, callback);
+        bc.hash(userPassword, SALT_ROUNDS, callback);
     });
 };
 
