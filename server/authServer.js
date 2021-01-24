@@ -76,13 +76,13 @@ app.get('/auth/server/signin', (req, res) => {
 app.post('/auth/server/signin/query', (req, res) => {
     const    loginEmail = req.body.userEmail;
     const loginPassword = req.body.userPassword;
-    const         query = `SELECT id, email, password, role FROM "Users" WHERE email='${loginEmail}'`;
+    const         query = `SELECT id, name, email, password, role FROM "Users" WHERE email='${loginEmail}'`;
     console.log(`query: ${query}`);
 
     const promise = findUser(query);
     promise
         .then((data) => {
-            console.log(`loginPass: ${loginPassword}, data.password: ${data.password}`);
+            console.log(`loginPass: ${loginPassword}, data.password: ${data.password}, data= ${JSON.stringify(data)}`);
 
             const callback = (err, isSameHashPassword) => {
                 if(err) { console.log(`Error in route signin query: ${err}`) };
@@ -97,10 +97,11 @@ app.post('/auth/server/signin/query', (req, res) => {
                         email: loginEmail,
                         isLoggedin: true
                     };
+                    console.log(`req.session.User.name= ${req.session.User.name}`);
                     res.cookie("userLoginInfo", 
                                 JSON.stringify(req.session.User), 
                                 { maxAge: 2 * 60 * 60 * 1000 });
-                    res.render('pages/home', { year: currentYear, actionType: 'signin', status: 'success', error: 'None', isLoggedin: true });
+                    res.render('pages/home', { year: currentYear, actionType: 'signin', status: 'success', error: 'None', isLoggedin: true, user: req.session.User });
                 } else {
                     res.render('auth/signin', { year: currentYear, actionType: 'signin', status: 'fail', error: 'Wrong password', isLoggedin: false });
                 }
@@ -139,12 +140,25 @@ app.post('/auth/server/signup/query', (req, res) => {
             });
 });
 
+app.get('/auth/server/signout', (req, res) => {
+    req.logout();
+    res.render('pages/landing', { year: currentYear });
+});
+
 
 app.get('/auth/server/auth/google', passport.authenticate('google', { scope: ['profile'] }));
 
 app.get('/auth/server/auth/google/done', passport.authenticate('google', { failureRedirect: '/auth/server/signin' }), (req, res, next) => {
     console.log(`!!!!!!!! google oauth success`);
-    res.render('pages/home', { year: currentYear, actionType: 'Google-auth', status: 'success', error: ''});
+    res.render('pages/home', { year: currentYear, actionType: 'Google-auth', status: 'success', error: 'None'});
+});
+
+// may open one more server to serve this route
+app.get('/auth/server/home', (req, res) => {
+    if (req.isAuthenticated()) {
+        return res.render('pages/home', { year: currentYear, actionType: 'Google-account-authenticated', status: 'success', error: 'None'});
+    }
+    res.render('auth/signin', { year: currentYear, actionType: 'Google-account-authenticated', status: 'fail', error: 'Google account authenticated fail' });
 });
 
 app.all('*', (req, res) => {
