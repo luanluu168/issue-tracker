@@ -1,5 +1,4 @@
 const dbConnection = require('./db');
-const { bc, SALT } = require('./encrypt');
 
 const findUser = (query) => {
     return new Promise((resolve, reject) => {
@@ -23,14 +22,14 @@ const findUser = (query) => {
     });
 };
 
-const registerUser = (user) => {
+const registerUser = (user, bc, SALT) => {
     return new Promise((resolve, reject) => {
         const { userName, userEmail, userPassword, userRole } = user;
 
         const callback = (err, hashPass) => {
             if (err) { reject({ error: err, actionType: 'Hash Password', status: 'fail', code: '500'}); }
 
-            const     query = `INSERT INTO "Users" (name, email, password, role) VALUES (${userName}, ${userEmail}, '${hashPass}', ${userRole})`;
+            const     query = `INSERT INTO "Users" (name, email, password, role) VALUES ('${userName}', '${userEmail}', '${hashPass}', '${userRole}')`;
             console.log(`------ registerUser query: ${query}`);
             dbConnection.any(query)
                         .then((data) => {
@@ -40,7 +39,7 @@ const registerUser = (user) => {
                         })
                         .catch((e) => {
                             console.log(`Register user testing 2 pass...`);
-                            reject({ error: 'User email is already exist', actionType: 'Register user', status: 'fail', code: '500'});
+                            reject({ error: 'User email is already exist', actionType: 'Register user', status: 'fail', code: '400'});
                         }); 
         };
         // use async bcrypt function to hash
@@ -59,12 +58,8 @@ const registerUserByOAuth = (user) => {
                 })
                 .catch((e) => {
                     console.log(`RegisterUserByOAth testing 2 pass...`);
-                    reject({ error: 'User email is already exist', actionType: 'Register user', status: 'fail', code: '500'});
+                    reject({ error: 'User email is already exist', actionType: 'Register user', status: 'fail', code: '400'});
                 }); 
 };
 
-const compareHash = (plainPassword, hashPassword, callback) => {
-    return bc.compare(plainPassword, hashPassword, callback);
-};
-
-module.exports = { findUser, registerUser, compareHash, registerUserByOAuth };
+module.exports = { findUser, registerUser, registerUserByOAuth };

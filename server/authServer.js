@@ -2,8 +2,8 @@ require('dotenv').config();
 const         path = require('path');
 const      express = require('express');
 const dbConnection = require('../database/db');
-const { findUser, registerUser, compareHash } = require('../database/users');
 const { bc, SALT } = require('../database/encrypt');
+const { findUser, registerUser } = require('../database/users');
 const       morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const      session = require('express-session');
@@ -74,22 +74,21 @@ app.get('/auth/server/signin', (req, res) => {
     res.render('auth/signin', { year: currentYear, actionType: 'signin', error: '' });
 });
 app.post('/auth/server/signin/query', (req, res) => {
-    const    loginEmail = `'${req.body.userEmail}'`;
-    const loginPassword = `'${req.body.userPassword}'`;
-    const         query = `SELECT id, email, password, role FROM "Users" WHERE email=${loginEmail}`;
+    const    loginEmail = req.body.userEmail;
+    const loginPassword = req.body.userPassword;
+    const         query = `SELECT id, email, password, role FROM "Users" WHERE email='${loginEmail}'`;
     console.log(`query: ${query}`);
 
     const promise = findUser(query);
     promise
         .then((data) => {
-            const       userPassword = `'${data.password}'`;
-            console.log(`loginPass: ${loginPassword}, userPass: ${userPassword}, data.password: ${data.password}`);
+            console.log(`loginPass: ${loginPassword}, data.password: ${data.password}`);
 
             const callback = (err, isSameHashPassword) => {
-                if(err) {console.log(`Error: ${err}`)};
+                if(err) { console.log(`Error in route signin query: ${err}`) };
                 console.log(`!!!!!!!!!!!! isSameHashPassword= ${isSameHashPassword}`);
                 // users can be created directly in PG or through the app that use bcrypt, so need to check 2 cases: with and without bcrypt
-                if ((data.role == 'user' || data.role == 'admin') && (userPassword == loginPassword || isSameHashPassword)) {
+                if ((data.role == 'user' || data.role == 'admin') && (data.password == loginPassword || isSameHashPassword)) {
                     req.session.valid = true;
                     req.session.User = {
                         aId:   data.id,
@@ -106,7 +105,8 @@ app.post('/auth/server/signin/query', (req, res) => {
                     res.render('auth/signin', { year: currentYear, actionType: 'signin', status: 'fail', error: 'Wrong password', isLoggedin: false });
                 }
             };
-            compareHash(req.body.userPassword, data.password, callback);
+
+            bc.compare(req.body.userPassword, data.password, callback);
     })
     .catch( (e) => {
         console.log(`Error signin @ authServer: ${e}`);
@@ -121,17 +121,14 @@ app.get('/auth/server/signup', (req, res) => {
     res.render('auth/signup', { year: currentYear, actionType: 'signup', error: ''});
 });
 app.post('/auth/server/signup/query', (req, res) => {
-    const    signupEmail = `'${req.body.userEmail}'`;
-    const signupPassword = `'${req.body.userPassword}'`;
-    const     signupName = `'${req.body.userName}'`;
-    const     signupRole = `'user'`;
     let user = {
-        userName: signupName,
-        userEmail: signupEmail,
-        userPassword: signupPassword,
-        userRole: signupRole
+        userName: req.body.userName,
+        userEmail: req.body.userEmail,
+        userPassword: req.body.userPassword,
+        userRole: 'user'
     };
-    const promise = registerUser(user);
+    
+    const promise = registerUser(user, bc, SALT);
     promise.then((data) => {
                 res.render('auth/signin', { year: currentYear, actionType: 'signup', status: 'success', error: 'Register successfully' });
             })
@@ -155,4 +152,3 @@ app.all('*', (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`authServer is listening on port ${PORT}`));
-
