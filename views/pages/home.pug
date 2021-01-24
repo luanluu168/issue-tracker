@@ -11,6 +11,8 @@ block content
                 img(src='/assets/web-logo-landing.png' alt='Web logo' width='150' height='150')
             #navbarToggler.collapse.navbar-collapse
                 ul.navbar-nav.ml-auto.mt-2.mt-lg-0
+                    li.mt-2.mr-2
+                        | Hi, !{ user.name }
                     li.nav-item.dropdown
                         a#navbarDropdown2.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
                             i.fa.fa-user-circle(aria-hidden='true').fa-lg
