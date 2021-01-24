@@ -26,7 +26,7 @@ block content
                             div(class='input-group-prepend')
                             span(class='input-group-text')
                                 i(class='fas fa-key')
-                            input(type='password' id="signup-password-input" class='form-control text-truncate' pattern='^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{6,}$' name='userPassword' placeholder='Enter your password' onchange="try{setCustomValidity('')}catch(e){}" oninvalid="this.setCustomValidity('Need min 6 chars: At least 1 letter, 1 number, and 1 special char')" required='')
+                            input(type='password' id="signup-password-input" class='form-control text-truncate' pattern='^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{6,}$' name='userPassword' placeholder='Enter your password' onchange="try{setCustomValidity('')}catch(e){}" oninvalid="this.setCustomValidity('Need min 6 chars: At least 1 letter, 1 number, and 1 special char')" oninput="setCustomValidity(' ')" required='')
                         div(class='input-group form-group')
                             button(type='submit' name="submit" class='auth-button') Sign-up &#8594;
 

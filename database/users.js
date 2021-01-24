@@ -57,11 +57,11 @@ const registerUserByOAuth = (user) => {
     dbConnection.any(query)
                 .then((data) => {
                     console.log(`RegisterUserByOAth testing 1 pass...`);
-                    resolve({ error: 'Register successfully', actionType: 'Register user', status: 'success', code: '200' });
+                    resolve({ error: 'Account register successfully', actionType: 'Register user', status: 'success', code: '200' });
                 })
                 .catch((e) => {
                     console.log(`RegisterUserByOAth testing 2 pass...`);
-                    reject({ error: 'User email is already exist', actionType: 'Register user', status: 'fail', code: '400'});
+                    reject({ error: 'User email already existed', actionType: 'Register user', status: 'fail', code: '400'});
                 }); 
 };
 
