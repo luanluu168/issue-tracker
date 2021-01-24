@@ -26,6 +26,9 @@ const registerUser = (user, bc, SALT_ROUNDS) => {
     return new Promise((resolve, reject) => {
         const { userName, userEmail, userPassword, userRole } = user;
 
+        // check if the input data are all valid (not undefined)
+        if (userName == undefined || userEmail == undefined || userPassword == undefined || userRole == undefined) return reject({ error: 'Data arguments require', actionType: 'Register user', status: 'fail', code: '400'});
+
         const callback = (err, hashPass) => {
             if (err) { reject({ error: err, actionType: 'Hash Password', status: 'fail', code: '500'}); }
 
