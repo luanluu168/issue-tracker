@@ -25,7 +25,7 @@ block content
                             div(class='input-group-prepend')
                             span(class='input-group-text')
                                 i(class='fas fa-key')
-                            input(type='password' class='form-control' name='userPassword' placeholder='Enter your password' required='')
+                            input(type='password' class='form-control' pattern='^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{6,}$' name='userPassword' placeholder='Enter your password' title='Min 6 chars, at least 1 letter, 1 number, and 1 special char' required='')
                         div(class='input-group form-group')
                             button(type='submit' name="submit" class='auth-button') Sign-up &#8594;
 
