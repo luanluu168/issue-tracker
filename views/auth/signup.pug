@@ -2,7 +2,7 @@ extends layout.pug
 
 block content
     //-  Sign up
-    div(class='container-sm pt-3 pb-5 mr-5 ml-5')
+    div(class='container-md pt-3 pb-5 mx-5')
         if error
             h4.d-flex.justify-content-center.alert.alert-secondary.font-weight-bold.text-danger !{error}
         div(class='d-flex justify-content-center')
@@ -11,30 +11,42 @@ block content
                     h3(class='text-center text-dark') Sign up
                 div(class='card-body')
                     form(name='signinForm' action='/auth/server/signup/query' method='POST')
-                        div(class='input-group form-group')
-                            div(class='input-group-prepend')
-                            span(class='input-group-text')
-                                i.fa.fa-id-card(aria-hidden='true')
-                            input(type='text' class='form-control' name='userName' placeholder='Enter your name' required='')
-                        
-                        div(class='input-group form-group')
-                            div(class='input-group-prepend')
-                            span(class='input-group-text')
-                                i(class='fas fa-user')
-                            input(type='email' class='form-control' name='userEmail' placeholder='Enter your email' required='')
-                        div(class='input-group form-group')
-                            div(class='input-group-prepend')
-                            span(class='input-group-text')
-                                i(class='fas fa-key')
-                            input(type='password' id="signup-password-input" class='form-control text-truncate' pattern='^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{6,}$' name='userPassword' placeholder='Enter your password' onchange="try{setCustomValidity('')}catch(e){}" oninvalid="this.setCustomValidity('Need min 6 chars: At least 1 letter, 1 number, and 1 special char')" oninput="setCustomValidity(' ')" required='')
-                        div(class='input-group form-group')
-                            button(type='submit' name="submit" class='auth-button') Sign-up &#8594;
+                        .col-auto
+                            label.sr-only(for='input-user-name') Name
+                            div(class='input-group form-group')
+                                div(class='input-group-prepend')
+                                span(class='input-group-text')
+                                    i.fa.fa-id-card(aria-hidden='true')
+                                input(type='text' class='form-control text-truncate' name='userName' placeholder='Enter your name' id='input-user-name' required='')
+                        .col-auto
+                            label.sr-only(for='input-user-email') Email
+                            div(class='input-group form-group')
+                                div(class='input-group-prepend')
+                                span(class='input-group-text')
+                                    i(class='fas fa-user')
+                                input(type='email' class='form-control text-truncate' name='userEmail' placeholder='Enter your email' id='input-user-email' required='')
+                        .col-auto
+                            label.sr-only(for='signup-password-input') Password
+                            div(class='input-group form-group')
+                                div(class='input-group-prepend')
+                                span(class='input-group-text')
+                                    i(class='fas fa-key')
+                                input(type='password' id="signup-password-input" class='form-control text-truncate' 
+                                    pattern='^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{6,}$' name='userPassword'
+                                    placeholder='Enter your password' onchange="try{setCustomValidity('')}catch(e){}" 
+                                    oninvalid="this.setCustomValidity('Need min 6 chars: At least 1 letter, 1 number, and 1 special char')" 
+                                    oninput="this.setCustomValidity(' ')" aria-expanded="true" required='')
+                        .col-auto
+                            div(class='input-group form-group')
+                                button(type='submit' name="submit" class='auth-button text-truncate') Sign-up &#8594;
 
-                    p(class='cross-middle-line-text') or
-                    div(class='text-center mb-3')
-                        a(class='google-auth-button' href='/auth/server/auth/google' role='button')
-                            img(class='google-auth-img' alt='google-auth-img' src='/assets/Google__G__Logo.svg.webp')
-                            div(class='ml-2 text-truncate') Sign-up with Google
-                    p(class='cross-middle-line-text') already have an account?
-                    div(class='text-center')
-                        a(href='/auth/server/signin') Sign-in
+                    .col-auto
+                        p(class='cross-middle-line-text') or
+                        div(class='text-center mb-3')
+                            a(class='google-auth-button' href='/auth/server/auth/google' role='button')
+                                img(class='google-auth-img' alt='google-auth-img' src='/assets/Google__G__Logo.svg.webp')
+                                div(class='ml-2 text-truncate') Sign-up with Google
+                        p(class='cross-middle-line-text') already have an account?
+                        div(class='text-center')
+                            a(href='/auth/server/signin') Sign-in
+
