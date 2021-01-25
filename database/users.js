@@ -38,11 +38,11 @@ const registerUser = (user, bc, SALT_ROUNDS) => {
                         .then((data) => {
                             console.log(`Register user testing 1 pass...`);
                             console.log(`hashPass= ${hashPass}`);
-                            resolve({ error: 'Register successfully', actionType: 'Register user', status: 'success', code: '200' });
+                            resolve({ error: 'Account register successfully', actionType: 'Register user', status: 'success', code: '200' });
                         })
                         .catch((e) => {
                             console.log(`Register user testing 2 pass...`);
-                            reject({ error: 'User email is already exist', actionType: 'Register user', status: 'fail', code: '400'});
+                            reject({ error: 'User email already existed', actionType: 'Register user', status: 'fail', code: '400'});
                         }); 
         };
         // use async bcrypt function to hash
