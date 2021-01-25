@@ -10,7 +10,7 @@ const      session = require('express-session');
 const     passport = require('passport');
 const { Strategy } = require('passport-google-oauth20');
 const        redis = require('redis');
-const       client = redis.createClient();
+const       client = process.env.PRODUCTION == 'NO' ? redis.createClient() : redis.createClient(process.env.REDIS_URL);
 const         PORT = process.env.AUTH_SERVER_PORT || 4002;
 const          app = express();
 
@@ -46,7 +46,7 @@ passport.use(new Strategy({
             if(!cachedValue) {
                 console.log('Redis cache miss');
                 client.set(profile.id, JSON.stringify(user));
-                client.expire(profile.id, 2 * 60) // key will be expired in 2 minutes
+                client.expire(profile.id, 60) // key will be expired in 1 minute
             } else {
                 console.log('Cache found the data');
             }
@@ -181,6 +181,7 @@ app.get('/auth/server/auth/google/done', passport.authenticate('google', { failu
 
         client.incr('user-counter', (err, value) => {
             if(err) { console.log(`Error in client.incr: ${err}`) };
+            client.expire('user-counter', 60) // key will be expired in 1 minute
         });
         
         // Successful authentication, redirect home
