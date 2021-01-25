@@ -9,8 +9,15 @@ const cookieParser = require('cookie-parser');
 const      session = require('express-session');
 const     passport = require('passport');
 const { Strategy } = require('passport-google-oauth20');
+const        redis = require('redis');
+const       client = redis.createClient();
 const         PORT = process.env.AUTH_SERVER_PORT || 4002;
 const          app = express();
+
+let            key = null;
+client.on("error", (err) => {
+    console.error(err);
+});
 
 passport.use(new Strategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
@@ -22,27 +29,35 @@ passport.use(new Strategy({
         console.log(`refreshToken: ${refreshToken}`);
         console.log(`profile: ${JSON.stringify(profile)}`);
         console.log(`profile.id: ${profile.id}`);
-        console.log(`profile.email: ${profile.email}`);
+        console.log(`profile.emails[0].value: ${profile.emails[0].value}`);
         console.log(`profile.name: ${profile.displayName}`);
-        return callback(null, profile);
+
+        let user = {
+            aId:   profile.id,
+            role:  'user',
+            name:  profile.name.givenName,
+            email: profile.emails[0].value,
+            isLoggedin: true
+        };
+
+        key = profile.id;
+        client.get(profile.id, (err, cachedValue) => {
+            if(err) { console.log(`Error in client get: ${err}`) };
+            if(!cachedValue) {
+                console.log('Redis cache miss');
+                client.set(profile.id, JSON.stringify(user));
+                client.expire(profile.id, 2 * 60) // key will be expired in 2 minutes
+            } else {
+                console.log('Cache found the data');
+            }
+
+            return callback(null, profile);
+        });
     }
 ));
 
 passport.serializeUser((user, callback) => {
     console.log(`serializeUser, user: ${JSON.stringify(user)}`);
-
-    req.session.valid = true;
-    req.session.User = {
-        aId:   user.id,
-        role:  'user',
-        name:  `${user.name.givenName} ${user.name.familyName}`,
-        email: user.id,
-        isLoggedin: true
-    };
-    res.cookie("userLoginInfo", 
-                JSON.stringify(req.session.User), 
-                { maxAge: 2 * 60 * 60 * 1000 });
-
     callback(null, user);
 });
 
@@ -100,7 +115,7 @@ app.post('/auth/server/signin/query', (req, res) => {
                     console.log(`req.session.User.name= ${req.session.User.name}`);
                     res.cookie("userLoginInfo", 
                                 JSON.stringify(req.session.User), 
-                                { maxAge: 2 * 60 * 60 * 1000 });
+                                { maxAge: 2 * 60 * 60 * 1000 }); // expire in 2 hours
                     res.render('pages/home', { year: currentYear, actionType: 'signin', status: 'success', error: 'None', isLoggedin: true, user: req.session.User });
                 } else {
                     res.render('auth/signin', { year: currentYear, actionType: 'signin', status: 'fail', error: 'Wrong password', isLoggedin: false });
@@ -145,12 +160,32 @@ app.get('/auth/server/signout', (req, res) => {
     res.render('pages/landing', { year: currentYear });
 });
 
-
-app.get('/auth/server/auth/google', passport.authenticate('google', { scope: ['profile'] }));
+app.get('/auth/server/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get('/auth/server/auth/google/done', passport.authenticate('google', { failureRedirect: '/auth/server/signin' }), (req, res, next) => {
     console.log(`!!!!!!!! google oauth success`);
-    res.render('pages/home', { year: currentYear, actionType: 'Google-auth', status: 'success', error: 'None'});
+    client.get(key, (error, cachedValue) => {
+        if(error) { console.log(`Error in client.get: ${error}`) };
+        user = JSON.parse(cachedValue);
+        req.session.valid = true;
+        req.session.User = {
+            aId:   user.aId,
+            role:  user.role,
+            name:  user.name,
+            email: user.email,
+            isLoggedin: true
+        };
+        res.cookie("userLoginInfo", 
+                    JSON.stringify(req.session.User), 
+                    { maxAge: 2 * 60 * 60 * 1000 }); // expire in 2 hours
+
+        client.incr('user-counter', (err, value) => {
+            if(err) { console.log(`Error in client.incr: ${err}`) };
+        });
+        
+        // Successful authentication, redirect home
+        res.render('pages/home', { year: currentYear, actionType: 'Google-auth', status: 'success', error: 'None', user: req.session.User, isLoggedin: true });
+    });
 });
 
 // may open one more server to serve this route
