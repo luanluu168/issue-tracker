@@ -11,24 +11,30 @@ block content
                     h3(class='text-center') Sign In
                 div(class='card-body')
                     form(name='signinForm' action='/auth/server/signin/query' method='POST')
-                        div(class='input-group form-group')
-                            div(class='input-group-prepend')
-                            span(class='input-group-text')
-                                i(class='fas fa-user')
-                            input(type='email' class='form-control' name='userEmail' placeholder='Enter your email' required='')
-                        div(class='input-group form-group')
-                            div(class='input-group-prepend')
-                            span(class='input-group-text')
-                                i(class='fas fa-key')
-                            input(type='password' class='form-control' name='userPassword' placeholder='Enter your password' required='')
-                        div(class='input-group form-group')
-                            button(type='submit' name="submit" class='auth-button') Sign-in &#8594;
+                        .col-auto
+                            label.sr-only(for='signin-input-user-email') Email
+                            div(class='input-group form-group')
+                                div(class='input-group-prepend')
+                                span(class='input-group-text')
+                                    i(class='fas fa-user')
+                                input(type='email' class='form-control text-truncate' name='userEmail' id='signin-input-user-email' placeholder='Enter your email' required='')
+                        .col-auto
+                            label.sr-only(for='signin-input-user-password') Password
+                            div(class='input-group form-group')
+                                div(class='input-group-prepend')
+                                span(class='input-group-text')
+                                    i(class='fas fa-key')
+                                input(type='password' class='form-control text-truncate' name='userPassword' id='signin-input-user-password' placeholder='Enter your password' required='')
+                        .col-auto
+                            div(class='input-group form-group')
+                                button(type='submit' name="submit" class='auth-button text-truncate') Sign-in &#8594;
 
-                    p(class='cross-middle-line-text') or
-                    div(class='text-center mb-3')
-                        a(class='google-auth-button' href='/auth/server/auth/google' role='button')
-                            img(class='google-auth-img' alt='google-auth-img' src='/assets/Google__G__Logo.svg.webp')
-                            div(class='ml-2') Sign-in with Google
-                    p(class='cross-middle-line-text') not have an account yet?
-                    div(class='text-center')
-                        a(href='/auth/server/signup') Sign-up
+                    .col-auto
+                        p(class='cross-middle-line-text') or
+                        div(class='text-center mb-3')
+                            a(class='google-auth-button' href='/auth/server/auth/google' role='button')
+                                img(class='google-auth-img' alt='google-auth-img' src='/assets/Google__G__Logo.svg.webp')
+                                div(class='ml-2 text-truncate') Sign-in with Google
+                        p(class='cross-middle-line-text') not have an account yet?
+                        div(class='text-center')
+                            a(href='/auth/server/signup') Sign-up
