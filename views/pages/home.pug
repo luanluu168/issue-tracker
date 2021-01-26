@@ -26,9 +26,16 @@ block content
 
         //- Intro
         div(class='container-fluid pt-3')
-            div(class='d-flex justify-content-center')
-                h1 Home page...
+            div(class='d-flex flex-column justify-content-center align-items-center')
+                .col-auto
+                    h1 Add a new project
+                    if listings
+                        h1 !{listings}
+                    else
+                        div(class='alert alert-info text-center') No existed project yet!
 
+                .col-auto
+                    button(class='btn btn-outline-success font-weight-bold rounded-circle' id='add-new-project-btn') +
         //- footer
         div(class='pt-5 bg-transparent')
             div(class='footer')
