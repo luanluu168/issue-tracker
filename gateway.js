@@ -29,14 +29,6 @@ proxy.on('proxyReq', (proxyReq, req) => {
     }
 });
 
-let       today = new Date();
-let currentYear = today ? today.getFullYear() : 2020;
-
-// home route
-app.all('/', (req, res) => {
-    res.render('pages/landing', {year: currentYear});
-});
-
 // api server
 app.all('/api/server*', (req, res) => {
     proxy.web(req, res, {
@@ -48,6 +40,13 @@ app.all('/api/server*', (req, res) => {
 app.all('/auth/server*', (req, res) => {
     proxy.web(req, res, {
         target: `http://localhost:${process.env.AUTH_SERVER_PORT}`
+    });
+});
+
+// frontend server
+app.all('/*', (req, res) => {
+    proxy.web(req, res, {
+        target: `http://localhost:${process.env.FRONTEND_SERVER_PORT}`
     });
 });
 

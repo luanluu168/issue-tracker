@@ -116,7 +116,8 @@ app.post('/auth/server/signin/query', (req, res) => {
                     res.cookie("userLoginInfo", 
                                 JSON.stringify(req.session.User), 
                                 { maxAge: 2 * 60 * 60 * 1000 }); // expire in 2 hours
-                    res.render('pages/home', { year: currentYear, actionType: 'signin', status: 'success', error: 'None', isLoggedin: true, user: req.session.User });
+                    // res.render('pages/home', { year: currentYear, actionType: 'signin', status: 'success', error: 'None', isLoggedin: true, user: req.session.User });
+                    res.redirect(`http://localhost:${process.env.PORT}/home`);  // delegate render task for frontend server
                 } else {
                     res.render('auth/signin', { year: currentYear, actionType: 'signin', status: 'fail', error: 'Wrong password', isLoggedin: false });
                 }
@@ -185,11 +186,12 @@ app.get('/auth/server/auth/google/done', passport.authenticate('google', { failu
         });
         
         // Successful authentication, redirect home
-        res.render('pages/home', { year: currentYear, actionType: 'Google-auth', status: 'success', error: 'None', user: req.session.User, isLoggedin: true });
+        // res.render('pages/home', { year: currentYear, actionType: 'Google-auth', status: 'success', error: 'None', user: req.session.User, isLoggedin: true });
+        res.redirect(`http://localhost:${process.env.PORT}/home`);  // delegate render task for frontend server
     });
 });
 
-// may open one more server to serve this route
+// TODO: may open one more server to serve this route, then remove this
 app.get('/auth/server/home', (req, res) => {
     if (req.isAuthenticated()) {
         return res.render('pages/home', { year: currentYear, actionType: 'Google-account-authenticated', status: 'success', error: 'None'});

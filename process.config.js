@@ -14,6 +14,11 @@ module.exports = {
             name: "Gateway",
             script: "./gateway.js",
             watch: true,
+        },
+        {
+            name: "Frontend Server",
+            script: "./server/frontendServer.js",
+            watch: true,
         }
     ]
 };
