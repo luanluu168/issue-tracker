@@ -46,7 +46,7 @@ passport.use(new Strategy({
             if(!cachedValue) {
                 console.log('Redis cache miss');
                 client.set(profile.id, JSON.stringify(user));
-                client.expire(profile.id, 60) // key will be expired in 1 minute
+                client.expire(profile.id, 5 * 60) // key will be expired in 5 minutes
             } else {
                 console.log('Cache found the data');
             }
@@ -117,7 +117,31 @@ app.post('/auth/server/signin/query', (req, res) => {
                                 JSON.stringify(req.session.User), 
                                 { maxAge: 2 * 60 * 60 * 1000 }); // expire in 2 hours
                     // res.render('pages/home', { year: currentYear, actionType: 'signin', status: 'success', error: 'None', isLoggedin: true, user: req.session.User });
-                    res.redirect(`http://localhost:${process.env.PORT}/home`);  // delegate render task for frontend server
+                    res.redirect(`http://${process.env.DOMAIN_NAME}:${process.env.PORT}/home`);  // delegate render task for frontend server
+                
+                    // client.get(data.id, (err, cachedValue) => {
+                    //     if(err) { console.log(`Error in client get: ${err}`) };
+                    //     const user = {
+                    //         aId:   data.id,
+                    //         role:  data.role,
+                    //         name:  data.name,
+                    //         email: loginEmail,
+                    //         isLoggedin: true
+                    //     };
+                    //     if(!cachedValue) {
+                    //         console.log('Redis cache miss');
+                    //         client.set(cachedValue.id, JSON.stringify(user));
+                    //         client.expire(cachedValue.id, 5 * 60) // key will be expired in 5 minutes
+                    //     } else {
+                    //         console.log('Cache found the data');
+                    //     }
+
+                    //     res.cookie("userLoginInfo", 
+                    //                 JSON.stringify(user), 
+                    //                 { maxAge: 2 * 60 * 60 * 1000 }); // expire in 2 hours
+                    //     // res.render('pages/home', { year: currentYear, actionType: 'signin', status: 'success', error: 'None', isLoggedin: true, user: req.session.User });
+                    //     res.redirect(`http://${process.env.DOMAIN_NAME}:${process.env.PORT}/home`);  // delegate render task for frontend server
+                    // });
                 } else {
                     res.render('auth/signin', { year: currentYear, actionType: 'signin', status: 'fail', error: 'Wrong password', isLoggedin: false });
                 }
@@ -156,9 +180,26 @@ app.post('/auth/server/signup/query', (req, res) => {
             });
 });
 
-app.get('/auth/server/signout', (req, res) => {
-    req.logout();
+app.get('/auth/server/signout', (req, res, next) => {
+    // destroy session
+    if(req.session.User) {
+        req.session.destroy( err => {
+            if(err) { return console.log('Error logging out') };
+        });
+    }
+    // destroy cookie
+    if(req.cookies.userLoginInfo) {
+        res.clearCookie("userLoginInfo");
+    }
     res.render('pages/landing', { year: currentYear });
+
+    // console.log(`req.cookies.userLoginInfo= ${req.cookies.userLoginInfo}`);
+    // const logoutUser = JSON.parse(req.cookies.userLoginInfo);
+    // console.log(`logoutUser= ${logoutUser}`);
+    // client.del(JSON.stringify(logoutUser.aId), (err, cachedValue) => {
+    //     if (err) { console.log(`Error in redis del route(signout): ${err}`) };
+    //     res.render('pages/landing', { year: currentYear });
+    // });
 });
 
 app.get('/auth/server/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -187,7 +228,10 @@ app.get('/auth/server/auth/google/done', passport.authenticate('google', { failu
         
         // Successful authentication, redirect home
         // res.render('pages/home', { year: currentYear, actionType: 'Google-auth', status: 'success', error: 'None', user: req.session.User, isLoggedin: true });
-        res.redirect(`http://localhost:${process.env.PORT}/home`);  // delegate render task for frontend server
+        if (process.env.PRODUCTION == 'NO') {
+            return res.redirect(`http://localhost:${process.env.PORT}/home`);  // delegate render task for frontend server
+        }
+        res.redirect(`http://issue-tracker-ex.herokuapp.com/home`);
     });
 });
 
