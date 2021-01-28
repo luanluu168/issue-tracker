@@ -10,7 +10,7 @@
   "scripts": {
     "test": "pm2 start process.config.js",
     "stop": "pm2 kill",
-    "start": "concurrently \"node gateway.js\" \"cd server && PORT=4001 node apiServer.js\" \"cd server && PORT=4002 node authServer.js\"",
+    "start": "concurrently \"node gateway.js\" \"cd server && PORT=4001 node apiServer.js\" \"cd server && PORT=4002 node authServer.js\" \"cd server && PORT=4003 node frontendServer.js\"",
     "heroku-postbuild": "npm install pm2 -g && pm2 start process.config.js"
   },
   "author": "luan",
