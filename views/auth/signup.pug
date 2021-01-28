@@ -17,14 +17,14 @@ block content
                                 div(class='input-group-prepend')
                                 span(class='input-group-text')
                                     i.fa.fa-id-card(aria-hidden='true')
-                                input(type='text' class='form-control text-truncate' name='userName' placeholder='Enter your name' id='signup-input-user-name' required='')
+                                input(type='text' class='form-control' name='userName' placeholder='Enter your name' id='signup-input-user-name' required='')
                         .col-auto
                             label.sr-only(for='signup-input-user-email') Email
                             div(class='input-group form-group')
                                 div(class='input-group-prepend')
                                 span(class='input-group-text')
                                     i(class='fas fa-user')
-                                input(type='email' class='form-control text-truncate' name='userEmail' placeholder='Enter your email' id='signup-input-user-email' required='')
+                                input(type='email' class='form-control' name='userEmail' placeholder='Enter your email' id='signup-input-user-email' required='')
                         .col-auto
                             label.sr-only(for='signup-password-input') Password
                             div(class='input-group form-group')
@@ -38,14 +38,14 @@ block content
                                     oninput="this.setCustomValidity(' ')" aria-expanded="true" required='')
                         .col-auto
                             div(class='input-group form-group')
-                                button(type='submit' name="submit" class='auth-button text-truncate') Sign-up &#8594;
+                                button(type='submit' name="submit" class='auth-button') Sign-up &#8594;
 
                     .col-auto
                         p(class='cross-middle-line-text') or
                         div(class='text-center mb-3')
                             a(class='google-auth-button' href='/auth/server/auth/google' role='button')
                                 img(class='google-auth-img' alt='google-auth-img' src='/assets/Google__G__Logo.svg.webp')
-                                div(class='ml-2 text-truncate') Sign-up with Google
+                                div(class='ml-2') Sign-up with Google
                         p(class='cross-middle-line-text') already have an account?
                         div(class='text-center')
                             a(href='/auth/server/signin') Sign-in
