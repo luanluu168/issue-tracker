@@ -10,6 +10,7 @@ const      session = require('express-session');
 const     passport = require('passport');
 const { Strategy } = require('passport-google-oauth20');
 const        redis = require('redis');
+const   RedisStore = require('connect-redis')(session);
 const       client = process.env.PRODUCTION == 'NO' ? redis.createClient() : redis.createClient(process.env.REDIS_URL);
 const         PORT = process.env.AUTH_SERVER_PORT || 4002;
 const          app = express();
@@ -46,7 +47,7 @@ passport.use(new Strategy({
             if(!cachedValue) {
                 console.log('Redis cache miss');
                 client.set(profile.id, JSON.stringify(user));
-                client.expire(profile.id, 5 * 60) // key will be expired in 5 minutes
+                client.expire(profile.id, 60) // key will be expired in 1 minute
             } else {
                 console.log('Cache found the data');
             }
@@ -67,10 +68,11 @@ passport.deserializeUser((object, callback) => {
 });
 
 app.use(session({ 
+    store : new RedisStore({ client: client }),
     secret: process.env.SESSION_SECRET,
-    resave: true, 
+    resave: true, // false if have touch method
     saveUninitialized: true,
-    cookie: { maxAge: 2 * 60 * 60 * 1000 }
+    cookie: { maxAge: 2 * 60 * 60 * 1000 } // session will be expired in 2 hours
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -117,31 +119,10 @@ app.post('/auth/server/signin/query', (req, res) => {
                                 JSON.stringify(req.session.User), 
                                 { maxAge: 2 * 60 * 60 * 1000 }); // expire in 2 hours
                     // res.render('pages/home', { year: currentYear, actionType: 'signin', status: 'success', error: 'None', isLoggedin: true, user: req.session.User });
-                    res.redirect(`http://${process.env.DOMAIN_NAME}:${process.env.PORT}/home`);  // delegate render task for frontend server
-                
-                    // client.get(data.id, (err, cachedValue) => {
-                    //     if(err) { console.log(`Error in client get: ${err}`) };
-                    //     const user = {
-                    //         aId:   data.id,
-                    //         role:  data.role,
-                    //         name:  data.name,
-                    //         email: loginEmail,
-                    //         isLoggedin: true
-                    //     };
-                    //     if(!cachedValue) {
-                    //         console.log('Redis cache miss');
-                    //         client.set(cachedValue.id, JSON.stringify(user));
-                    //         client.expire(cachedValue.id, 5 * 60) // key will be expired in 5 minutes
-                    //     } else {
-                    //         console.log('Cache found the data');
-                    //     }
-
-                    //     res.cookie("userLoginInfo", 
-                    //                 JSON.stringify(user), 
-                    //                 { maxAge: 2 * 60 * 60 * 1000 }); // expire in 2 hours
-                    //     // res.render('pages/home', { year: currentYear, actionType: 'signin', status: 'success', error: 'None', isLoggedin: true, user: req.session.User });
-                    //     res.redirect(`http://${process.env.DOMAIN_NAME}:${process.env.PORT}/home`);  // delegate render task for frontend server
-                    // });
+                    if (process.env.PRODUCTION == 'NO') {
+                        return res.redirect(`${process.env.DOMAIN_NAME}:${process.env.PORT}/home`);  // delegate render task for frontend server
+                    }
+                    res.redirect(`${process.env.DOMAIN_NAME}:${process.env.PORT}/home`);  // delegate render task for frontend server
                 } else {
                     res.render('auth/signin', { year: currentYear, actionType: 'signin', status: 'fail', error: 'Wrong password', isLoggedin: false });
                 }
@@ -184,22 +165,12 @@ app.get('/auth/server/signout', (req, res, next) => {
     // destroy session
     if(req.session.User) {
         req.session.destroy( err => {
-            if(err) { return console.log('Error logging out') };
+            if(err) { console.log('Error logging out') };
         });
-    }
+    };
     // destroy cookie
-    if(req.cookies.userLoginInfo) {
-        res.clearCookie("userLoginInfo");
-    }
+    if(req.cookies.userLoginInfo) { res.clearCookie("userLoginInfo") };
     res.render('pages/landing', { year: currentYear });
-
-    // console.log(`req.cookies.userLoginInfo= ${req.cookies.userLoginInfo}`);
-    // const logoutUser = JSON.parse(req.cookies.userLoginInfo);
-    // console.log(`logoutUser= ${logoutUser}`);
-    // client.del(JSON.stringify(logoutUser.aId), (err, cachedValue) => {
-    //     if (err) { console.log(`Error in redis del route(signout): ${err}`) };
-    //     res.render('pages/landing', { year: currentYear });
-    // });
 });
 
 app.get('/auth/server/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -217,6 +188,7 @@ app.get('/auth/server/auth/google/done', passport.authenticate('google', { failu
             email: user.email,
             isLoggedin: true
         };
+        
         res.cookie("userLoginInfo", 
                     JSON.stringify(req.session.User), 
                     { maxAge: 2 * 60 * 60 * 1000 }); // expire in 2 hours
@@ -229,9 +201,9 @@ app.get('/auth/server/auth/google/done', passport.authenticate('google', { failu
         // Successful authentication, redirect home
         // res.render('pages/home', { year: currentYear, actionType: 'Google-auth', status: 'success', error: 'None', user: req.session.User, isLoggedin: true });
         if (process.env.PRODUCTION == 'NO') {
-            return res.redirect(`http://localhost:${process.env.PORT}/home`);  // delegate render task for frontend server
+            return res.redirect(`${process.env.DOMAIN_NAME}:${process.env.PORT}/home`);  // delegate render task for frontend server
         }
-        res.redirect(`http://issue-tracker-ex.herokuapp.com/home`);
+        res.redirect(`${process.env.DOMAIN_NAME}/home`);  // delegate render task for frontend server
     });
 });
 
