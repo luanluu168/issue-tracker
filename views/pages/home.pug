@@ -39,10 +39,14 @@ block content
                                 .form-row
                                     .form-group.col-md-6
                                         label(for='project-name') Project name
-                                        input(id='project-name' class='form-control' name='projectName' placeholder='e.g: Learn python in 7 days' type='text' require='')
+                                        input(id='project-name' class='form-control' name='projectName' placeholder='e.g: Learn python in 7 days' type='text' required='')
                                     .form-group.col-md-6
                                         label(for='project-end-date') End date
-                                        input(id='project-end-date' class='form-control' name='projectEndDate' placeholder='e.g: 7' type='text' require='')
+                                        input(id='project-end-date' class='form-control' name='projectEndDate' placeholder='e.g: 7'
+                                                pattern='^([0-9]){1,4}$'
+                                                onchange="try{setCustomValidity('')}catch(e){}" 
+                                                oninvalid="this.setCustomValidity('Need minimum 1 digit and maximum 4 digits')" 
+                                                oninput="this.setCustomValidity(' ')" aria-expanded="true" type='text' required='')
                                 .form-group.d-none
                                     label(for='project-image') Project image
                                     input(id='project-image' class='form-control' type='text')
@@ -56,11 +60,11 @@ block content
                             li= 'Name: ' + list.name
                             li(class='text-truncate')= 'End date: ' + list.end_date
                             li(class='text-truncate')= 'Created on: ' + list.created_on
-                            li(class='text-truncate')= 'status: ' + list.status
+                            li(class='text-truncate')= 'Status: ' + list.status
                             li(class='d-flex flex-row flex-wrap justify-content-center') 
                                 form(action='/crud-project' method='POST')
                                     input(class='d-none' name='projectId' value=list.id)
-                                    button.btn.btn-primary(type='submit' class='m-1' name='crudProjectBtn' value='detail') Detail
+                                    button.btn.btn-primary(type='submit' class='m-1 px-3' name='crudProjectBtn' value='detail') Detail
                                     button.btn.btn-danger(type='submit' class='m-1' name='crudProjectBtn' value='delete') Delete
                                     button.btn.btn-success(type='submit' class='m-1' name='crudProjectBtn' value='update') Update
                             

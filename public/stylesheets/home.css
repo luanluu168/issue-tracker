@@ -29,6 +29,6 @@ html, body {
     opacity: 0.85;
     border: 2px double rgb(53, 53, 247);
     background-color: rgb(120, 120, 172);
-    max-width: 25%;
-    min-width: 15%;
+    max-width: 65%;
+    min-width: 20%;
 }
