@@ -3,7 +3,7 @@ const         path = require('path');
 const      express = require('express');
 const dbConnection = require('../database/db');
 const  { bc, SALT_ROUNDS, SALT } = require('../database/hash');
-const { findUser, registerUser } = require('../database/users');
+const { findUser, registerUser, registerUserByOAuth } = require('../database/users');
 const       morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const      session = require('express-session');
@@ -47,7 +47,7 @@ passport.use(new Strategy({
             if(!cachedValue) {
                 console.log('Redis cache miss');
                 client.set(profile.id, JSON.stringify(user));
-                client.expire(profile.id, 60) // key will be expired in 1 minute
+                client.expire(profile.id, 2 * 60 * 60) // key will be expired in 2 hours
             } else {
                 console.log('Cache found the data');
             }
@@ -122,7 +122,7 @@ app.post('/auth/server/signin/query', (req, res) => {
                     if (process.env.PRODUCTION == 'NO') {
                         return res.redirect(`${process.env.DOMAIN_NAME}:${process.env.PORT}/home`);  // delegate render task for frontend server
                     }
-                    res.redirect(`${process.env.DOMAIN_NAME}:${process.env.PORT}/home`);  // delegate render task for frontend server
+                    res.redirect(`${process.env.DOMAIN_NAME}/home`);  // delegate render task for frontend server
                 } else {
                     res.render('auth/signin', { year: currentYear, actionType: 'signin', status: 'fail', error: 'Wrong password', isLoggedin: false });
                 }
@@ -188,6 +188,19 @@ app.get('/auth/server/auth/google/done', passport.authenticate('google', { failu
             email: user.email,
             isLoggedin: true
         };
+
+        // check and store account into db 
+        const query = `SELECT id, name, email, password, role FROM "Users" WHERE email='${user.email}'`;
+        console.log(`query= ${query}`);
+        const findUserPromise = findUser(query);
+        findUserPromise
+            .then((data) => {} ) // the case where user account already existed
+            .catch((err) => {
+                const registerUserPromise = registerUserByOAuth(user, bc, SALT_ROUNDS);
+                registerUserPromise
+                    .then((data) => { console.log(`registerUserPromise data= ${data}`) })
+                    .catch((e) => { console.log(`registerUserPromise error= ${e}`) });
+            }); // the case where user was not found
         
         res.cookie("userLoginInfo", 
                     JSON.stringify(req.session.User), 
