@@ -170,7 +170,7 @@ app.get('/auth/server/signout', (req, res, next) => {
     };
     // destroy cookie
     if(req.cookies.userLoginInfo) { res.clearCookie("userLoginInfo") };
-    res.render('pages/landing', { year: currentYear });
+    res.render('pages/landing', { year: currentYear, isLoggedin: false });
 });
 
 app.get('/auth/server/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
