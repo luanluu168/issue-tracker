@@ -182,7 +182,7 @@ app.get('/auth/server/auth/google/done', passport.authenticate('google', { failu
         user = JSON.parse(cachedValue);
         req.session.valid = true;
         req.session.User = {
-            aId:   user.aId,
+            aId:   parseInt(("" + user.aId).substring(0,7)),
             role:  user.role,
             name:  user.name,
             email: user.email,
