@@ -39,11 +39,18 @@ const deleteProject = (deleteId) => {
     });
 };
 
-const updateProject = () => {
-    let query = ``;
-    dbConnection.any(query)
-                .then()
-                .catch((err) => { console.log(`Cannot update project: ${err}`) });
+const updateProject = (updateId, updateName, updateEndDate, updateStatus, modifiedOn, modifiedBy) => {
+    // calculate end date
+    const query = `UPDATE "Projects" SET (name, end_date, status, modified_on, modified_by) = ('${updateName}', '${updateEndDate}', '${updateStatus}', '${modifiedOn}', '${modifiedBy}') WHERE id=${updateId}`;
+    console.log(`query= ${query}`);
+    return new Promise((resolve, reject) => {
+                    dbConnection.any(query)
+                            .then((data) => { 
+                                console.log(`update project data= ${data}`);
+                                resolve(data);
+                            })
+                            .catch((err) => reject({ error: `Error in update projects: ${err}`, status: 'internal error', code: '500' }));
+    });
 };
 
 module.exports = {

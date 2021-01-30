@@ -149,12 +149,49 @@ app.post('/crud-project', (req, res) => {
                 .catch((err) => console.log(`Error ${err}`));
             break;
         case'update':
+            console.log(`switch to update`);
+            axios({
+                method: 'POST',
+                url: URL,
+                data: {
+                    userLoginInfo: req.cookies.userLoginInfo,
+                    updateId: id,
+                    updateName: req.body.projectNameInModal,
+                    updateEndDate: req.body.endDateInModal,
+                    updateStatus: req.body.optradio
+                }
+                })
+                .then((result) => result.data)
+                .then((data) => {
+                    console.log(`axios update project data= ${JSON.stringify(data)}`);
+                    res.redirect('/home');
+                })
+                .catch((err) => console.log(`Error ${err}`));
             break;
         default:
-            console.log(`switch to default`);
+            console.log(`switch to detail`);
+            return res.redirect('/project-issue');
     }
 });
 
+app.get('/project-issue', (req, res) => {
+    const      URL = (process.env.PRODUCTION == 'NO') ? `${process.env.DOMAIN_NAME}:${process.env.PORT}/api/server/project-issue/query` : 
+                                                        `${process.env.DOMAIN_NAME}/api/server/project-issue/query`;
 
+    axios({
+        method: 'POST',
+        url: URL,
+        data: {
+            userLoginInfo: req.cookies.userLoginInfo,
+            detailId: id
+        }
+        })
+        .then((result) => result.data)
+        .then((data) => {
+            console.log(`axios detail project data= ${JSON.stringify(data)}`);
+            res.render('pages/issue', { year: currentYear, actionType: 'access-issue-page', status: 'success', error: 'None', isLoggedin: true });
+        })
+        .catch((err) => console.log(`Error ${err}`));
+});
 
 app.listen(PORT, () => console.log(`frontend server is listening on port ${PORT}`));
