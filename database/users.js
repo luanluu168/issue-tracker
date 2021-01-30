@@ -50,19 +50,41 @@ const registerUser = (user, bc, SALT_ROUNDS) => {
     });
 };
 
-const registerUserByOAuth = (user) => {
-    const { userName, userEmail, userPass, userRole } = user;
-    const query = `INSERT INTO "Users"(name, email, password, role) VALUES (${userName}, ${userEmail}, ${userPass}, ${userRole})`;
-    console.log(`------ registerUser query: ${query}`);
-    dbConnection.any(query)
-                .then((data) => {
-                    console.log(`RegisterUserByOAth testing 1 pass...`);
-                    resolve({ error: 'Account register successfully', actionType: 'Register user', status: 'success', code: '200' });
-                })
-                .catch((e) => {
-                    console.log(`RegisterUserByOAth testing 2 pass...`);
-                    reject({ error: 'User email already existed', actionType: 'Register user', status: 'fail', code: '400'});
-                }); 
+const registerUserByOAuth = (user, bc, SALT_ROUNDS) => {
+    return new Promise((resolve, reject) => {
+        const userName = user.name;
+        const userEmail = user.email;
+        const userPassword = user.aId;
+        const userRole = user.role;
+        console.log(`userName= ${userName}, userEmail= ${userEmail}, userPassword= ${userPassword}, userRole= ${userRole}`);
+
+        // check if the input data are all valid (not undefined)
+        if (userName == undefined || userEmail == undefined || userPassword == undefined || userRole == undefined) return reject({ error: 'Data arguments require', actionType: 'Register user', status: 'fail', code: '400'});
+
+        const callback = (err, hashPass) => {
+            if (err) { reject({ error: err, actionType: 'Hash Password', status: 'fail', code: '500'}); }
+
+            const    userId = parseInt(("" + user.aId).substring(0,7));
+            const     query = `INSERT INTO "Users" (id, name, email, password, role) VALUES (${userId}, '${userName}', '${userEmail}', '${hashPass}', '${userRole}')`;
+            console.log(`------ registerUser query: ${query}`);
+            dbConnection.any(query)
+                        .then((data) => {
+                            console.log(`Register Google oauth user testing 1 pass...`);
+                            console.log(`hashPass= ${hashPass}`);
+                            resolve({ error: 'Google oauth Account register successfully', actionType: 'Register user', status: 'success', code: '200' });
+                        })
+                        .catch((e) => {
+                            console.log(`Register Google oauth user testing 2 pass...`);
+                            reject({ error: 'Google email already existed', actionType: 'Register user', status: 'fail', code: '400'});
+                        }); 
+        };
+        // use async bcrypt function to hash
+        bc.hash(userPassword, SALT_ROUNDS, callback);
+    });
 };
 
-module.exports = { findUser, registerUser, registerUserByOAuth };
+module.exports = { 
+    findUser,
+    registerUser,
+    registerUserByOAuth
+};
