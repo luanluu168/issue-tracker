@@ -1,0 +1,34 @@
+html, body {
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.d-flex.justify-content-center .col-auto .container .jumbotron {
+   opacity: 0.75;
+   background-color: #e2e6eb;
+}
+@media (max-width: 850px) {
+    .d-flex.justify-content-center .col-auto .container .jumbotron {
+        padding: 15px;
+    }
+}
+@media (min-width: 851px) {
+    .d-flex.justify-content-center .col-auto .container .jumbotron {
+        padding: 50px;
+    }
+}
+
+.projects-listing-ul-style {
+    margin: 10px;
+    padding: 10px;
+    color: #fff;
+    list-style: none;
+    opacity: 0.85;
+    border: 2px double rgb(53, 53, 247);
+    background-color: rgb(120, 120, 172);
+    max-width: 25%;
+    min-width: 15%;
+}

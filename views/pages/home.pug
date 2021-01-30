@@ -26,17 +26,51 @@ block content
 
         //- Intro
         div(class='container-fluid pt-3')
-            div(class='d-flex flex-column justify-content-center align-items-center')
-                .col-auto
-                    h1 Add a new project
-                    if listings
-                        h1 !{listings}
-                    else
-                        div(class='alert alert-info text-center') No existed project yet!
+            div(class='d-flex justify-content-center align-items-center')
+                div(class='col-auto')
+                    //- insert table 
+                    .container
+                        .jumbotron
+                            div.text-center 
+                                i.fa.fa-file-powerpoint(aria-hidden='true').fa-3x
+                            h1.display-5.text-center Create a new project
 
-                .col-auto
-                    button(class='btn btn-outline-success font-weight-bold rounded-circle' id='add-new-project-btn') +
+                            form(action='/create-project' method='POST')
+                                .form-row
+                                    .form-group.col-md-6
+                                        label(for='project-name') Project name
+                                        input(id='project-name' class='form-control' name='projectName' placeholder='e.g: Learn python in 7 days' type='text' require='')
+                                    .form-group.col-md-6
+                                        label(for='project-end-date') End date
+                                        input(id='project-end-date' class='form-control' name='projectEndDate' placeholder='e.g: 7' type='text' require='')
+                                .form-group.d-none
+                                    label(for='project-image') Project image
+                                    input(id='project-image' class='form-control' type='text')
+                                button.btn.btn-primary(type='submit' class='w-100 mt-3') Create
+                    
+            //- view data table 
+            if listings
+                .container-fluid.d-flex.flex-wrap.justify-content-center
+                    each list in listings
+                        ul(class='projects-listing-ul-style')
+                            li= 'Name: ' + list.name
+                            li(class='text-truncate')= 'End date: ' + list.end_date
+                            li(class='text-truncate')= 'Created on: ' + list.created_on
+                            li(class='text-truncate')= 'status: ' + list.status
+                            li(class='d-flex flex-row flex-wrap justify-content-center') 
+                                form(action='/crud-project' method='POST')
+                                    input(class='d-none' name='projectId' value=list.id)
+                                    button.btn.btn-primary(type='submit' class='m-1' name='crudProjectBtn' value='detail') Detail
+                                    button.btn.btn-danger(type='submit' class='m-1' name='crudProjectBtn' value='delete') Delete
+                                    button.btn.btn-success(type='submit' class='m-1' name='crudProjectBtn' value='update') Update
+                            
+            else
+                div(class='alert alert-info text-center') No existed project yet!
+
+
+            .col-auto
+                button(class='btn btn-outline-success font-weight-bold rounded-circle my-3' id='add-new-project-btn') +
         //- footer
         div(class='pt-5 bg-transparent')
             div(class='footer')
-                | Copyright &copy; !{ div= year } All right reserved
+                | Copyright &copy; !{ div= year } Issue-Tracker, All right reserved
