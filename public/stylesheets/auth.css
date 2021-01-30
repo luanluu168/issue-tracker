@@ -41,6 +41,7 @@ html, body {
 
 .d-flex.justify-content-center .card {
    opacity: 0.75;
+   /* background-color: rgb(203, 226, 236); */
    background-color: #e2e6eb;
 }
 @media (max-width: 850px) {
