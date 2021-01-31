@@ -50,7 +50,7 @@ block content
                                 .form-group.d-none
                                     label(for='project-image') Project image
                                     input(id='project-image' class='form-control' type='text')
-                                button.btn.btn-primary(type='submit' class='w-100 mt-3') Create
+                                button.btn.btn-primary(type='submit' class='w-100 mt-3') Save
                     
             //- view data table 
             if listings
@@ -65,11 +65,11 @@ block content
                                 li(class='d-flex flex-wrap justify-content-center') 
                                     input(class='d-none' name='projectId' value=list.id)
                                     input(class='d-none' name='projectName' value=list.name)
-                                    button.btn.btn-primary(type='submit' class='m-1 px-3' name='crudProjectBtn' value='detail'
+                                    button.btn.btn-primary.crud-btn(type='submit' class='m-1 px-3' name='crudProjectBtn' value='detail'
                                                             data-whatid=list.id 
                                                             data-whatname=list.name) Detail
-                                    button.btn.btn-danger(type='submit' class='m-1' name='crudProjectBtn' value='delete') Delete
-                                    button.btn.btn-success(type='button' class='m-1' name='crudProjectBtn' value='update' 
+                                    button.btn.btn-danger.crud-btn(type='submit' class='m-1' name='crudProjectBtn' value='delete') Delete
+                                    button.btn.btn-success.crud-btn(type='button' class='m-1' name='crudProjectBtn' value='update' 
                                                             data-whatid=list.id 
                                                             data-whatname=list.name 
                                                             data-toggle='modal' 
