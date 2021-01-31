@@ -40,14 +40,14 @@ const deleteIssue = (deleteId) => {
     });
 };
 
-const updateIssue = (updateId, updateName, updateEndDate, updateStatus, modifiedOn, modifiedBy) => {
+const updateIssue = (updateSummary, updateResolvedDate, updateStatus, updatePriority, modifiedOn, modifiedBy, issueId) => {
     // calculate end date
-    const query = `UPDATE "Issues" SET (name, end_date, status, modified_on, modified_by) = ('${updateName}', '${updateEndDate}', '${updateStatus}', '${modifiedOn}', '${modifiedBy}') WHERE id=${updateId}`;
+    const query = `UPDATE "Issues" SET (summary, resolved_date, status, priority, modified_on, modified_by) = ('${updateSummary}', '${updateResolvedDate}', '${updateStatus}', '${updatePriority}', '${modifiedOn}', '${modifiedBy}') WHERE id=${issueId}`;
     console.log(`query= ${query}`);
     return new Promise((resolve, reject) => {
                     dbConnection.any(query)
                             .then((data) => { 
-                                console.log(`update project data= ${data}`);
+                                console.log(`update issues data successfully`);
                                 resolve(data);
                             })
                             .catch((err) => reject({ error: `Error in update issues: ${err}`, status: 'internal error', code: '500' }));

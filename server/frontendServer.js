@@ -221,8 +221,8 @@ app.get('/project-issue', (req, res) => {
 app.post('/crud-issue', (req, res) => {
     const btnValue = req.body.crudIssueBtn;
     const       id = req.body.issueId;
-    const      pid = req.body.projectId;
-    const    pname = req.body.projectName;
+    let        pid = req.body.projectId;
+    let      pname = req.body.projectName;
     console.log(`crud-issue route is called, req.body= ${JSON.stringify(req.body)} btnValue= ${btnValue}, id= ${id}`);
     const      URL = (process.env.PRODUCTION == 'NO') ? `${process.env.DOMAIN_NAME}:${process.env.PORT}/api/server/${btnValue}-issue/query` : 
                                                         `${process.env.DOMAIN_NAME}/api/server/${btnValue}-issue/query`;
@@ -244,7 +244,7 @@ app.post('/crud-issue', (req, res) => {
                 .then((result) => result.data)
                 .then((data) => {
                     console.log(`axios create issue succesfully`);
-                    res.redirect(`/project-issue/?pid=${req.body.projectId}&pname=${req.body.projectName}`);
+                    res.redirect(`/project-issue/?pid=${pid}&pname=${pname}`);
                 })
                 .catch((err) => console.log(`Error ${err}`));
             break;
@@ -267,27 +267,30 @@ app.post('/crud-issue', (req, res) => {
             break;
         case'update':
             console.log(`switch to update`);
+            pid   = req.body.projectIdInModal;
+            pname = req.body.projectNameInModal;
             axios({
                 method: 'POST',
                 url: URL,
                 data: {
                     userLoginInfo: req.cookies.userLoginInfo,
                     updateId: id,
-                    updateName: req.body.projectNameInModal,
-                    updateEndDate: req.body.endDateInModal,
-                    updateStatus: req.body.optradio
+                    updateSummary: req.body.issueSummaryInModal,
+                    updateResolvedDate: req.body.resolvedDateInModal,
+                    updateStatus: req.body.optradioStatus,
+                    updatePriority: req.body.optradioPriority
                 }
                 })
                 .then((result) => result.data)
                 .then((data) => {
                     console.log(`axios update project data= ${JSON.stringify(data)}`);
-                    res.redirect('/home');
+                    res.redirect(`/project-issue/?pid=${pid}&pname=${pname}`);
                 })
                 .catch((err) => console.log(`Error ${err}`));
             break;
         default:
-            console.log(`switch to detail`);
-            res.redirect(`/project-issue/?pid=${id}&pname=${req.body.projectName}`);
+            console.log(`switch to none`);
+            res.redirect(`/project-issue/?pid=${pid}&pname=${pname}`);
     }
 });
 

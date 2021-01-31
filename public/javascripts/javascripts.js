@@ -59,17 +59,22 @@ $('#updateProjectModal').on('show.bs.modal', (event) => {
 
 // -------      update issue        -------
 $('#updateIssueModal').on('show.bs.modal', (event) => {
-  // get the button value which contain id, name of the current ul element
-  let            updateButton = $(event.relatedTarget); // the update button that triggered the modal
-  let   updateButtonWhatIdVal = updateButton.data('whatid'); 
-  let updateButtonWhatNameVal = updateButton.data('whatname'); 
-  // console.log(`!!!!!!!!!!!!!! updateButtonWhatVal= ${updateButtonWhatIdVal}, projectName= ${updateButtonWhatNameVal}, projectId= ${updateButtonWhatIdVal}`);
+  // get the button value which contain id, name of the row in the table
+  let               updateButton = $(event.relatedTarget); // the update button that triggered the modal
+  let      updateButtonWhatIdVal = updateButton.data('whatid'); 
+  let updateButtonWhatSummaryVal = updateButton.data('whatsummary'); 
   
   // put the previous value into the modal field accrodingly
   $('input[name="issueIdInModal"]').val(updateButtonWhatIdVal);
-  $('textarea[name="issueSummaryInModal"]').val(updateButtonWhatNameVal);
+  $('textarea[name="issueSummaryInModal"]').val(updateButtonWhatSummaryVal);
 
   // update the id to the modal field for backend to do crud
   $('#issueIdInModal').val(updateButtonWhatIdVal);
+
+  // update project id and name
+  let   updateButtonWhatPid = updateButton.data('whatpid');
+  let updateButtonWhatPname = updateButton.data('whatpname');
+  $('input[name="projectIdInModal"]').val(updateButtonWhatPid);
+  $('input[name="projectNameInModal"]').val(updateButtonWhatPname);
 });
 // -------    end update issue   -------

@@ -122,5 +122,36 @@ app.post('/api/server/delete-issue/query', (req, res) => {
     }
 });
 
+app.post('/api/server/update-issue/query', (req, res) => {
+    console.log(`!!!!! api update issue route is called, req.body= ${JSON.stringify(req.body)}, projectId= ${JSON.stringify(req.body.projectId)}, issueSummary= ${JSON.stringify(req.body.updateSummary)}`);
+    if (req.body.userLoginInfo) {
+        const    issueResolvedDate = new Date(Date.now() + parseInt(req.body.updateResolvedDate) * 24 * 60 * 60 * 1000);
+        const          formatMonth = issueResolvedDate.getMonth()+1 < 10 ? `0${issueResolvedDate.getMonth()+1}` : issueResolvedDate.getMonth()+1;
+        const issueResolvedDateTSF = `${issueResolvedDate.getFullYear()}-${formatMonth}-${issueResolvedDate.getDate()}`;
+
+        const  updateSummary = req.body.updateSummary;
+        const   updateStatus = req.body.updateStatus;
+        const        issueId = req.body.updateId;
+        const updatePriority = req.body.updatePriority;
+
+        const          today = new Date(Date.now() + 24 * 60 * 60 * 1000);
+        const    formatToday = today.getMonth()+1 < 10 ? `0${today.getMonth()+1}` : today.getMonth()+1;
+        const     modifiedOn = `${today.getFullYear()}-${formatToday}-${today.getDate()}`;
+
+        const   userInCookie = JSON.parse(req.body.userLoginInfo);
+        const     modifiedBy = userInCookie.name;
+        const        promise = updateIssue(updateSummary, issueResolvedDateTSF, updateStatus, updatePriority, modifiedOn, modifiedBy, issueId);
+        return promise
+                    .then((data) => {
+                        console.log(`data= ${data}`);
+                        res.send({ actionType: 'update-project', status: 'success', code: 200, error: 'Update project successfully', isLoggedin: true });
+                    })
+                    .catch((err) => console.log(`Error in api server update project: ${JSON.stringify(err)}`));
+    } else {
+        console.log(`!!!!! Non login user want to update project`);
+        res.send({ actionType: 'update-project', status: 'fail', code: 403, error: 'Must logged in first', isLoggedin: false });
+    }
+});
+
 
 app.listen(PORT, () => console.log(`apiServer is listening on port ${PORT}`));

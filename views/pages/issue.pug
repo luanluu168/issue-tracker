@@ -96,7 +96,9 @@ block content
                                     td(scope='row') 
                                         button(type='button' class='btn btn-success' name='crudIssueBtn' value='update'
                                                 data-whatid=list.id
-                                                data-whatname=list.name
+                                                data-whatsummary=list.summary
+                                                data-whatpid=projectId
+                                                data-whatpname=projectName
                                                 data-toggle='modal'
                                                 data-target='#updateIssueModal') Update
                                     td(scope='row')
@@ -113,6 +115,8 @@ block content
                                 .modal-body
                                     form(action='/crud-issue' method='POST')
                                         .form-group
+                                            input(class='d-none' name='projectIdInModal')
+                                            input(class='d-none' name='projectNameInModal')
                                             input(class='d-none' name='issueId' id='issueIdInModal')
                                             label.col-form-label(for='modal-issue-summary-input') Issue summary:
                                             textarea(class='form-control' size='2' id='modalIssueSummaryInput' type='text' name='issueSummaryInModal' required=''
@@ -149,7 +153,7 @@ block content
 
                                         .modal-footer
                                             button.btn.btn-secondary(type='button' data-dismiss='modal') Close
-                                            button.btn.btn-success(type='submit' name='crudProjectBtn' value='update') Update
+                                            button.btn.btn-success(type='submit' name='crudIssueBtn' value='update') Update
 
 
             else
