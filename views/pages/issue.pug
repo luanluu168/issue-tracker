@@ -80,7 +80,11 @@ block content
                             th(scope='col') Delete
                         each list in listings
                             tbody
-                                form(action='/crud-project' method='POST')
+                                form(action='/crud-issue' method='POST')
+                                    input(class='d-none' name='issueId' value=list.id)
+                                    input(class='d-none' name='issueSummary' value=list.summary)
+                                    input(class='d-none' name='projectId' value=projectId)
+                                    input(class='d-none' name='projectName' value=projectName)
                                     tr
                                     th(scope='row') #{list.id}
                                     td(scope='row') #{projectName}
@@ -111,7 +115,7 @@ block content
                                         .form-group
                                             input(class='d-none' name='issueId' id='issueIdInModal')
                                             label.col-form-label(for='modal-issue-summary-input') Issue summary:
-                                            input(class='form-control' id='modalIssueSummaryInput' type='text' name='issueSummaryInModal' required=''
+                                            textarea(class='form-control' size='2' id='modalIssueSummaryInput' type='text' name='issueSummaryInModal' required=''
                                                     pattern='.*[\\w\\s]{1,}'
                                                     onchange="try{setCustomValidity('')}catch(e){}" 
                                                     oninvalid="this.setCustomValidity('Need at least 1 character')" 
@@ -125,12 +129,23 @@ block content
                                                     oninput="this.setCustomValidity(' ')" aria-expanded="true")
                                         .form-group(class='d-flex align-items-center')
                                             label.col-form-label(for='modal-status-input') Status:
-                                                label.radio-inline.mx-3
-                                                    input(type='radio' name='optradio' checked='' value='open' class='mx-1')
+                                                label.radio-inline.mx-4
+                                                    input(type='radio' name='optradioStatus' checked='' value='open' class='mx-1')
                                                     | open
-                                                label.radio-inline.mx-3
-                                                    input(type='radio' name='optradio' value='close' class='mx-1')
+                                                label.radio-inline.mx-1
+                                                    input(type='radio' name='optradioStatus' value='close' class='mx-1')
                                                     | close
+                                        .form-group(class='d-flex align-items-center')
+                                            label.col-form-label(for='modal-status-input') Priority:
+                                                label.radio-inline.mx-3
+                                                    input(type='radio' name='optradioPriority' checked='' value='high' class='mx-1')
+                                                    | High
+                                                label.radio-inline.mx-3
+                                                    input(type='radio' name='optradioPriority' value='normal' class='mx-1')
+                                                    | Normal
+                                                label.radio-inline.mx-3
+                                                    input(type='radio' name='optradioPriority' value='low' class='mx-1')
+                                                    | Low
 
                                         .modal-footer
                                             button.btn.btn-secondary(type='button' data-dismiss='modal') Close

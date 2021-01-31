@@ -106,5 +106,21 @@ app.post('/api/server/create-issue/query', (req, res) => {
     }
 });
 
+app.post('/api/server/delete-issue/query', (req, res) => {
+    console.log(`!!!!! api delete issue route is called, req.body= ${JSON.stringify(req.body)}, deleteId= ${JSON.stringify(req.body.deleteId)}, issueSummary= ${JSON.stringify(req.body.issueSummary)}`);
+    if (req.body.userLoginInfo) {
+        const  promise = deleteIssue(req.body.deleteId);
+        return promise
+                    .then((data) => {
+                        console.log(`data= ${data}`);
+                        res.send({ actionType: 'delete-issue', status: 'success', code: 200, error: 'Delete issue successfully', isLoggedin: true });
+                    })
+                    .catch((err) => console.log(`Error in api server delete issue: ${JSON.stringify(err)}`));
+    } else {
+        console.log(`!!!!! Non login user want to update project`);
+        res.send({ actionType: 'delete-issue', status: 'fail', code: 403, error: 'Must logged in first', isLoggedin: false });
+    }
+});
+
 
 app.listen(PORT, () => console.log(`apiServer is listening on port ${PORT}`));

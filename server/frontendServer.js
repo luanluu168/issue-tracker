@@ -221,6 +221,8 @@ app.get('/project-issue', (req, res) => {
 app.post('/crud-issue', (req, res) => {
     const btnValue = req.body.crudIssueBtn;
     const       id = req.body.issueId;
+    const      pid = req.body.projectId;
+    const    pname = req.body.projectName;
     console.log(`crud-issue route is called, req.body= ${JSON.stringify(req.body)} btnValue= ${btnValue}, id= ${id}`);
     const      URL = (process.env.PRODUCTION == 'NO') ? `${process.env.DOMAIN_NAME}:${process.env.PORT}/api/server/${btnValue}-issue/query` : 
                                                         `${process.env.DOMAIN_NAME}/api/server/${btnValue}-issue/query`;
@@ -258,8 +260,8 @@ app.post('/crud-issue', (req, res) => {
                 })
                 .then((result) => result.data)
                 .then((data) => {
-                    console.log(`axios delete project data= ${JSON.stringify(data)}`);
-                    res.redirect('/home');
+                    console.log(`axios delete issue data= ${JSON.stringify(data)}`);
+                    res.redirect(`/project-issue/?pid=${pid}&pname=${pname}`);
                 })
                 .catch((err) => console.log(`Error ${err}`));
             break;

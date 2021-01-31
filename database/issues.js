@@ -15,7 +15,7 @@ const getIssues = (projectId) => {
 
 const createIssue = (projectId, summary, resolvedDate, priority, createdBy, userId) => {
     if (userId > Number.MAX_SAFE_INTEGER + 1) { userId= parseInt(("" + userId).substring(0,7)) };
-    const query = `INSERT INTO "Issues"(project_id, summary, resolved_date, priority, created_by, user_id) VALUES ('${projectId}', '${summary}', '${resolvedDate}', '${priority}', '${createdBy}', ${userId})`;
+    const query = `INSERT INTO "Issues"(project_id, summary, resolved_date, priority, created_by, user_id) VALUES (${parseInt(projectId)}, '${summary}', '${resolvedDate}', '${priority}', '${createdBy}', ${userId})`;
     console.log(`query= ${query}`); 
     return new Promise((resolve, reject) => {
                     dbConnection.any(query)
@@ -29,10 +29,11 @@ const createIssue = (projectId, summary, resolvedDate, priority, createdBy, user
 
 const deleteIssue = (deleteId) => {
     const query = `DELETE FROM "Issues" WHERE id=${deleteId}`;
+    console.log(`query= ${query}`);
     return new Promise((resolve, reject) => {
                     dbConnection.any(query)
                             .then((data) => { 
-                                console.log(data);
+                                console.log(`delete issue successfully`);
                                 resolve(data);
                             })
                             .catch((err) => reject({ error: `Error in deleting issues: ${err}`, status: 'internal error', code: '500' }));
