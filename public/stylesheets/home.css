@@ -32,3 +32,10 @@ html, body {
     max-width: 65%;
     min-width: 20%;
 }
+
+.crud-btn {
+    min-width: 40px;
+    min-height: 18px;
+    font-size: 15px;
+    opacity: 0.9;
+}
