@@ -25,6 +25,8 @@ html, body {
     opacity: 0.75;
     margin: 0;
     padding: 0;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
     background-color: #7952b3;
     width: 100%;
     min-height: 5vh;
@@ -49,6 +51,8 @@ html, body {
     color:rgba(10, 10, 10, .85);
     margin: 0px;
     padding: 1px;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
 }
 
 .d-flex.justify-content-center .col-auto .jumbotron {
