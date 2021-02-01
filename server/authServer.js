@@ -88,6 +88,9 @@ const       today = new Date();
 const currentYear = today ? today.getFullYear() : 2020;
 
 app.get('/auth/server/signin', (req, res) => {
+    if (req.cookies.recaptcha == undefined) {
+        return res.render('pages/verifyIsHuman', { year: currentYear, actionType: 'render the page verify is human' });
+    }
     res.render('auth/signin', { year: currentYear, actionType: 'signin', error: '' });
 });
 app.post('/auth/server/signin/query', (req, res) => {
@@ -140,6 +143,11 @@ app.post('/auth/server/signin/query', (req, res) => {
 });
 
 app.get('/auth/server/signup', (req, res) => {
+    console.log(`req.cookies.recaptcha= ${JSON.stringify(req.cookies.recaptcha)}`);
+    if (req.cookies.recaptcha == undefined) {
+        return res.render('pages/verifyIsHuman', { year: currentYear, actionType: 'render the page verify is human' });
+    }
+    
     res.render('auth/signup', { year: currentYear, actionType: 'signup', error: ''});
 });
 app.post('/auth/server/signup/query', (req, res) => {
