@@ -19,6 +19,11 @@ module.exports = {
             name: "Frontend Server",
             script: "./server/frontendServer.js",
             watch: true,
+        },
+        {
+            name: "Security Server",
+            script: "./server/securityServer.js",
+            watch: true,
         }
     ]
 };

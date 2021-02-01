@@ -33,9 +33,26 @@ const modifyDropdownProps = () => {
 window.onresize = () => { 
   modifyDropdownProps();
 }; 
+const handleVerifyIsHumanClick = () => {
+  fetch('/security/server/verify-is-human', {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'post',
+      })
+      .then(response => {
+        console.log(`response.text= ${response.text()}`)
+        response.text()
+      })
+      .then(text => console.log(`text= ${text}`))
+      .catch(err => console.log(`Error in javascript fetch: ${err}`));
+};
 window.onload = () => {
   getDropdownComponents();
   modifyDropdownProps();
+
+  $('#verify-is-human-button').submit(() => handleVerifyIsHumanClick);
 };
 // ------- end dropdown menu hover ---------
 
