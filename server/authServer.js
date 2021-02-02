@@ -14,7 +14,6 @@ const   RedisStore = require('connect-redis')(session);
 const       client = process.env.PRODUCTION == 'NO' ? redis.createClient() : redis.createClient(process.env.REDIS_URL);
 const       crypto = require('crypto');
 const       sgMail = require('@sendgrid/mail');
-const { render } = require('pug');
 const         PORT = process.env.AUTH_SERVER_PORT || 4002;
 const          app = express();
 
@@ -87,7 +86,7 @@ app.use(morgan('dev'));
 (process.env.PRODUCTION === 'NO') ? app.set('views', 'views') : app.set('views', '../views');
 app.set('view engine', 'pug');
 
-// email
+// Sendgrid email
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const       today = new Date();
@@ -188,8 +187,7 @@ const handleSignupWithVerifyEmail = (req, res) => {
         `
     };
 
-    console.log(`handleSignupWithVerifyEmail is called, newUser= ${JSON.stringify(newUser)}, message= ${JSON.stringify(message)}`);
-    const callback = async () => {
+    const sendEmailToVerify = async () => {
         try {
             await sgMail.send(message);
             // save the new user info to redis store
@@ -198,7 +196,7 @@ const handleSignupWithVerifyEmail = (req, res) => {
             res.render('auth/signup', { year: currentYear, actionType: 'server send token email', status: 'success', error: `Thanks for registering. Please check your email to verify your account` });
         } catch(err) {
             console.log(err);
-            if (err.response) { console.error(err.response.body) }
+            if (err.response) { console.error(err.response.body) };
             res.render('auth/signup', { year: currentYear, actionType: 'server send token email', status: 'fail', error: 'Something went wrong. Please contact us for assistance' });
         }
     };
@@ -207,9 +205,9 @@ const handleSignupWithVerifyEmail = (req, res) => {
     client.get(newUser.userEmail, (err, cachedValue) => {
         if(err) { console.log(`Error in client get: ${err}`) };
         if(cachedValue) { // email and token exist in cache
-            return res.render('auth/signup', { year: currentYear, actionType: 'Email exists in redis cache', status: 'success', error: `Thanks for registering. Please check your email to verify your account! (be aware that your token will be expired after 2 hours)` });
+            res.render('auth/signup', { year: currentYear, actionType: 'Email exists in redis cache', status: 'success', error: `Thanks for registering. Please check your email to verify your account! (be aware that your token will be expired after 2 hours)` });
         } else { // email and token not in cache
-            callback();
+            sendEmailToVerify();
         }
     });
 }
@@ -226,25 +224,6 @@ app.post('/auth/server/signup/query', (req, res) => {
             // 2. ask user to verify their email and save the token to redis store
             handleSignupWithVerifyEmail(req, res);
          }); 
-    
-
-    // // if email is verified, then save the user to the db
-    // let user = {
-    //     userName: req.body.userName,
-    //     userEmail: req.body.userEmail,
-    //     userPassword: req.body.userPassword,
-    //     userRole: 'user'
-    // };
-    
-    // const promise = registerUser(user, bc, SALT_ROUNDS);
-    // promise.then((data) => {
-    //             res.render('auth/signin', { year: currentYear, actionType: 'signup', status: 'success', error: 'Register successfully' });
-    //         })
-    //         .catch( (e) => {
-    //             console.log(`Error signup @ authServer: ${e}`);
-    //             let strError = e.error;
-    //             res.render('auth/signup', { year: currentYear, actionType: 'singup', status: 'fail', error: strError });
-    //         });
 });
 app.get('/auth/server/verify-email', (req, res, next) => {
     client.get(req.query.email, (error, cachedValue) => {
