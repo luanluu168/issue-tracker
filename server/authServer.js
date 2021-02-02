@@ -177,6 +177,10 @@ const handleSignupWithVerifyEmail = (req, res) => {
             http://${req.headers.host}/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}
         `,
         html: `
+            <div style="font-size: 33px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; 
+            border-radius: 3px; width: 100%; background-color: #15cd72; border-top: 12px solid #15cd72; border-bottom: 12px solid #15cd72; 
+            border-right: 18px solid #15cd72; border-left: 18px solid #15cd72; font-weight: bold; text-align: center; min-height: 1.5em;">Issue Tracker</div>
+
             <h1>Hello, ${newUser.userName}!<h1>
             <p>Thanks for registering on Issue-Tracker.</p>
             <p>Please click the button below to verify your account.</p>
