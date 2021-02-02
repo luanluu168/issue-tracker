@@ -16,3 +16,33 @@
 .g-recaptcha {
     opacity: 0.85;
 }
+
+.verify-heading-text {
+    color: #fff;
+    text-align: center;
+}
+@media (max-width: 750px) {
+    .verify-heading-text {
+        font-size: 1.5rem;
+    }
+}
+@media (min-width: 751px) {
+    .verify-heading-text {
+        font-size: 2.2rem;
+    }
+}
+
+.verify-detail-text {
+    color: #fff;
+    text-align: center;
+}
+@media (max-width: 750px) {
+    .verify-detail-text {
+        font-size: 1.1rem;
+    }
+}
+@media (min-width: 751px) {
+    .verify-detail-text {
+        font-size: 1.5rem;
+    }
+}
