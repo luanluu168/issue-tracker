@@ -169,12 +169,12 @@ const handleSignupWithVerifyEmail = (req, res) => {
 
     const message = {
         to: newUser.userEmail,
-        from: 'marvinitsw@gmail.com',
+        from: 'issuetrackerex@gmail.com',
         subject: 'Issue-Tracker - verify your email',
         text: `
             Hello, thanks for registering on Issue-Tracker. 
             Please copy and past the address below to verify your account. 
-            http://${req.headers.host}/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}
+            ${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}
         `,
         html: `
             <div style="font-size: 33px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; 
@@ -184,7 +184,7 @@ const handleSignupWithVerifyEmail = (req, res) => {
             <h1>Hello, ${newUser.userName}!<h1>
             <p>Thanks for registering on Issue-Tracker.</p>
             <p>Please click the button below to verify your account.</p>
-            <a href='http://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}'
+            <a href='${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}'
             target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; 
             border-radius: 3px; background-color: #0275d8; border-top: 12px solid #0275d8; border-bottom: 12px solid #0275d8; 
             border-right: 18px solid #0275d8; border-left: 18px solid #0275d8; display: inline-block;">Verify your account &rarr;</a>
