@@ -177,17 +177,53 @@ const handleSignupWithVerifyEmail = (req, res) => {
             ${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}
         `,
         html: `
-            <div style="font-size: 33px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; 
-            border-radius: 3px; width: 100%; background-color: #15cd72; border-top: 12px solid #15cd72; border-bottom: 12px solid #15cd72; 
-            border-right: 18px solid #15cd72; border-left: 18px solid #15cd72; font-weight: bold; text-align: center; min-height: 1.5em;">Issue Tracker</div>
+            <table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
+                <tbody>
+                    <tr>
+                        <td><a href="https://issue-tracker-ex.herokuapp.com/"><img src="https://i.ibb.co/Kb1CQWr/web-logo-landing.png" alt="web-logo-landing" border="0"></a></td>
+                    </tr>
+					<tr>
+						<td style="box-sizing:border-box;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;padding:30px" valign="top">
+						<table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
+							<tbody>
+								<tr>
+									<td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
+									<h2 style="margin:0;margin-bottom:30px;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;line-height:1.5;font-size:24px;color:#294661!important">Hello, ${newUser.userName}!</h2>
 
-            <h1>Hello, ${newUser.userName}!<h1>
-            <p>Thanks for registering on Issue-Tracker.</p>
-            <p>Please click the button below to verify your account.</p>
-            <a href='${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}'
-            target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; 
-            border-radius: 3px; background-color: #0275d8; border-top: 12px solid #0275d8; border-bottom: 12px solid #0275d8; 
-            border-right: 18px solid #0275d8; border-left: 18px solid #0275d8; display: inline-block;">Verify your account &rarr;</a>
+									<p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300"><strong>Thanks for registering on Issue-Tracker.<br><br>Let's verify your account so you can start using the app.</strong></p>
+
+									<p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300"><small>Your link is active for 2 hours. After that, you will need to register again to get a new token link.</small></p>
+									</td>
+								</tr>
+								<tr>
+									<td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
+									<table cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-spacing:0;width:100%;border-collapse:separate!important" width="100%">
+										<tbody>
+											<tr>
+												<td align="center" style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;padding-bottom:15px" valign="top">
+												<table cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-spacing:0;width:auto;border-collapse:separate!important">
+													<tbody>
+														<tr>
+                                                            <td bgcolor="#348eda" style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;background-color:#348eda;border-radius:2px;text-align:center" valign="top">
+                                                                <a href='${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}'
+                                                                target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; 
+                                                                border-radius: 3px; background-color: #0275d8; border-top: 12px solid #0275d8; border-bottom: 12px solid #0275d8; 
+                                                                border-right: 18px solid #0275d8; border-left: 18px solid #0275d8; display: inline-block;">Verify your account &rarr;</a></td>
+														</tr>
+													</tbody>
+												</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>
         `
     };
 
