@@ -12,10 +12,13 @@ const { Strategy } = require('passport-google-oauth20');
 const        redis = require('redis');
 const   RedisStore = require('connect-redis')(session);
 const       client = process.env.PRODUCTION == 'NO' ? redis.createClient() : redis.createClient(process.env.REDIS_URL);
+const       crypto = require('crypto');
+const       sgMail = require('@sendgrid/mail');
+const { render } = require('pug');
 const         PORT = process.env.AUTH_SERVER_PORT || 4002;
 const          app = express();
 
-let            key = null;
+let            key = 0;
 client.on("error", (err) => {
     console.error(err);
 });
@@ -84,6 +87,9 @@ app.use(morgan('dev'));
 (process.env.PRODUCTION === 'NO') ? app.set('views', 'views') : app.set('views', '../views');
 app.set('view engine', 'pug');
 
+// email
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 const       today = new Date();
 const currentYear = today ? today.getFullYear() : 2020;
 
@@ -144,29 +150,131 @@ app.post('/auth/server/signin/query', (req, res) => {
 
 app.get('/auth/server/signup', (req, res) => {
     console.log(`req.cookies.recaptcha= ${JSON.stringify(req.cookies.recaptcha)}`);
+    console.log(`!!!!!!!! req.headers.host= ${req.headers.host}`); // can use this to remove domain
     if (req.cookies.recaptcha == undefined) {
         return res.render('pages/verifyIsHuman', { year: currentYear, actionType: 'render the page verify is human' });
     }
     
     res.render('auth/signup', { year: currentYear, actionType: 'signup', error: ''});
 });
-app.post('/auth/server/signup/query', (req, res) => {
-    let user = {
+const handleSignupWithVerifyEmail = (req, res) => {
+    let newUser = {
+        aId: key,
         userName: req.body.userName,
         userEmail: req.body.userEmail,
         userPassword: req.body.userPassword,
-        userRole: 'user'
+        userRole: 'user',
+        emailToken: crypto.randomBytes(64).toString('hex'),
+        status: 'pending'
     };
+
+    const message = {
+        to: newUser.userEmail,
+        from: 'marvinitsw@gmail.com',
+        subject: 'Issue-Tracker - verify your email',
+        text: `
+            Hello, thanks for registering on Issue-Tracker. 
+            Please copy and past the address below to verify your account. 
+            http://${req.headers.host}/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}
+        `,
+        html: `
+            <h1>Hello, ${newUser.userName}!<h1>
+            <p>Thanks for registering on Issue-Tracker.</p>
+            <p>Please click the button below to verify your account.</p>
+            <a href='http://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}'
+            target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; 
+            border-radius: 3px; background-color: #0275d8; border-top: 12px solid #0275d8; border-bottom: 12px solid #0275d8; 
+            border-right: 18px solid #0275d8; border-left: 18px solid #0275d8; display: inline-block;">Verify your account &rarr;</a>
+        `
+    };
+
+    console.log(`handleSignupWithVerifyEmail is called, newUser= ${JSON.stringify(newUser)}, message= ${JSON.stringify(message)}`);
+    const callback = async () => {
+        try {
+            await sgMail.send(message);
+            // save the new user info to redis store
+            client.set(newUser.userEmail, JSON.stringify(newUser));
+            client.expire(newUser.userEmail, 2 * 60 * 60) // key will be expired in 2 hours
+            res.render('auth/signup', { year: currentYear, actionType: 'server send token email', status: 'success', error: `Thanks for registering. Please check your email to verify your account` });
+        } catch(err) {
+            console.log(err);
+            if (err.response) { console.error(err.response.body) }
+            res.render('auth/signup', { year: currentYear, actionType: 'server send token email', status: 'fail', error: 'Something went wrong. Please contact us for assistance' });
+        }
+    };
+
+    // check if the redis still has the email key, then we do not need to resend and generate a new token
+    client.get(newUser.userEmail, (err, cachedValue) => {
+        if(err) { console.log(`Error in client get: ${err}`) };
+        if(cachedValue) { // email and token exist in cache
+            return res.render('auth/signup', { year: currentYear, actionType: 'Email exists in redis cache', status: 'success', error: `Thanks for registering. Please check your email to verify your account! (be aware that your token will be expired after 2 hours)` });
+        } else { // email and token not in cache
+            callback();
+        }
+    });
+}
+app.post('/auth/server/signup/query', (req, res) => {
+    // 1. find if the user email was already taken
+    const query = `SELECT id, name, email, password, role FROM "Users" WHERE email='${req.body.userEmail}'`;
+    console.log(`auth server signup query= ${query}`);
+    const findUserPromise = findUser(query);
+    findUserPromise
+        .then((result) => { // the case where user account already existed
+            res.render('auth/signup', { year: currentYear, actionType: 'register user', status: 'fail', error: 'Email was taken by another user' });
+        })
+        .catch((e) => { // the case where user account was not existed yet
+            // 2. ask user to verify their email and save the token to redis store
+            handleSignupWithVerifyEmail(req, res);
+         }); 
     
-    const promise = registerUser(user, bc, SALT_ROUNDS);
-    promise.then((data) => {
-                res.render('auth/signin', { year: currentYear, actionType: 'signup', status: 'success', error: 'Register successfully' });
-            })
-            .catch( (e) => {
-                console.log(`Error signup @ authServer: ${e}`);
-                let strError = e.error;
-                res.render('auth/signup', { year: currentYear, actionType: 'singup', status: 'fail', error: strError });
-            });
+
+    // // if email is verified, then save the user to the db
+    // let user = {
+    //     userName: req.body.userName,
+    //     userEmail: req.body.userEmail,
+    //     userPassword: req.body.userPassword,
+    //     userRole: 'user'
+    // };
+    
+    // const promise = registerUser(user, bc, SALT_ROUNDS);
+    // promise.then((data) => {
+    //             res.render('auth/signin', { year: currentYear, actionType: 'signup', status: 'success', error: 'Register successfully' });
+    //         })
+    //         .catch( (e) => {
+    //             console.log(`Error signup @ authServer: ${e}`);
+    //             let strError = e.error;
+    //             res.render('auth/signup', { year: currentYear, actionType: 'singup', status: 'fail', error: strError });
+    //         });
+});
+app.get('/auth/server/verify-email', (req, res, next) => {
+    client.get(req.query.email, (error, cachedValue) => {
+        if(error) { console.log(`Error in client.get: ${error}`) };
+        if (!cachedValue) { // token not exists or expired
+            return res.render('auth/server/signup', { year: currentYear, actionType: 'server send token email', status: 'fail', error: '<p>Your token is invalid. Please register again</p>' });
+        }
+        // the case where token is in the cache
+        user = JSON.parse(cachedValue);
+        req.session.valid = true;
+        req.session.User = {
+            aId:   user.aId,
+            role:  user.useRole,
+            name:  user.userName,
+            email: user.userEmail,
+            isLoggedin: true
+        };
+        // save the user to db
+        const promise = registerUser(user, bc, SALT_ROUNDS);
+        promise.then((data) => {
+                    // clear the cache and return to the signin page
+                    client.del(req.query.email);
+                    res.render('auth/signin', { year: currentYear, actionType: 'signup', status: 'success', error: 'Register successfully, please sign-in' });
+                })
+                .catch( (e) => {
+                    console.log(`Error signup @ authServer: ${e}`);
+                    let strError = e.error;
+                    res.render('auth/signup', { year: currentYear, actionType: 'singup', status: 'fail', error: strError });
+                });
+    });
 });
 
 app.get('/auth/server/signout', (req, res, next) => {
