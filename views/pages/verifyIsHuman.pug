@@ -1,42 +1,16 @@
 extends layout.pug
     
 block content
-    div(class='body-wrapper')
-        img(class="full-bg-img" src="/assets/bg-signup.jpg", alt="bg-image")
-        //- Navigation
-        nav.navbar.navbar-expand-lg.navbar-dark.bg-transparent
-            button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarToggler' aria-controls='navbarToggler' aria-expanded='false' aria-label='Toggle navigation')
-                span.navbar-toggler-icon
-            a.navbar-brand(href='/')
-                img(src='/assets/web-logo-landing.png' alt='Web logo' width='150' height='150')
-            #navbarToggler.collapse.navbar-collapse
-                ul.navbar-nav.ml-auto.mt-2.mt-lg-0
-                    li.nav-item.dropdown
-                        a#navbarDropdown2.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
-                            i.fa.fa-user-circle(aria-hidden='true').fa-lg
-                        .dropdown-menu(aria-labelledby='navbarDropdown2').dropdown-menu-right
-                            if !isLoggedin
-                                a.dropdown-item(href='/auth/server/signin') Sign-in
-                                a.dropdown-item(href='/auth/server/signup') Sign-up
-                            if isLoggedin
-                                a.dropdown-item(href='/auth/server/signout') Sign-out
-
-        //- Intro
-        div(class='container-fluid pt-3')
-            div(class='d-flex flex-column justify-content-center align-items-center')
-                div(class='w-100')
-                    h1(class='verify-heading-text my-3') 
-                        | To 
-                        u protect 
-                        | this site from 
-                        u fraud and abuse!
-                    h4(class='verify-detail-text') please check the box below to again access to this site
-                form#comment_form(action='/security/server/verify-is-human' method='post' class='mt-3')
-                    .g-recaptcha(name='recaptcha' id='grecaptcha' data-sitekey='6LeZ1UQaAAAAAEIEtTi9fm2h-8LiEqxQNjuD20sc')
-                    button(class='verify-button' type='submit' name='submit') Verify
-
-
-        //- footer
-        div(class='pt-5 bg-transparent')
-            div(class='footer')
-                | Copyright &copy; !{ div= year } Issue-Traker, All right reserved
+    //- Intro
+    div(class='container-fluid pt-3')
+        div(class='d-flex flex-column justify-content-center align-items-center')
+            div(class='w-100')
+                h1(class='verify-heading-text my-3') 
+                    | To 
+                    u protect 
+                    | this site from 
+                    u fraud and abuse!
+                h4(class='verify-detail-text') please check the box below to again access to this site
+            form#comment_form(action='/security/server/verify-is-human' method='post' class='mt-3')
+                .g-recaptcha(name='recaptcha' id='grecaptcha' data-sitekey='6LeZ1UQaAAAAAEIEtTi9fm2h-8LiEqxQNjuD20sc')
+                button(class='verify-button' type='submit' name='submit') Verify

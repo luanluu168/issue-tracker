@@ -16,7 +16,40 @@ html(lang="en")
         link(rel='stylesheet' type="text/css" href='/stylesheets/issue.css')
         link(rel='stylesheet' type="text/css" href='/stylesheets/verifyIsHuman.css')
     body
-        block content
+        div(class='body-wrapper')
+            img(class="full-bg-img" src="/assets/bg-masthead.jpg", alt="bg-image")
+            //- Navigation
+            nav.navbar.navbar-expand-lg.navbar-dark.bg-transparent
+                button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarToggler' aria-controls='navbarToggler' aria-expanded='false' aria-label='Toggle navigation')
+                    span.navbar-toggler-icon
+                a.navbar-brand(href='/')
+                    img(src='/assets/web-logo-landing.png' alt='Web logo' width='150' height='150')
+                if isLoggedin
+                    ul.navbar-nav.mt-2.mt-lg-0
+                        li
+                            a.nav-link(href='/home')
+                                | home
+                #navbarToggler.collapse.navbar-collapse
+                    ul.navbar-nav.ml-auto.mt-2.mt-lg-0
+                        li.mt-2.mr-2
+                            if isLoggedin && user
+                                | Hi, !{ user.name }
+                        li.nav-item.dropdown
+                            a#navbarDropdown2.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                                i.fa.fa-user-circle(aria-hidden='true').fa-lg
+                            .dropdown-menu(aria-labelledby='navbarDropdown2').dropdown-menu-right
+                                if !isLoggedin
+                                    a.dropdown-item(href='/auth/server/signin') Sign-in
+                                    a.dropdown-item(href='/auth/server/signup') Sign-up
+                                else
+                                    a.dropdown-item(href='/auth/server/edit-profile') Edit-profile
+                                    a.dropdown-item(href='/auth/server/signout') Sign-out
+            block content
+
+            //- footer
+            div(class='pt-5 bg-transparent')
+                div(class='footer')
+                    | Copyright &copy; !{ div= year } Issue-Tracker, All right reserved
         
         //-  JavaScript: jQuery first, then Popper.js, then Bootstrap JS
         script(src='/vendors/jquery-3.3.1.slim.min.js')

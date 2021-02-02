@@ -1,0 +1,81 @@
+extends layout.pug
+    
+block content
+    //- Intro
+    div(class='container-fluid my-3 mx-1 p-3')
+        .card
+            .card-body
+                form(action='/edit-profile' method='POST' oninput='confirmNewPasword.setCustomValidity(newPassword.value != confirmNewPasword.value ? "Passwords do not match." : "")')
+                    .row
+                        .col-12.col-sm-auto.mb-3
+                            .mx-auto(style='width: 150px;')
+                                .d-flex.justify-content-center.align-items-center.rounded(style='height: 150px; background-color: rgb(233, 236, 239);')
+                                    if user && user.image
+                                        img(src=`${user.image}` alt='photo' width='150' height='150')
+                                    else 
+                                        span(style='color: rgb(166, 168, 170); font: bold 8pt Arial;') 150x150 
+                        .col.d-flex.flex-column.flex-sm-row.justify-content-between.mb-3
+                            .text-center.text-sm-left.mb-2.mb-sm-0
+                                h4.pt-sm-2.pb-1.mb-0.text-nowrap #{user.name}
+                                p.mb-0 #{user.email}
+                                .text-muted
+                                    small Last seen #{user.lastLogin || '2 hours ago'}
+                                .mt-2
+                                    button.btn.btn-primary(type='button')
+                                        i.fa.fa-fw.fa-camera
+                                        span(class='ml-1') Change Photo
+                            .text-center.text-sm-right
+                                span.badge.badge-secondary #{user.role}
+                                .text-muted
+                                    small Joined #{user.createdOn}
+                    ul.nav.nav-tabs
+                        li.nav-item
+                            a.active.nav-link(href='') Settings
+                    .tab-content.pt-3
+                        .tab-pane.active
+                            form.form(novalidate='')
+                                .row
+                                    .col
+                                        .row
+                                            .col
+                                                .form-group
+                                                    label User name
+                                                    input.form-control(type='text' name='username' value=user.name)
+                                            .col
+                                                .form-group
+                                                    label Email
+                                                    input.form-control(type='email' value=user.email readonly)
+                                .row
+                                    .col-12.col-sm-6.mb-3
+                                        .mb-2
+                                            b Change Password
+                                        .row
+                                            .col
+                                                .form-group
+                                                    label Current Password
+                                                    input.form-control(type='password' value=user.password readonly)
+                                        .row
+                                            .col
+                                                .form-group
+                                                    label New Password
+                                                    input.form-control(type='password' name='newPassword')
+                                        .row
+                                            .col
+                                                .form-group
+                                                    label
+                                                        | Confirm 
+                                                        span.d-none.d-xl-inline Password
+                                                    input.form-control(type='password' name='confirmNewPasword')
+                                    .col-12.col-sm-5.offset-sm-1.mb-3
+                                        .mb-2
+                                            b Keeping in Touch
+                                        .row
+                                            .col
+                                                label Email Notifications
+                                                .custom-controls-stacked.px-2
+                                                    .custom-control.custom-checkbox
+                                                        input#notifications-news.custom-control-input(type='checkbox' checked='')
+                                                        label.custom-control-label(for='notifications-news') Newsletter
+                            .row
+                                .col.d-flex.justify-content-end
+                                    button.btn.btn-primary(type='submit') Save Changes
