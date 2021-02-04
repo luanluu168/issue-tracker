@@ -2,7 +2,7 @@ extends layout.pug
     
 block content
     //- Intro
-    div(class='container-fluid my-3 mx-1 p-3')
+    div(class='container-fluid mb-4 mt-3 mx-1 p-3')
         if user
             .card
                 .card-body
@@ -88,7 +88,7 @@ block content
                                                             label.custom-control-label(for='notifications-news') Newsletter
                                 .row
                                     .col.d-flex.justify-content-end
-                                        button.btn.btn-primary(type='submit' class='save-profile-button') Save Changes
+                                        button.btn.btn-primary(type='submit' class='save-profile-button' name='save-profile-button') Save Changes
 
         else
             | Loading... (please refresh if waiting too long)

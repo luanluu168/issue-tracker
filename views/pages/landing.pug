@@ -8,6 +8,6 @@ block content
             p(class='describe-app-text') use to track todos, bugs, and features for developers
         div(class='d-flex flex-row justify-content-center mt-4')
             if !isLoggedin
-                a(class='start-button' href='/auth/server/signup') START NOW
+                a(class='start-button' name='landing-start-button' href='/auth/server/signup') START NOW
             else
-                a(class='start-button' href='/home') START NOW
+                a(class='start-button' name='landing-start-button' href='/home') START NOW
