@@ -27,11 +27,6 @@ block content
                                             label(for='input-user-image-file' class='btn btn-primary') 
                                                 i.fa.fa-fw.fa-camera
                                                 span(class='ml-1') Change Image
-
-                                        //- button.btn.btn-primary(type='button' name='changeImageButton' data-toggle='modal' data-target='#changeImageModal')
-                                        //-     i.fa.fa-fw.fa-camera
-                                        //-     span(class='ml-1') Change Photo
-                                        //- input#input-user-image-file-1(name='userAvatar' type='text' class='custom-file-input')
                                 .text-center.text-sm-right
                                     span.badge.badge-secondary #{user.role}
                                     .text-muted
@@ -96,18 +91,3 @@ block content
 
         else
             | Loading... (please refresh if waiting too long)
-
-        form(enctype="multipart/form-data")
-            #changeImageModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='changeImageModalLabel' aria-hidden='true')
-                .modal-dialog.modal-lg(role='document')
-                    .modal-content
-                        .modal-header
-                            h4#changeImageModalLabel.modal-title Change Photo
-                            button.close(type='button' data-dismiss='modal' aria-label='Close' class='btn-outline-danger')
-                                span(aria-hidden='true') &times;
-                        .modal-body
-                            .file-loading
-                                input#input-user-image-file-2(name='tmpUserAvatar' type='file' accept='.jpg,.png')
-                        .modal-footer
-                            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
-                            button.btn.btn-primary(id='changeImageModalSaveButton' type='submit' title='Save image') Save
