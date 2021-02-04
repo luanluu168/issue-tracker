@@ -50,6 +50,13 @@ app.all('/security/server*', (req, res) => {
     });
 });
 
+// image server
+app.all('/image/server*', (req, res) => {
+    proxy.web(req, res, {
+        target: `http://localhost:${process.env.IMAGE_SERVER_PORT}`
+    });
+});
+
 // frontend server
 app.all('/*', (req, res) => {
     proxy.web(req, res, {

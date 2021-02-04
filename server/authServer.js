@@ -3,7 +3,7 @@ const         path = require('path');
 const      express = require('express');
 const dbConnection = require('../database/db');
 const  { bc, SALT_ROUNDS, SALT } = require('../database/hash');
-const { findUser, registerUser, registerUserByOAuth } = require('../database/users');
+const { findUser, registerUser, registerUserByOAuth, setUserImage, updateUserName, updateUserNameAndPassword } = require('../database/users');
 const       morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const      session = require('express-session');
@@ -40,6 +40,7 @@ passport.use(new Strategy({
             role:  'user',
             name:  profile.name.givenName,
             email: profile.emails[0].value,
+            image: '/upload/default-user.png',
             isLoggedin: true
         };
 
@@ -79,7 +80,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan('dev'));
 
@@ -119,7 +120,9 @@ app.post('/auth/server/signin/query', (req, res) => {
                         aId:   data.id,
                         role:  data.role,
                         name:  data.name,
+                        image: data.image,
                         email: loginEmail,
+                        isSocialAccount: false,
                         isLoggedin: true
                     };
                     console.log(`req.session.User.name= ${req.session.User.name}`);
@@ -200,7 +203,7 @@ const handleSignupWithVerifyEmail = (req, res) => {
 									<table cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-spacing:0;width:100%;border-collapse:separate!important" width="100%">
 										<tbody>
 											<tr>
-												<td align="center" style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;padding-bottom:15px" valign="top">
+												<td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;padding-bottom:15px" valign="top">
 												<table cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-spacing:0;width:auto;border-collapse:separate!important">
 													<tbody>
 														<tr>
@@ -208,7 +211,8 @@ const handleSignupWithVerifyEmail = (req, res) => {
                                                                 <a href='${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}'
                                                                 target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; 
                                                                 border-radius: 3px; background-color: #0275d8; border-top: 12px solid #0275d8; border-bottom: 12px solid #0275d8; 
-                                                                border-right: 18px solid #0275d8; border-left: 18px solid #0275d8; display: inline-block;">Verify your account &rarr;</a></td>
+                                                                border-right: 18px solid #0275d8; border-left: 18px solid #0275d8; display: inline-block;">Verify your account &rarr;</a>
+                                                            </td>
 														</tr>
 													</tbody>
 												</table>
@@ -279,6 +283,7 @@ app.get('/auth/server/verify-email', (req, res, next) => {
             role:  user.useRole,
             name:  user.userName,
             email: user.userEmail,
+            isSocialAccount: false,
             isLoggedin: true
         };
         // save the user to db
@@ -312,7 +317,7 @@ app.get('/auth/server/auth/google', passport.authenticate('google', { scope: ['p
 
 app.get('/auth/server/auth/google/done', passport.authenticate('google', { failureRedirect: '/auth/server/signin' }), (req, res, next) => {
     console.log(`!!!!!!!! google oauth success`);
-    client.get(key, (error, cachedValue) => {
+    client.get(key, async (error, cachedValue) => {
         if(error) { console.log(`Error in client.get: ${error}`) };
         user = JSON.parse(cachedValue);
         req.session.valid = true;
@@ -321,11 +326,13 @@ app.get('/auth/server/auth/google/done', passport.authenticate('google', { failu
             role:  user.role,
             name:  user.name,
             email: user.email,
+            image: user.image,
+            isSocialAccount: true,
             isLoggedin: true
         };
 
         // check and store account into db 
-        const query = `SELECT id, name, email, password, role FROM "Users" WHERE email='${user.email}'`;
+        const query = `SELECT id, name, email, password, role, image FROM "Users" WHERE email='${user.email}'`;
         console.log(`query= ${query}`);
         const findUserPromise = findUser(query);
         findUserPromise
@@ -333,7 +340,9 @@ app.get('/auth/server/auth/google/done', passport.authenticate('google', { failu
             .catch((err) => {
                 const registerUserPromise = registerUserByOAuth(user, bc, SALT_ROUNDS);
                 registerUserPromise
-                    .then((data) => { console.log(`registerUserPromise data= ${data}`) })
+                    .then((data) => { 
+                        console.log(`registerUserPromise data= ${data}`);
+                    })
                     .catch((e) => { console.log(`registerUserPromise error= ${e}`) });
             }); // the case where user was not found
         
@@ -353,6 +362,145 @@ app.get('/auth/server/auth/google/done', passport.authenticate('google', { failu
         }
         res.redirect(`${process.env.DOMAIN_NAME}/home`);  // delegate render task for frontend server
     });
+});
+
+app.get('/auth/server/edit-profile', (req, res, next) => {
+    if(req.cookies.userLoginInfo) {
+        const         query = `SELECT id, name, email, password, role, image, created_on, last_login, is_social_account FROM "Users" WHERE email='${JSON.parse(req.cookies.userLoginInfo).email}'`;
+        return findUser(query)
+                    .then((data) => {
+                        console.log(`------> data.image= ${data.image}`);
+                        console.log(`-----------> data.is_social_account= ${data.is_social_account}`);
+                        let user = {
+                            aId: 'key',
+                            name: data.name,
+                            email: data.email,
+                            password: data.password,
+                            role: data.role,
+                            image: data.image,
+                            createdOn: data.created_on.toString().slice(0, data.created_on.toString().indexOf('GMT')),
+                            lastLogin: data.last_login,
+                            isSocialAccount: data.is_social_account,
+                            isLoggedIn: true
+                        };
+                        res.render('pages/editProfile', { year: currentYear, actionType: 'access user profile', status: 'success', code: '200', error: '', user: user, isLoggedIn: true });        
+                    })
+                    .catch( (e) => console.log(e) );
+    }
+    res.render('auth/signin', { year: currentYear, actionType: 'access user profile', status: 'fail', code: '400', error: '', isLoggedIn: false });        
+});
+// app.post('/auth/server/edit-profile', (req, res, next) => {
+//     try {
+//         // console.log(`req.body= ${JSON.stringify(req.body)}`);
+//         // console.log(`req.body.inputFile= ${req.body.inputFile}`);
+//         let upload = multer({ storage: storage, fileFilter: fileFilter }).single('inputFile');
+
+//         console.log(`!!!!!!!!! pass 1`);
+//         upload(req, res, function(err) {
+//             if (req.fileValidationError) { 
+//                 console.log(`E1`);
+//                 return res.send(req.fileValidationError);
+//             }
+//             else if (!req.file) { 
+//                 console.log(`E2`);
+//                 return res.send('Please select an image to upload');
+//             }
+//             else if (err instanceof multer.MulterError) { 
+//                 console.log(`E3`);
+//                 return res.send(err); 
+//             }
+//             else if (err) { 
+//                 console.log(`E4`);
+//                 return res.send(err); 
+//             }
+
+//             console.log(`!!!!!!!!! pass 2`);
+//             // save the image link to the db
+//             const promise = setUserImage(JSON.parse(req.cookies.userLoginInfo).email, req.file.filename, '/upload/');
+//             return promise
+//                         .then((result) => {
+//                             // update image in cookies
+//                             console.log(`!!!!!!!!! pass 3`);
+//                             JSON.parse(req.cookies.userLoginInfo).image = req.file.filename;
+//                             res.redirect('/auth/server/edit-profile');
+//                         })
+//                         .catch((e) => {
+//                             console.log(`!!!!!!!!! pass 4`);
+//                             res.redirect('/auth/server/edit-profile');
+//                         });
+//         });
+//     } catch (error) {
+//         console.error(error);
+//     }
+// });
+
+
+// ---------- good version
+// app.post('/auth/server/edit-profile', upload.single('userAvatar'), async (req, res, next) => {
+//     try {
+//         const        userName = req.body.userName;
+//         const userNewPassword = req.body.newPassword;
+//         const noChangePassword = (userNewPassword == undefined || userNewPassword == '' || userNewPassword == null) ? true : false;
+//         console.log(`edit profile is called, req.body= ${JSON.stringify(req.body)}`);
+//         console.log(`!!!!!!!!! pass 1, userName= ${userName}, userNewPassword= ${userNewPassword}, req.file= ${req.file}`);
+
+//         // update user name and password if needed
+//         if (noChangePassword) { // only update userName
+//             await updateUserName(userName, JSON.parse(req.cookies.userLoginInfo).email).catch((e) => console.log(e));
+//         } else {
+//             await updateUserNameAndPassword(userName, userNewPassword, JSON.parse(req.cookies.userLoginInfo).email, bc, SALT_ROUNDS).catch((e) => console.log(e));
+//         }
+
+//         // update user image if needed
+//         if(req.file) {
+//             // save the image link to the db
+//             const imageDir = '/upload/';
+//             const  promise = setUserImage(JSON.parse(req.cookies.userLoginInfo).email, req.file.filename, imageDir);
+//             return promise
+//                         .then((result) => {
+//                             // update image in cookies
+//                             console.log(`!!!!!!!!! pass 2`);
+//                             JSON.parse(req.cookies.userLoginInfo).image = req.file.filename;
+//                             res.redirect('/auth/server/edit-profile');
+//                         })
+//                         .catch((e) => {
+//                             console.log(`!!!!!!!!! pass 3`);
+//                         });
+//         }
+//         res.redirect('/auth/server/edit-profile');
+//     } catch (error) {
+//         console.error(error);
+//     }
+// });
+
+app.post('/auth/server/edit-profile', (req, res, next) => {
+    console.log(`req.body= ${JSON.stringify(req.body)}`);
+    const        userName = req.body.updatedUserName;
+    const userNewPassword = req.body.updatedUserPassword;
+    const noChangePassword = (userNewPassword == undefined || userNewPassword == '' || userNewPassword == null) ? true : false;
+    
+    // console.log(`!!!!!!!!!!! pass, req.cookies= ${JSON.stringify(req.cookies.userLoginInfo)}`);
+    // const changeUserName = (newName) => { req.body.userLoginInfo.name = newName };
+    // update user name and password if needed
+    if (noChangePassword) { // only update userName
+        return updateUserName(userName, JSON.parse(req.body.userLoginInfo).email)
+                .then((result) => {
+                    res.json({ actionType: 'Update user name in auth server', status: 'success' });
+                })
+                .catch((e) => { 
+                    console.log(`Error in line 1, ${e}`); 
+                    e;
+                });
+    }
+
+    return updateUserNameAndPassword(userName, userNewPassword, JSON.parse(req.body.userLoginInfo).email, bc, SALT_ROUNDS)
+            .then((result) => {
+                res.json({ actionType: 'Update user name and password in auth server', status: 'fail' });
+            })
+            .catch((e) => {
+                console.log(`Error in line 2, ${e}`);
+                e;
+            });
 });
 
 // TODO: may open one more server to serve this route, then remove this
