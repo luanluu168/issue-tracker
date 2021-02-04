@@ -3,7 +3,7 @@ const         path = require('path');
 const      express = require('express');
 const dbConnection = require('../database/db');
 const  { bc, SALT_ROUNDS, SALT } = require('../database/hash');
-const { findUser, registerUser, registerUserByOAuth, setUserImage, updateUserName, updateUserNameAndPassword } = require('../database/users');
+const { findUser, registerUser, registerUserByOAuth, updateUserName, updateUserNameAndPassword } = require('../database/users');
 const       morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const      session = require('express-session');
@@ -369,8 +369,6 @@ app.get('/auth/server/edit-profile', (req, res, next) => {
         const         query = `SELECT id, name, email, password, role, image, created_on, last_login, is_social_account FROM "Users" WHERE email='${JSON.parse(req.cookies.userLoginInfo).email}'`;
         return findUser(query)
                     .then((data) => {
-                        console.log(`------> data.image= ${data.image}`);
-                        console.log(`-----------> data.is_social_account= ${data.is_social_account}`);
                         let user = {
                             aId: 'key',
                             name: data.name,
@@ -389,89 +387,7 @@ app.get('/auth/server/edit-profile', (req, res, next) => {
     }
     res.render('auth/signin', { year: currentYear, actionType: 'access user profile', status: 'fail', code: '400', error: '', isLoggedIn: false });        
 });
-// app.post('/auth/server/edit-profile', (req, res, next) => {
-//     try {
-//         // console.log(`req.body= ${JSON.stringify(req.body)}`);
-//         // console.log(`req.body.inputFile= ${req.body.inputFile}`);
-//         let upload = multer({ storage: storage, fileFilter: fileFilter }).single('inputFile');
 
-//         console.log(`!!!!!!!!! pass 1`);
-//         upload(req, res, function(err) {
-//             if (req.fileValidationError) { 
-//                 console.log(`E1`);
-//                 return res.send(req.fileValidationError);
-//             }
-//             else if (!req.file) { 
-//                 console.log(`E2`);
-//                 return res.send('Please select an image to upload');
-//             }
-//             else if (err instanceof multer.MulterError) { 
-//                 console.log(`E3`);
-//                 return res.send(err); 
-//             }
-//             else if (err) { 
-//                 console.log(`E4`);
-//                 return res.send(err); 
-//             }
-
-//             console.log(`!!!!!!!!! pass 2`);
-//             // save the image link to the db
-//             const promise = setUserImage(JSON.parse(req.cookies.userLoginInfo).email, req.file.filename, '/upload/');
-//             return promise
-//                         .then((result) => {
-//                             // update image in cookies
-//                             console.log(`!!!!!!!!! pass 3`);
-//                             JSON.parse(req.cookies.userLoginInfo).image = req.file.filename;
-//                             res.redirect('/auth/server/edit-profile');
-//                         })
-//                         .catch((e) => {
-//                             console.log(`!!!!!!!!! pass 4`);
-//                             res.redirect('/auth/server/edit-profile');
-//                         });
-//         });
-//     } catch (error) {
-//         console.error(error);
-//     }
-// });
-
-
-// ---------- good version
-// app.post('/auth/server/edit-profile', upload.single('userAvatar'), async (req, res, next) => {
-//     try {
-//         const        userName = req.body.userName;
-//         const userNewPassword = req.body.newPassword;
-//         const noChangePassword = (userNewPassword == undefined || userNewPassword == '' || userNewPassword == null) ? true : false;
-//         console.log(`edit profile is called, req.body= ${JSON.stringify(req.body)}`);
-//         console.log(`!!!!!!!!! pass 1, userName= ${userName}, userNewPassword= ${userNewPassword}, req.file= ${req.file}`);
-
-//         // update user name and password if needed
-//         if (noChangePassword) { // only update userName
-//             await updateUserName(userName, JSON.parse(req.cookies.userLoginInfo).email).catch((e) => console.log(e));
-//         } else {
-//             await updateUserNameAndPassword(userName, userNewPassword, JSON.parse(req.cookies.userLoginInfo).email, bc, SALT_ROUNDS).catch((e) => console.log(e));
-//         }
-
-//         // update user image if needed
-//         if(req.file) {
-//             // save the image link to the db
-//             const imageDir = '/upload/';
-//             const  promise = setUserImage(JSON.parse(req.cookies.userLoginInfo).email, req.file.filename, imageDir);
-//             return promise
-//                         .then((result) => {
-//                             // update image in cookies
-//                             console.log(`!!!!!!!!! pass 2`);
-//                             JSON.parse(req.cookies.userLoginInfo).image = req.file.filename;
-//                             res.redirect('/auth/server/edit-profile');
-//                         })
-//                         .catch((e) => {
-//                             console.log(`!!!!!!!!! pass 3`);
-//                         });
-//         }
-//         res.redirect('/auth/server/edit-profile');
-//     } catch (error) {
-//         console.error(error);
-//     }
-// });
 
 app.post('/auth/server/edit-profile', (req, res, next) => {
     console.log(`req.body= ${JSON.stringify(req.body)}`);
@@ -479,8 +395,6 @@ app.post('/auth/server/edit-profile', (req, res, next) => {
     const userNewPassword = req.body.updatedUserPassword;
     const noChangePassword = (userNewPassword == undefined || userNewPassword == '' || userNewPassword == null) ? true : false;
     
-    // console.log(`!!!!!!!!!!! pass, req.cookies= ${JSON.stringify(req.cookies.userLoginInfo)}`);
-    // const changeUserName = (newName) => { req.body.userLoginInfo.name = newName };
     // update user name and password if needed
     if (noChangePassword) { // only update userName
         return updateUserName(userName, JSON.parse(req.body.userLoginInfo).email)
@@ -489,7 +403,7 @@ app.post('/auth/server/edit-profile', (req, res, next) => {
                 })
                 .catch((e) => { 
                     console.log(`Error in line 1, ${e}`); 
-                    e;
+                    res.json({ error: e });
                 });
     }
 
@@ -499,7 +413,7 @@ app.post('/auth/server/edit-profile', (req, res, next) => {
             })
             .catch((e) => {
                 console.log(`Error in line 2, ${e}`);
-                e;
+                res.json({ error: e });
             });
 });
 
