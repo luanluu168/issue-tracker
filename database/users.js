@@ -1,4 +1,5 @@
-const dbConnection = require('./db');
+const           dbConnection = require('./db');
+const { getTimeStampFormat } = require('../utils/utils');
 
 const findUser = (query) => {
     return new Promise((resolve, reject) => {
@@ -32,7 +33,8 @@ const registerUser = (user, bc, SALT_ROUNDS) => {
         const callback = (err, hashPass) => {
             if (err) { reject({ error: err, actionType: 'Hash Password', status: 'fail', code: '500'}); }
 
-            const     query = `INSERT INTO "Users" (name, email, password, role) VALUES ('${userName}', '${userEmail}', '${hashPass}', '${userRole}')`;
+            const createdOn = getTimeStampFormat();
+            const     query = `INSERT INTO "Users" (name, email, password, role, created_on) VALUES ('${userName}', '${userEmail}', '${hashPass}', '${userRole}', '${createdOn}')`;
             console.log(`------ registerUser query: ${query}`);
             dbConnection.any(query)
                         .then((data) => {
