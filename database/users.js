@@ -161,6 +161,23 @@ const updateUserName = (userName, userEmail) => {
     });
 };
 
+const updateUserLastLogin = (userEmail, currentTimeStamp) => {
+    return new Promise((resolve, reject) => {
+        const query = `UPDATE "Users" SET last_login='${currentTimeStamp}' WHERE email='${userEmail}'`;
+        console.log(`query= ${query}`);
+        
+        dbConnection.any(query)
+                .then((data) => {
+                    console.log(`Update user last login time successfully`);
+                    resolve({ error: 'Update user name successfully', actionType: 'Update user name', status: 'success', code: '200' });
+                })
+                .catch((e) => {
+                    console.log(`Fail to update user last login time, error= ${e}`);
+                    reject({ error: 'Fail to update user name', actionType: 'Update user name', status: 'fail', code: '400' });
+                });
+    });
+};
+
 module.exports = { 
     findUser,
     registerUser,
@@ -168,5 +185,6 @@ module.exports = {
     setUserImage,
     updateUserNameAndPassword,
     updateUserPassword,
-    updateUserName
+    updateUserName,
+    updateUserLastLogin
 };
