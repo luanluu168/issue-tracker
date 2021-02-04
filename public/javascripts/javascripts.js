@@ -48,11 +48,29 @@ const handleVerifyIsHumanClick = () => {
       .then(text => console.log(`text= ${text}`))
       .catch(err => console.log(`Error in javascript fetch: ${err}`));
 };
+
+// for faster access
+let signupButton = $('button[name="signup-submit"]')
+let signinButton = $('button[name="signin-submit"]');
+let landingStartButton = $('button[name="landing-start-button"]');
+let saveProfileButton = $('button[name="save-profile-button"]');
+let googleOauthButton = $('a[class="google-auth-button"]');
+
 window.onload = () => {
   getDropdownComponents();
   modifyDropdownProps();
 
   $('#verify-is-human-button').submit(() => handleVerifyIsHumanClick);
+
+  // --------- loading button setup ------------
+  // landing start button
+  landingStartButton.click(() => { landingStartButton.html(`<span class="spinner-border spinner-border-md mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
+  signinButton.click(() => { signinButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
+  signupButton.click(() => { signupButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
+  saveProfileButton.click(() => { saveProfileButton.html(`<span class="spinner-border spinner-border-md mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
+  googleOauthButton.click(() => { googleOauthButton.html(`<span class="spinner-border spinner-border-md mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
+  // --------- end loading button setup --------
+  
 };
 // ------- end dropdown menu hover ---------
 
@@ -96,28 +114,8 @@ $('#updateIssueModal').on('show.bs.modal', (event) => {
 });
 // -------    end update issue   -------
 
-
-// --------- loading button setup ------------
 const loadingButtonSetup = (obj, spinnerSize) => {
   $(obj).prop("disabled", true);
   // add spinner to button
   $(obj).html(`<span class="spinner-border spinner-border-${spinnerSize} mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`);
-}
-// landing start button
-$('a[class="start-button"], a[class="google-auth-button"]').click((event) => {
-  loadingButtonSetup(this, 'md');
-});
-
-$('button[class="auth-button"]').click((event) => {
-  loadingButtonSetup(this, 'sm');
-});
-
-$('a[class="google-auth-button"]').click((event) => {
-  loadingButtonSetup(this, 'sm');
-});
-
-$('button[class="save-profile-button"]').click((event) => {
-  loadingButtonSetup(this, 'md');
-});
-// --------- end loading button setup --------
-
+};
