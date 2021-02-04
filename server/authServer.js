@@ -3,7 +3,12 @@ const         path = require('path');
 const      express = require('express');
 const dbConnection = require('../database/db');
 const  { bc, SALT_ROUNDS, SALT } = require('../database/hash');
-const { findUser, registerUser, registerUserByOAuth, updateUserName, updateUserNameAndPassword } = require('../database/users');
+const { findUser,
+        registerUser,
+        registerUserByOAuth,
+        updateUserName, 
+        updateUserNameAndPassword,
+        updateUserLastLogin } = require('../database/users');
 const       morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const      session = require('express-session');
@@ -14,6 +19,7 @@ const   RedisStore = require('connect-redis')(session);
 const       client = process.env.PRODUCTION == 'NO' ? redis.createClient() : redis.createClient(process.env.REDIS_URL);
 const       crypto = require('crypto');
 const       sgMail = require('@sendgrid/mail');
+const { getTimeStampFormat, getStringTimeWithoutGMT } = require('../utils/utils');
 const         PORT = process.env.AUTH_SERVER_PORT || 4002;
 const          app = express();
 
@@ -301,13 +307,14 @@ app.get('/auth/server/verify-email', (req, res, next) => {
     });
 });
 
-app.get('/auth/server/signout', (req, res, next) => {
+app.get('/auth/server/signout', async (req, res, next) => {
     // destroy session
     if(req.session.User) {
         req.session.destroy( err => {
             if(err) { console.log('Error logging out') };
         });
     };
+    await updateUserLastLogin(JSON.parse(req.cookies.userLoginInfo).email, getTimeStampFormat()).catch((e) => { console.log(`Error in signout, ${e}`) });
     // destroy cookie
     if(req.cookies.userLoginInfo) { res.clearCookie("userLoginInfo") };
     res.render('pages/landing', { year: currentYear, isLoggedin: false });
@@ -376,8 +383,8 @@ app.get('/auth/server/edit-profile', (req, res, next) => {
                             password: data.password,
                             role: data.role,
                             image: data.image,
-                            createdOn: data.created_on.toString().slice(0, data.created_on.toString().indexOf('GMT')),
-                            lastLogin: data.last_login,
+                            createdOn: getStringTimeWithoutGMT(data.created_on),
+                            lastLogin: getStringTimeWithoutGMT(data.last_login),
                             isSocialAccount: data.is_social_account,
                             isLoggedIn: true
                         };
