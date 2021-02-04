@@ -1,0 +1,27 @@
+.save-profile-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
+    color: white;
+    background-color: #007bff;
+}
+.save-profile-button:hover {
+    text-decoration: none;
+    color: white;
+    background-color:rgb(49, 144, 245)f;
+}
+@media (max-width: 850px) {
+    .save-profile-button {
+        font-size: 1rem;
+        min-height: 25px;
+        min-width: 75px;
+    }
+}
+@media (min-width: 851px) {
+    .save-profile-button {
+        font-size: 1.5rem;
+        min-height: 35px;
+        min-width: 100px;
+    }
+}
