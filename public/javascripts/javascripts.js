@@ -95,3 +95,29 @@ $('#updateIssueModal').on('show.bs.modal', (event) => {
   $('input[name="projectNameInModal"]').val(updateButtonWhatPname);
 });
 // -------    end update issue   -------
+
+
+// --------- loading button setup ------------
+const loadingButtonSetup = (obj, spinnerSize) => {
+  $(obj).prop("disabled", true);
+  // add spinner to button
+  $(obj).html(`<span class="spinner-border spinner-border-${spinnerSize} mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`);
+}
+// landing start button
+$('a[class="start-button"], a[class="google-auth-button"]').click((event) => {
+  loadingButtonSetup(this, 'md');
+});
+
+$('button[class="auth-button"]').click((event) => {
+  loadingButtonSetup(this, 'sm');
+});
+
+$('a[class="google-auth-button"]').click((event) => {
+  loadingButtonSetup(this, 'sm');
+});
+
+$('button[class="save-profile-button"]').click((event) => {
+  loadingButtonSetup(this, 'md');
+});
+// --------- end loading button setup --------
+
