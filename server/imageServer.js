@@ -8,13 +8,10 @@ const cookieParser = require('cookie-parser');
 const       multer = require('multer');
 const      storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        // console.log(`storage->destination, req.body= ${req.body}, file= ${JSON.stringify(file)}`);
         cb(null, path.join(__dirname, '..', 'public', 'upload'));
     },
     filename: (req, file, cb) => {
-        // console.log(`storage->filename `);
         console.log(file);
-        // cb(null, Date.now() + path.extname(file.originalname));
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
 });
