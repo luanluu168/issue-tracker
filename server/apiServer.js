@@ -23,9 +23,6 @@ app.post('/api/server/create-project/query', (req, res) => {
         console.log(`!!!!!!!!! here`);
         const   userInCookie = JSON.parse(req.body.userLoginInfo);
         console.log(`----------- Date.now()= ${Date.now()}, req.body.projectEndDate= ${req.body.projectEndDate}`);
-        // const projectEndDate = new Date(Date.now() + parseInt(req.body.projectEndDate) * 24 * 60 * 60 * 1000);
-        // const    formatMonth = projectEndDate.getMonth()+1 < 10 ? `0${projectEndDate.getMonth()+1}` : projectEndDate.getMonth()+1;
-        // const projectEndDateTSF = `${projectEndDate.getFullYear()}-${formatMonth}-${projectEndDate.getDate()}`;
         
         const projectEndDateTSF = getTimeStampFormat(parseInt(req.body.projectEndDate));
         const        promise = createProject(req.body.projectName, projectEndDateTSF, userInCookie.name, userInCookie.aId);
@@ -63,15 +60,7 @@ app.post('/api/server/update-project/query', (req, res) => {
     console.log(`!!!!! api update project route is called, req.body= ${JSON.stringify(req.body)}`);
     if (req.body.userLoginInfo) {
         console.log(`!!!!!!!!! updateId= ${req.body.updateId}`);
-        // const    projectEndDate = new Date(Date.now() + parseInt(req.body.updateEndDate) * 24 * 60 * 60 * 1000);
-        // const       formatMonth = projectEndDate.getMonth()+1 < 10 ? `0${projectEndDate.getMonth()+1}` : projectEndDate.getMonth()+1;
-        // const projectEndDateTSF = `${projectEndDate.getFullYear()}-${formatMonth}-${projectEndDate.getDate()}`;
-
         const projectEndDateTSF = getTimeStampFormat(parseInt(req.body.projectEndDate));
-
-        // const             today = new Date(Date.now() + 24 * 60 * 60 * 1000);
-        // const       formatToday = today.getMonth()+1 < 10 ? `0${today.getMonth()+1}` : today.getMonth()+1;
-        // const        modifiedOn = `${today.getFullYear()}-${formatToday}-${today.getDate()}`;
 
         const modifiedOnTSF = getTimeStampFormat();
         const    modifiedBy = JSON.parse(req.body.userLoginInfo).name;
@@ -93,10 +82,6 @@ app.post('/api/server/update-project/query', (req, res) => {
 app.post('/api/server/create-issue/query', (req, res) => {
     console.log(`!!!!! api create issue route is called, req.body= ${JSON.stringify(req.body)}, projectId= ${JSON.stringify(req.body.projectId)}, issueSummary= ${JSON.stringify(req.body.issueSummary)}`);
     if (req.body.userLoginInfo) {
-        // const    issueResolvedDate = new Date(Date.now() + parseInt(req.body.issueResolvedDate) * 24 * 60 * 60 * 1000);
-        // const          formatMonth = issueResolvedDate.getMonth()+1 < 10 ? `0${issueResolvedDate.getMonth()+1}` : issueResolvedDate.getMonth()+1;
-        // const issueResolvedDateTSF = `${issueResolvedDate.getFullYear()}-${formatMonth}-${issueResolvedDate.getDate()}`;
-
         const issueResolvedDateTSF = getTimeStampFormat(parseInt(req.body.issueResolvedDate));
 
         const userInCookie = JSON.parse(req.body.userLoginInfo);
@@ -134,20 +119,12 @@ app.post('/api/server/delete-issue/query', (req, res) => {
 app.post('/api/server/update-issue/query', (req, res) => {
     console.log(`!!!!! api update issue route is called, req.body= ${JSON.stringify(req.body)}, projectId= ${JSON.stringify(req.body.projectId)}, issueSummary= ${JSON.stringify(req.body.updateSummary)}`);
     if (req.body.userLoginInfo) {
-        // const    issueResolvedDate = new Date(Date.now() + parseInt(req.body.updateResolvedDate) * 24 * 60 * 60 * 1000);
-        // const          formatMonth = issueResolvedDate.getMonth()+1 < 10 ? `0${issueResolvedDate.getMonth()+1}` : issueResolvedDate.getMonth()+1;
-        // const issueResolvedDateTSF = `${issueResolvedDate.getFullYear()}-${formatMonth}-${issueResolvedDate.getDate()}`;
-
         const issueResolvedDateTSF = getTimeStampFormat(parseInt(req.body.updateResolvedDate));
 
         const  updateSummary = req.body.updateSummary;
         const   updateStatus = req.body.updateStatus;
         const        issueId = req.body.updateId;
         const updatePriority = req.body.updatePriority;
-
-        // const          today = new Date(Date.now() + 24 * 60 * 60 * 1000);
-        // const    formatToday = today.getMonth()+1 < 10 ? `0${today.getMonth()+1}` : today.getMonth()+1;
-        // const     modifiedOn = `${today.getFullYear()}-${formatToday}-${today.getDate()}`;
 
         const  modifiedOnTSF = getTimeStampFormat();
 
