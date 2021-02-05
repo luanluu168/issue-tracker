@@ -50,29 +50,62 @@ const handleVerifyIsHumanClick = () => {
 };
 
 // for faster access
-let signupButton = $('button[name="signup-submit"]')
-let signinButton = $('button[name="signin-submit"]');
-let landingStartButton = $('button[name="landing-start-button"]');
-let saveProfileButton = $('button[name="save-profile-button"]');
-let googleOauthButton = $('a[class="google-auth-button"]');
+let        signupButton = $('button[name="signup-submit"]')
+let        signinButton = $('button[name="signin-submit"]');
+let  landingStartButton = $('button[name="landing-start-button"]');
+let   saveProfileButton = $('button[name="save-profile-button"]');
+let   googleOauthButton = $('a[class="google-auth-button"]');
+let verifyIsHumanButton = $('button[name="verify-is-human-button"]');
 
+// signup page element
+const signupUserNameLabel = $('label[name="signup-input-user-name"]');
+const signupInputUserName = $('input[name="userName"]');
+const signupUserName = () => {
+  signupInputUserName.on('focus', () => {
+    signupUserNameLabel.removeClass('d-none');
+  });
+};
+const signupUserEmailLabel = $('label[name="signup-input-user-email"]');
+const signupInputUserEmail = $('input[name="userEmail"]');
+const signupUserEmail = () => {
+  signupInputUserEmail.on('focus', () => {
+    signupUserEmailLabel.removeClass('d-none');
+  });
+};
+
+const signupPasswordInput = $('#signup-password-container input');
+const  signupPasswordSpan = $('#signup-password-container span');
+const handleSignupPasswordIconClick = () => {
+  signupPasswordSpan.on('click', () => {
+    if(signupPasswordInput.attr('type') == 'text') {
+      signupPasswordInput.attr('type', 'password');
+    } else { // the case where signup-password-container's type is password
+      signupPasswordInput.attr('type', 'text');
+    }
+    $('#toggle-password-icon').toggleClass('fa-eye fa-eye-slash');
+  });
+};
 window.onload = () => {
   getDropdownComponents();
   modifyDropdownProps();
 
   $('#verify-is-human-button').submit(() => handleVerifyIsHumanClick);
-
-  // --------- loading button setup ------------
-  // landing start button
-  landingStartButton.click(() => { landingStartButton.html(`<span class="spinner-border spinner-border-md mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
-  signinButton.click(() => { signinButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
-  signupButton.click(() => { signupButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
-  saveProfileButton.click(() => { saveProfileButton.html(`<span class="spinner-border spinner-border-md mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
-  googleOauthButton.click(() => { googleOauthButton.html(`<span class="spinner-border spinner-border-md mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
-  // --------- end loading button setup --------
   
+  // signupUserName();
+  // signupUserEmail();
+
+  handleSignupPasswordIconClick();
 };
 // ------- end dropdown menu hover ---------
+
+// --------- loading button setup ------------
+landingStartButton.click(() => { landingStartButton.html(`<span class="spinner-border spinner-border-md mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
+signinButton.click(() => { signinButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
+signupButton.click(() => { signupButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
+saveProfileButton.click(() => { saveProfileButton.html(`<span class="spinner-border spinner-border-md mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
+googleOauthButton.click(() => { googleOauthButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
+verifyIsHumanButton.click(() => { verifyIsHumanButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
+// --------- end loading button setup --------
 
 // -------      update project       -------
 $('#updateProjectModal').on('show.bs.modal', (event) => {

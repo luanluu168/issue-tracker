@@ -90,3 +90,19 @@ html, body {
     color: #fff;
     background-image: linear-gradient(to right,rgb(107, 224, 166), rgb(68, 216, 142));
 }
+
+.password-field-status-icon {
+    margin-left: -25px;
+    margin-top: 10px;
+    position: relative;
+    z-index: 10;
+}
+
+/* remove later */
+.field-icon {
+    float: right;
+    margin-left: -25px;
+    margin-top: -25px;
+    position: relative;
+    z-index: 2;
+  }

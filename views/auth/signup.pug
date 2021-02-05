@@ -7,35 +7,50 @@ block content
             h4.d-flex.justify-content-center.alert.alert-secondary.font-weight-bold.text-danger !{error}
         div(class='d-flex justify-content-center')
             div(class='card')
+                div(class='mx-auto mb-2')
+                    img(src='/assets/web-logo-only.png' alt='LogoImg')
                 div(class='lead')
                     h3(class='text-center text-dark') Sign up
                 div(class='card-body')
                     form(name='signinForm' action='/auth/server/signup/query' method='POST')
                         .col-auto
-                            label.sr-only(for='signup-input-user-name') Name
+                            label(for='signup-input-user-name' name='signup-input-user-name' class='d-none') Name
                             div(class='input-group form-group')
                                 div(class='input-group-prepend')
                                 span(class='input-group-text')
                                     i.fa.fa-id-card(aria-hidden='true')
-                                input(type='text' class='form-control' name='userName' placeholder='Enter your name' id='signup-input-user-name' required='')
+                                input(type='text' class='form-control' name='userName' placeholder='Enter your name'
+                                        id='signup-input-user-name' required
+                                        pattern='^[a-zA-Z]{1,}.*$' onchange="try{setCustomValidity('')}catch(e){}" 
+                                        oninvalid="this.setCustomValidity('Need to start with a character')" 
+                                        oninput="this.setCustomValidity(' ')" aria-expanded="true")
                         .col-auto
-                            label.sr-only(for='signup-input-user-email') Email
+                            label(for='signup-input-user-email' name='signup-input-user-email' class='d-none') 
+                                small(class='m-0 p-0') Email
                             div(class='input-group form-group')
                                 div(class='input-group-prepend')
                                 span(class='input-group-text')
-                                    i(class='fas fa-user')
-                                input(type='email' class='form-control' name='userEmail' placeholder='Enter your email' id='signup-input-user-email' required='')
+                                    i.fa.fa-envelope(aria-hidden='true')
+                                input(type='email' class='form-control' name='userEmail' placeholder='Enter your email' id='signup-input-user-email' required)
                         .col-auto
-                            label.sr-only(for='signup-password-input') Password
-                            div(class='input-group form-group')
-                                div(class='input-group-prepend')
+                            label(for='signup-password-input' class='d-none') Password
+                            div(class='input-group form-group' id='signup-password-container')
+                                //- div(class='input-group-prepend')
                                 span(class='input-group-text')
                                     i(class='fas fa-key')
                                 input(type='password' id="signup-password-input" class='form-control text-truncate' 
                                     pattern='^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{6,}$' name='userPassword'
                                     placeholder='Enter your password' onchange="try{setCustomValidity('')}catch(e){}" 
                                     oninvalid="this.setCustomValidity('Need min 6 chars: At least 1 letter, 1 number, and 1 special char')" 
-                                    oninput="this.setCustomValidity(' ')" aria-expanded="true" required='')
+                                    oninput="this.setCustomValidity(' ')" aria-expanded="true" required)
+                                span
+                                    i#toggle-password-icon.fa.fa-eye.password-field-status-icon(aria-hidden='true')
+                        .col-auto
+                            div(class='custom-control custom-checkbox mb-3')
+                                input#termCheckBox(type='checkbox' class='custom-control-input' required)
+                                label(class='custom-control-label text-wrap' for='termCheckBox')
+                                    | I accept the 
+                                    a(href='#' type='button' data-toggle='modal' data-target='#contractModal')  Terms of Service
                         .col-auto
                             div(class='input-group form-group')
                                 button(type='submit' name="signup-submit" class='auth-button') Sign-up &#8594;
@@ -49,3 +64,16 @@ block content
                         p(class='cross-middle-line-text') already have an account?
                         div(class='text-center')
                             a(href='/auth/server/signin') Sign-in
+
+    #contractModal.modal.fade(tabindex='-10' role='dialog' aria-labelledby='contactModal' aria-hidden='true')
+        .modal-dialog.modal-dialog-scrollable.modal-lg.modal-dialog-centered(role='document')
+            .modal-content
+                .modal-header.bg-info
+                    h5.modal-title Issue-Tracker Terms Of Services
+                    button.close(type='button' data-dismiss='modal' aria-label='Close' class='btn btn-outline-danger')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    h3 AGREEMENT TO TERMS
+                    p Comming soon
+                .modal-footer
+                    button.btn.btn-secondary(type='button' name='agreeTerms' data-dismiss='modal' value='close' class='auth-button') Close

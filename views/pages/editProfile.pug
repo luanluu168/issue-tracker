@@ -6,15 +6,16 @@ block content
         if user
             .card
                 .card-body
-                    form(action='/image/server/change-user-image' method='POST' enctype="multipart/form-data" oninput='confirmNewPasword.setCustomValidity(newPassword.value != confirmNewPasword.value ? "Passwords do not match." : "")')
+                    form(action='/image/server/change-user-image' method='POST' enctype="multipart/form-data" 
+                         oninput='confirmNewPasword.setCustomValidity(newPassword.value != confirmNewPasword.value ? "Passwords do not match." : "")')
                         .row
                             .col-12.col-sm-auto.mb-3
                                 .mx-auto(style='width: 150px;')
                                     .d-flex.justify-content-center.align-items-center.rounded(style='height: 150px; background-color: rgb(233, 236, 239);')
-                                        if user && user.image
-                                            img(src=`${user.image}` alt='avatar' width='150' height='150')
+                                        if user.image
+                                            img(src=`${user.image}` onerror="this.style.display='none'" alt='user-avatar' width='150' height='150')
                                         else 
-                                            span(style='color: rgb(166, 168, 170); font: bold 8pt Arial;') 150x150 
+                                            span(name='blank-user-avatar' style='color: rgb(166, 168, 170); font: bold 8pt Arial;') 150x150 
                             .col.d-flex.flex-column.flex-sm-row.justify-content-between.mb-3
                                 .text-center.text-sm-left.mb-2.mb-sm-0
                                     h4.pt-sm-2.pb-1.mb-0.text-nowrap #{user.name}

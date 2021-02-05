@@ -18,7 +18,7 @@
 }
 
 .verify-heading-text {
-    color: #fff;
+    color: rgb(65, 65, 32);
     text-align: center;
 }
 @media (max-width: 750px) {
@@ -33,7 +33,7 @@
 }
 
 .verify-detail-text {
-    color: #fff;
+    color: rgb(65, 65, 32);
     text-align: center;
 }
 @media (max-width: 750px) {
