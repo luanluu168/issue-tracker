@@ -29,7 +29,7 @@ app.post('/api/server/create-project/query', (req, res) => {
         
         const projectEndDateTSF = getTimeStampFormat(parseInt(req.body.projectEndDate));
         const        promise = createProject(req.body.projectName, projectEndDateTSF, userInCookie.name, userInCookie.aId);
-        console.log(`projectEndDate= ${projectEndDate}, formatMonth= ${formatMonth}, projectEndDateTSF= ${projectEndDateTSF}, promise= ${promise}`);
+        console.log(`projectEndDateTSF= ${projectEndDateTSF}, promise= ${promise}`);
         return promise
                     .then((data) => {
                         console.log(`data= ${data}`);
