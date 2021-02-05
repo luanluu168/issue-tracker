@@ -25,7 +25,7 @@ const fileFilter = (req, file, cb) => {
 const limits = {
     fileSize: 1024 * 1024
 };
-let         upload = multer({ storage: storage, fileFilter: fileFilter });
+let         upload = multer({ storage: storage, limits: limits, fileFilter: fileFilter });
 const         PORT = process.env.IMAGE_SERVER_PORT || 4005;
 const          app = express();
 
