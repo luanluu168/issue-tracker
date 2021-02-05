@@ -65,7 +65,8 @@ ul.navbar-nav.ml-auto.mt-2.mt-lg-0 li a, ul.navbar-nav li.nav-item a.nav-link {
 .big-heading-text {
     font-weight: 900;
     text-align: center;
-    background: linear-gradient(to bottom, rgb(65, 65, 32),  rgb(228, 228, 235));
+    /* background: linear-gradient(to bottom, rgb(65, 65, 32),  rgb(228, 228, 235)); */
+    background: linear-gradient(to bottom, #721c24, #a38f91);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -83,7 +84,8 @@ ul.navbar-nav.ml-auto.mt-2.mt-lg-0 li a, ul.navbar-nav li.nav-item a.nav-link {
 .describe-app-text {
     font-weight: 500;
     text-align: center;
-    background: linear-gradient(to right, rgb(65, 65, 32),  rgb(228, 228, 235));
+    /* background: linear-gradient(to right, rgb(65, 65, 32),  rgb(228, 228, 235)); */
+    background: linear-gradient(to top, #721c24,  #a38f91);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
