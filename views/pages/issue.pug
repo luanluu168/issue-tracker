@@ -46,15 +46,15 @@ block content
                 table.table.table-responsive-lg.table-striped.issues-table-content
                     thead
                         tr 
-                        th(scope='col') #
-                        th(scope='col') Project name
-                        th(scope='col') Issue Summary
-                        th(scope='col') Status
-                        th(scope='col') Priority
-                        th(scope='col') Created on
-                        th(scope='col') Resolved date
-                        th(scope='col') Update
-                        th(scope='col') Delete
+                            th(scope='col') #
+                            th(scope='col') Project name
+                            th(scope='col') Issue Summary
+                            th(scope='col') Status
+                            th(scope='col') Priority
+                            th(scope='col') Created on
+                            th(scope='col') Resolved date
+                            th(scope='col') Update
+                            th(scope='col') Delete
                     each list, index in listings
                         tbody
                             form(action='/crud-issue' method='POST')
@@ -63,24 +63,24 @@ block content
                                 input(class='d-none' name='projectId' value=projectId)
                                 input(class='d-none' name='projectName' value=projectName)
                                 tr
-                                th(scope='row') #{index+1}
-                                td(scope='row') #{projectName}
-                                td(scope='row') #{list.summary}
-                                td(scope='row') #{list.status}
-                                td(scope='row') #{list.priority}
-                                td(scope='row' class='w-25') #{list.created_on}
-                                td(scope='row' class='w-25') #{list.resolved_date}
-                                td(scope='row') 
-                                    button(type='button' class='btn btn-success' name='crudIssueBtn' value='update'
-                                            data-whatid=list.id
-                                            data-whatsummary=list.summary
-                                            data-whatpid=projectId
-                                            data-whatpname=projectName
-                                            data-toggle='modal'
-                                            data-target='#updateIssueModal') Update
-                                td(scope='row')
-                                    button(type='submit' class='btn btn-danger' name='crudIssueBtn' value='delete') Delete
-                                tr
+                                    th(scope='row') #{index+1}
+                                    td(scope='row') #{projectName}
+                                    td(scope='row') #{list.summary}
+                                    td(scope='row') #{list.status}
+                                    td(scope='row') #{list.priority}
+                                    td(scope='row' class='w-25') #{list.created_on}
+                                    td(scope='row' class='w-25') #{list.resolved_date}
+                                    td(scope='row') 
+                                        button(type='button' class='btn btn-success' name='crudIssueBtn' value='update'
+                                                data-whatid=list.id
+                                                data-whatsummary=list.summary
+                                                data-whatpid=projectId
+                                                data-whatpname=projectName
+                                                data-toggle='modal'
+                                                data-target='#updateIssueModal') Update
+                                    td(scope='row')
+                                        button(type='submit' class='btn btn-danger' name='crudIssueBtn' value='delete') Delete
+                                
 
                 #updateIssueModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='modalLabel' aria-hidden='true')
                     .modal-dialog(role='document').modal-lg
