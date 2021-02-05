@@ -314,6 +314,8 @@ app.get('/auth/server/signout', (req, res, next) => {
             if(err) { console.log('Error logging out') };
         });
     };
+    console.log(`req.cookies= ${req.cookies}`);
+    if (!req.cookies.userLoginInfo) { return res.render('pages/landing', { year: currentYear, isLoggedin: false }) };
     const copyEmail = JSON.parse(req.cookies.userLoginInfo).email;
     updateUserLastLogin(copyEmail, getTimeStampFormat()).catch((e) => { console.log(`Error in signout, ${e}`) });
     // destroy cookie
