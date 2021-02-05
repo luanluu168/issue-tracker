@@ -19,7 +19,10 @@ app.set('view engine', 'pug');
 const       today = new Date();
 const currentYear = today ? today.getFullYear() : 2020;
 
-app.post('/security/server/verify-is-human',function(req,res){
+app.get('/security/server/verify-is-human', (req,res) => {
+    res.render('pages/verifyIsHuman', { year: currentYear });
+});
+app.post('/security/server/verify-is-human', (req,res) => {
     console.log(`security server is called, req.body= ${JSON.stringify(req.body)}`);
     const token = req.body['g-recaptcha-response'];
     console.log(`token= ${token}`);
@@ -52,5 +55,7 @@ app.post('/security/server/verify-is-human',function(req,res){
         })
         .catch(err => { console.log(`Error in getting verifaction google recaptcha url: ${err}`) });
 });
+
+
 
 app.listen(PORT, () => { console.log(`Security server is listening on port ${PORT}`) });
