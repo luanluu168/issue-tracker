@@ -436,7 +436,7 @@ app.get('/auth/server/home', (req, res) => {
 });
 
 app.all('*', (req, res) => {
-    res.render('pages/error', { year: currentYear, actionType: 'response', code: '404', error: 'Page not found!', detail: 'You try to catch some fog but you miss :(' });
+    res.redirect('/auth/server/signup');   
 });
 
 app.listen(PORT, () => console.log(`authServer is listening on port ${PORT}`));
