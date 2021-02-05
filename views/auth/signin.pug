@@ -6,7 +6,7 @@ block content
         if error
             h4.d-flex.justify-content-center.alert.alert-secondary.font-weight-bold.text-danger !{error}
         div(class='d-flex justify-content-center align-items-center')
-            div(class='card')
+            div(class='card my-0 py-2')
                 div(class='mx-auto mb-2')
                     img(src='/assets/web-logo-only.png' alt='LogoImg')
                 div
@@ -20,7 +20,11 @@ block content
                                 div(class='input-group-prepend')
                                 span(class='input-group-text')
                                     i.fa.fa-envelope(aria-hidden='true')
-                                input(type='email' class='form-control' name='userEmail' id='signin-input-user-email' placeholder='Enter your email' required='')
+                                input(type='email' class='form-control' name='userEmail' id='signin-input-user-email' placeholder='Enter your email' required
+                                        pattern="[a-z0-9._%+-]+@[a-z.-]+\.[a-z]{2,4}$" 
+                                        onchange="try{setCustomValidity('')}catch(e){}" 
+                                        oninvalid="this.setCustomValidity('Not valid email')" 
+                                        oninput="this.setCustomValidity(' ')" aria-expanded="true")
                         .col-auto
                             label.sr-only(for='signin-input-user-password') Password
                             div(class='input-group form-group')

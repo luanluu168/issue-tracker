@@ -59,19 +59,20 @@ let verifyIsHumanButton = $('button[name="verify-is-human-button"]');
 
 // signup page element
 const signupUserNameLabel = $('label[name="signup-input-user-name"]');
-const signupInputUserName = $('input[name="userName"]');
+const signupInputUserName = $('#signup-input-user-name');
 const signupUserName = () => {
   signupInputUserName.on('focus', () => {
     signupUserNameLabel.removeClass('d-none');
   });
 };
 const signupUserEmailLabel = $('label[name="signup-input-user-email"]');
-const signupInputUserEmail = $('input[name="userEmail"]');
+const signupInputUserEmail = $('#signup-input-user-email');
 const signupUserEmail = () => {
   signupInputUserEmail.on('focus', () => {
     signupUserEmailLabel.removeClass('d-none');
   });
 };
+const signupInputUserPassword = $('#signup-password-input');
 
 const signupPasswordInput = $('#signup-password-container input');
 const  signupPasswordSpan = $('#signup-password-container span');
@@ -99,9 +100,18 @@ window.onload = () => {
 // ------- end dropdown menu hover ---------
 
 // --------- loading button setup ------------
+const emailPattern = "[a-z0-9._%+-]+@[a-z.-]+\.[a-z]{2,4}$";
+const signupConditionMet = () => {
+  return (signupInputUserName.val() != '' && signupInputUserEmail.val().match(emailPattern) && signupInputUserPassword.val().match("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{6,}$"));
+};
+const    signinInputUserEmail = $('#signin-input-user-email');
+const signinInputUserPassword = $('#signin-input-user-password');
+const signinConditionMet = () => {
+  return (signinInputUserEmail.val().match(emailPattern) && signinInputUserPassword.val() != '');
+};
 landingStartButton.click(() => { landingStartButton.html(`<span class="spinner-border spinner-border-md mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
-signinButton.click(() => { signinButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
-signupButton.click(() => { signupButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
+signinButton.click(() => { if(signinConditionMet()) { signinButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) }});
+signupButton.click(() => { if(signupConditionMet()){ signupButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) }});
 saveProfileButton.click(() => { saveProfileButton.html(`<span class="spinner-border spinner-border-md mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
 googleOauthButton.click(() => { googleOauthButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
 verifyIsHumanButton.click(() => { verifyIsHumanButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
