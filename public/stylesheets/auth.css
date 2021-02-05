@@ -97,3 +97,22 @@ html, body {
     position: relative;
     z-index: 10;
 }
+
+.terms-of-services-text {
+    display: block;
+    margin: auto;
+    text-align: center;
+    font-size: italic;
+    width: 210px;
+    font-size: 0.8rem;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    font-style: italic;
+}
+
+.terms-of-services-link {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
