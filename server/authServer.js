@@ -307,14 +307,15 @@ app.get('/auth/server/verify-email', (req, res, next) => {
     });
 });
 
-app.get('/auth/server/signout', async (req, res, next) => {
+app.get('/auth/server/signout', (req, res, next) => {
     // destroy session
     if(req.session.User) {
         req.session.destroy( err => {
             if(err) { console.log('Error logging out') };
         });
     };
-    await updateUserLastLogin(JSON.parse(req.cookies.userLoginInfo).email, getTimeStampFormat()).catch((e) => { console.log(`Error in signout, ${e}`) });
+    const copyEmail = JSON.parse(req.cookies.userLoginInfo).email;
+    updateUserLastLogin(copyEmail, getTimeStampFormat()).catch((e) => { console.log(`Error in signout, ${e}`) });
     // destroy cookie
     if(req.cookies.userLoginInfo) { res.clearCookie("userLoginInfo") };
     res.render('pages/landing', { year: currentYear, isLoggedin: false });
@@ -400,27 +401,27 @@ app.post('/auth/server/edit-profile', (req, res, next) => {
     console.log(`req.body= ${JSON.stringify(req.body)}`);
     const        userName = req.body.updatedUserName;
     const userNewPassword = req.body.updatedUserPassword;
-    const noChangePassword = (userNewPassword == undefined || userNewPassword == '' || userNewPassword == null) ? true : false;
+    const noChangePassword = (userNewPassword === undefined || userNewPassword === '' || userNewPassword === null) ? true : false;
     
     // update user name and password if needed
     if (noChangePassword) { // only update userName
         return updateUserName(userName, JSON.parse(req.body.userLoginInfo).email)
                 .then((result) => {
-                    res.json({ actionType: 'Update user name in auth server', status: 'success' });
+                    res.json({ actionType: 'Update user name in auth server', status: 'success', error: 'Update user name successfully' });
                 })
                 .catch((e) => { 
                     console.log(`Error in line 1, ${e}`); 
-                    res.json({ error: e });
+                    res.json({ actionType: 'Update user name in auth server', status: 'fail', error: e });
                 });
     }
 
     return updateUserNameAndPassword(userName, userNewPassword, JSON.parse(req.body.userLoginInfo).email, bc, SALT_ROUNDS)
             .then((result) => {
-                res.json({ actionType: 'Update user name and password in auth server', status: 'fail' });
+                res.json({ actionType: 'Update user name and password in auth server', status: 'success', error: 'Update user name and password successfully' });
             })
             .catch((e) => {
                 console.log(`Error in line 2, ${e}`);
-                res.json({ error: e });
+                res.json({ actionType: 'Update user name and password in auth server', status: 'fail', error: e });
             });
 });
 

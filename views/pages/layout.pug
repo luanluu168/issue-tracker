@@ -37,7 +37,7 @@ html(lang="en")
                                 | Hi, !{ user.name }
                         li.nav-item.dropdown
                             a#navbarDropdown2.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
-                                i.fa.fa-user-circle(aria-hidden='true').fa-lg
+                                i.fa.fa-user-circle.fa-lg(aria-hidden='true')
                             .dropdown-menu(aria-labelledby='navbarDropdown2').dropdown-menu-right
                                 if !isLoggedin && !user
                                     a.dropdown-item(href='/auth/server/signin') Sign-in

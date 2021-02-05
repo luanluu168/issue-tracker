@@ -3,6 +3,8 @@ extends layout.pug
 block content
     //- Intro
     div(class='container-fluid mb-4 mt-3 mx-1 p-3')
+        if error
+            h4.d-flex.justify-content-center.alert.alert-secondary.font-weight-bold.text-danger !{error}
         if user
             .card
                 .card-body
