@@ -11,7 +11,10 @@
     "test": "pm2 start process.config.js && pm2 log",
     "stop": "pm2 kill",
     "start": "concurrently \"node gateway.js\" \"cd server && PORT=4001 node apiServer.js\" \"cd server && PORT=4002 node authServer.js\" \"cd server && PORT=4003 node frontendServer.js\" \"cd server && PORT=4004 node securityServer.js\" \"cd server && PORT=4005 node imageServer.js\"",
-    "heroku-postbuild": "npm install pm2 -g && pm2 start process.config.js"
+    "heroku-postbuild": "npm install pm2 -g && pm2 start process.config.js",
+    "db:migrate": "npx sequelize db:migrate",
+    "db:rollback": "npx sequelize db:migrate:undo:all",
+    "db:migrate:force": "npm run db:rollback && npm run db:migrate"
   },
   "author": "luan",
   "license": "ISC",
@@ -33,6 +36,10 @@
     "passport-google-oauth20": "^2.0.0",
     "pg-promise": "^10.9.1",
     "pug": "^3.0.0",
-    "redis": "^3.0.2"
+    "redis": "^3.0.2",
+    "sequelize": "^6.5.0"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.2.0"
   }
 }
