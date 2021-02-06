@@ -11,7 +11,13 @@
 
 # image
 /public/upload/*
-!default-user.png
+!/public/upload/default-user.png
+
+# models
+./models 
+
+# seeders
+./seeders
 
 # misc
 .DS_Store
