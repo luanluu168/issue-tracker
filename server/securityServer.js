@@ -27,7 +27,7 @@ app.post('/security/server/verify-is-human', (req,res) => {
     const token = req.body['g-recaptcha-response'];
     console.log(`token= ${token}`);
     if(token == undefined || token == '' || token == null) {
-      return res.json({actionType: 'verify recaptcha', status: 'fail', code: 1, error: "Please select captcha"});
+      return res.render('pages/verifyIsHuman', {actionType: 'verify recaptcha', status: 'fail', code: 1, error: "Please complete the captcha"});
     }
 
     let secretKey = process.env.RECAPTCHA_SECRET_KEY;
