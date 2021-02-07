@@ -14,7 +14,8 @@
     "heroku-postbuild": "npm install pm2 -g && pm2 start process.config.js",
     "db:migrate": "npx sequelize db:migrate",
     "db:rollback": "npx sequelize db:migrate:undo:all",
-    "db:migrate:force": "npm run db:rollback && npm run db:migrate"
+    "db:seed": "npx sequelize-cli db:seed:all",
+    "db:migrate:force": "npm run db:rollback && npm run db:migrate && npm run db:seed"
   },
   "author": "luan",
   "license": "ISC",
