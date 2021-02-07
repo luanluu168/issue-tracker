@@ -18,8 +18,10 @@
 }
 
 .verify-heading-text {
-    /* color: rgb(65, 65, 32); */
-    color: #721c24;
+    font-weight: 700;
+    background: linear-gradient(to bottom, #455A64, #37474F);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     text-align: center;
 }
 @media (max-width: 750px) {
@@ -34,8 +36,10 @@
 }
 
 .verify-detail-text {
-    /* color: rgb(65, 65, 32); */
-    color: #721c24;
+    font-weight: 600;
+    background: linear-gradient(to bottom, #455A64, #37474F);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     text-align: center;
 }
 @media (max-width: 750px) {

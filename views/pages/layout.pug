@@ -54,6 +54,10 @@ html(lang="en")
                 div(class='footer')
                     | Copyright &copy; !{ div= year } Issue-Tracker, All right reserved
         
+            //- goto top button 
+            button#to-top-button(type='button' name='to-top')
+                i.fa.fa-arrow-up.text-primary.fa-2x(aria-hidden='true')
+
         //-  JavaScript: jQuery first, then Popper.js, then Bootstrap JS
         script(src='/vendors/jquery-3.3.1.slim.min.js')
         script(src='/vendors/popper.min.js')

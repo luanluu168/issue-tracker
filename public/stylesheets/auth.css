@@ -36,6 +36,7 @@ html, body {
 }
 .auth-button:hover {
     background-color: #44d88e;
+    outline: none;
 }
 
 

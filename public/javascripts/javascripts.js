@@ -52,10 +52,17 @@ const handleVerifyIsHumanClick = () => {
 // for faster access
 let        signupButton = $('button[name="signup-submit"]')
 let        signinButton = $('button[name="signin-submit"]');
-let  landingStartButton = $('button[name="landing-start-button"]');
+let  landingStartButton = $('a[name="landing-start-button"]');
 let   saveProfileButton = $('button[name="save-profile-button"]');
 let   googleOauthButton = $('a[class="google-auth-button"]');
 let verifyIsHumanButton = $('button[name="verify-is-human-button"]');
+let saveCreateProjectButton = $('button[name="home-save-create-project-button"]');
+let   saveCreateIssueButton = $('#issues-save-create-issue-button');
+let        inputProjectName = $('#project-name');
+let        inputProjectDate = $('#project-end-date');
+let    textAreaIssueSummary = $('#issue-summary');
+let  inputIssueResovledDate = $('#issue-resolved-date');
+
 
 // signup page element
 const signupUserNameLabel = $('label[name="signup-input-user-name"]');
@@ -109,12 +116,22 @@ const signinInputUserPassword = $('#signin-input-user-password');
 const signinConditionMet = () => {
   return (signinInputUserEmail.val().match(emailPattern) && signinInputUserPassword.val() != '');
 };
-landingStartButton.click(() => { landingStartButton.html(`<span class="spinner-border spinner-border-md mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
-signinButton.click(() => { if(signinConditionMet()) { signinButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) }});
-signupButton.click(() => { if(signupConditionMet()){ signupButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) }});
-saveProfileButton.click(() => { saveProfileButton.html(`<span class="spinner-border spinner-border-md mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
-googleOauthButton.click(() => { googleOauthButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
-verifyIsHumanButton.click(() => { verifyIsHumanButton.html(`<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`) });
+const createProjectConditionMet = () => {
+  return (inputProjectName.val() != '' && inputProjectDate.val() != '');
+};
+const createIssueConditionMet = () => {
+  return (textAreaIssueSummary.val().trim().length > 0 && inputIssueResovledDate.val().match('^([0-9]){1,4}$'));
+};
+const  smallSpinner = `<span class="spinner-border spinner-border-sm mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`;
+const mediumSpinner = `<span class="spinner-border spinner-border-md mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`;
+landingStartButton.click(() => { landingStartButton.html(mediumSpinner) });
+signinButton.click(() => { if(signinConditionMet()) { signinButton.html(smallSpinner) }});
+signupButton.click(() => { if(signupConditionMet()){ signupButton.html(smallSpinner) }});
+saveProfileButton.click(() => { saveProfileButton.html(mediumSpinner) });
+googleOauthButton.click(() => { googleOauthButton.html(smallSpinner) });
+verifyIsHumanButton.click(() => { verifyIsHumanButton.html(smallSpinner) });
+saveCreateProjectButton.click(() => { if(createProjectConditionMet()) { saveCreateProjectButton.html(smallSpinner) } });
+saveCreateIssueButton.click(() => { if(createIssueConditionMet()) { saveCreateIssueButton.html(smallSpinner) } });
 // --------- end loading button setup --------
 
 // -------      update project       -------
@@ -162,3 +179,33 @@ const loadingButtonSetup = (obj, spinnerSize) => {
   // add spinner to button
   $(obj).html(`<span class="spinner-border spinner-border-${spinnerSize} mr-3" role="status" aria-hidden="true"></span> <strong>Loading...</strong>`);
 };
+
+// ------ to-top button --------
+const    toTopButton = $('#to-top-button');
+const DEFAULT_HEIGHT = 200;
+window.onscroll = () => {
+  const currentScrollPos = window.pageYOffset;
+  if(toTopButton) {
+    (currentScrollPos > DEFAULT_HEIGHT) ? (
+      toTopButton.css({ "position":"fixed","bottom":"50px","right":"50px",
+                        "transition-property":"right,left",
+                        "transition-duration": "2s",
+                        "-webkit-transition-property": "right, left",
+                        "-webkit-transition-duration": "2s" })
+    ) : (
+      toTopButton.css({ "position":"fixed","bottom":"50px","right":"-50px",
+                        "transition-property":"left,right",
+                        "transition-duration": "2s",
+                        "-webkit-transition-property": "left,right",
+                        "-webkit-transition-duration": "2s" })
+    );
+
+    toTopButton.click(() => {
+      window.scroll({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  }
+};
+// ------ end to-top button ----

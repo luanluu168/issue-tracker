@@ -5,11 +5,13 @@ block content
     div(class='container-fluid pt-3')
         div(class='d-flex flex-column justify-content-center align-items-center')
             div(class='w-100')
+                if error
+                    h4.d-flex.justify-content-center.alert.alert-secondary.font-weight-bold.text-danger !{error}
                 h1(class='verify-heading-text my-3') 
                     | To 
-                    u protect 
+                    u(class='border-dark border-bottom') protect 
                     | this site from 
-                    u fraud and abuse!
+                    u(class='border-dark border-bottom') fraud and abuse!
                 h4(class='verify-detail-text') please complete the security check to access to this site
             form#comment_form(action='/security/server/verify-is-human' method='post' class='mt-3')
                 .g-recaptcha(name='recaptcha' id='grecaptcha' data-sitekey='6LeZ1UQaAAAAAEIEtTi9fm2h-8LiEqxQNjuD20sc')
