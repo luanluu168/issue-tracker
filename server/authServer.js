@@ -186,54 +186,87 @@ const handleSignupWithVerifyEmail = (req, res) => {
             ${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}
         `,
         html: `
-            <table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
-                <tbody>
-                    <tr>
-                        <td><a href="https://issue-tracker-ex.herokuapp.com/"><img src="https://i.ibb.co/Kb1CQWr/web-logo-landing.png" alt="web-logo-landing" border="0"></a></td>
-                    </tr>
-					<tr>
-						<td style="box-sizing:border-box;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;padding:30px" valign="top">
-						<table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
-							<tbody>
-								<tr>
-									<td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
-									<h2 style="margin:0;margin-bottom:30px;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;line-height:1.5;font-size:24px;color:#294661!important">Hello, ${newUser.userName}!</h2>
+            <!doctype html>
+            <html lang="en">
+                <head>
+                    <title>Issue-Tracker</title>
+                    <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                </head>
+                <body>
+                    <div style="text-align:center;width:100%;">
+                        <table style="box-sizing:border-box;border-spacing:0;border-collapse:separate!important;border-top:3px solid gray;border-left:3px solid gray;border-right:3px solid gray;" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td style="background-color:rgb(228, 228, 235);"><a href="https://issue-tracker-ex.herokuapp.com/"><img src="https://i.ibb.co/Kb1CQWr/web-logo-landing.png" alt="web-logo-landing" border="0"></a></td>
+                                </tr>
+                                <tr>
+                                    <td style="box-sizing:border-box;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;padding:30px" valign="top">
+                                    <table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
+                                                <h2 style="margin:0;margin-bottom:30px;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;line-height:1.5;font-size:24px;color:#294661!important">Hello, ${newUser.userName}!</h2>
 
-									<p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300"><strong>Thanks for registering on Issue-Tracker.<br><br>Let's verify your account so you can start using the app.</strong></p>
+                                                <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300"><strong>Thanks for registering on Issue-Tracker.<br><br>Let's verify your account so you can start using the web application.</strong></p>
 
-									<p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300"><small>Your link is active for 2 hours. After that, you will need to register again to get a new token link.</small></p>
-									</td>
-								</tr>
-								<tr>
-									<td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
-									<table cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-spacing:0;width:100%;border-collapse:separate!important" width="100%">
-										<tbody>
-											<tr>
-												<td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;padding-bottom:15px" valign="top">
-												<table cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-spacing:0;width:auto;border-collapse:separate!important">
-													<tbody>
-														<tr>
-                                                            <td bgcolor="#348eda" style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;background-color:#348eda;border-radius:2px;text-align:center" valign="top">
-                                                                <a href='${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}'
-                                                                target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; 
-                                                                border-radius: 3px; background-color: #0275d8; border-top: 12px solid #0275d8; border-bottom: 12px solid #0275d8; 
-                                                                border-right: 18px solid #0275d8; border-left: 18px solid #0275d8; display: inline-block;">Verify your account &rarr;</a>
+                                                <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300"><small>Your link is active for 2 hours. After that, you will need to register again to get a new token link.</small></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
+                                                <table cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-spacing:0;width:100%;border-collapse:separate!important" width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;padding-bottom:15px" valign="top">
+                                                            <table cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-spacing:0;width:auto;border-collapse:separate!important;display:flex;justify-content:center;align-items:center;">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;border-radius:2px;text-align:center" valign="top">
+                                                                            <a href='${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}'
+                                                                            target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; 
+                                                                            border-radius: 3px; background-color: #0275d8; border-top: 12px solid #0275d8; border-bottom: 12px solid #0275d8; 
+                                                                            border-right: 18px solid #0275d8; border-left: 18px solid #0275d8; display: inline-block;">Verify your account &rarr;</a>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td>
+                                                                            <p style="margin-top:20px;margin-bottom:20px;"> Or copy the link below and past it to your browser </p>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>
+                                                                        <a href='${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}'>${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}</a>
+                                                                        <td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
                                                             </td>
-														</tr>
-													</tbody>
-												</table>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table style="border-bottom:3px solid gray;border-left:3px solid gray;border-right:3px solid gray;background-color:rgb(228, 228, 235);color:#000;font-size:15px" width="100%" height="80" cellpadding="0" cellspacing="0" border="0">
+                            <tbody>
+                                <tr>
+                                    <td style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif">
+                                        <span>Copyright © 2021 Issue-Tracker, All right reserved</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </body>
+            </html>
         `
     };
 
