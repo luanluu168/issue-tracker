@@ -109,7 +109,7 @@ app.get('/auth/server/signin', (req, res) => {
 app.post('/auth/server/signin/query', (req, res) => {
     const    loginEmail = req.body.userEmail;
     const loginPassword = req.body.userPassword;
-    const         query = `SELECT id, name, email, password, role FROM "Users" WHERE email='${loginEmail}'`;
+    const         query = `SELECT id, name, email, password, role, image FROM "Users" WHERE email='${loginEmail}'`;
     console.log(`query: ${query}`);
 
     const promise = findUser(query);
