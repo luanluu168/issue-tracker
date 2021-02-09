@@ -13,6 +13,18 @@ const getProjects = (userId) => {
     });
 };
 
+const getProjectsWithinDays = (userId, days = 7) => {
+    const query = `SELECT * FROM "Projects" WHERE created_on > NOW()::TIMESTAMP - INTERVAL '${days} days' AND user_id=${userId}`;
+    console.log(`query= ${query}`); 
+    return new Promise((resolve, reject) => {
+                    dbConnection.any(query)
+                            .then((data) => { 
+                                resolve(data);
+                            })
+                            .catch((err) => reject({ error: `Error in getting 7 days projects: ${err}`, status: 'internal error', code: '500' }));
+    });
+};
+
 const createProject = (name, endDate, createdBy, userId) => {
     if (userId > Number.MAX_SAFE_INTEGER + 1) { userId= parseInt(("" + userId).substring(0,7)) };
     const query = `INSERT INTO "Projects"(name, end_date, created_by, user_id) VALUES ('${name}', '${endDate}', '${createdBy}', ${userId})`;
@@ -57,5 +69,6 @@ module.exports = {
     getProjects,
     createProject,
     deleteProject,
-    updateProject
+    updateProject,
+    getProjectsWithinDays
 };
