@@ -197,25 +197,6 @@ app.get('/project-issue', (req, res) => {
         });
     }
     process.env.PRODUCTION == 'NO' ? res.redirect(`${process.env.DOMAIN_NAME}:${process.env.PORT}/auth/server/signin`) : res.redirect(`${process.env.DOMAIN_NAME}/auth/server/signin`);
-
-
-    // axios({
-    //     method: 'POST',
-    //     url: URL,
-    //     data: {
-    //         userLoginInfo: req.cookies.userLoginInfo,
-    //         detailId: req.params.pid
-    //     }
-    //     })
-    //     .then((result) => result.data)
-    //     .then((data) => {
-    //         console.log(`axios detail project data= ${JSON.stringify(data)}`);
-    //         res.render('pages/issue', { year: currentYear, actionType: 'access-issue-page', status: 'success', error: 'None', isLoggedin: true });
-    //     })
-    //     .catch((err) => {
-    //         console.log(`Error ${err}`);
-    //         res.render('pages/error', { year: currentYear, actionType: 'access-issue-page', status: 'fail', error: 'Error occur when accessing issue page', isLoggedin: true });
-    //     });
 });
 
 app.post('/crud-issue', (req, res) => {
@@ -292,6 +273,37 @@ app.post('/crud-issue', (req, res) => {
             console.log(`switch to none`);
             res.redirect(`/project-issue/?pid=${pid}&pname=${pname}`);
     }
+});
+
+app.get('/chart', (req, res) => {
+    if (req.cookies.userLoginInfo) {
+        const userInCookie = JSON.parse(req.cookies.userLoginInfo);
+        return res.render('chart/chart', { year: currentYear, actionType: 'access-chart-page', status: 'success', error: 'None', user: userInCookie, isLoggedin: true });
+    }
+    res.render('pages/landing', { year: currentYear, actionType: 'access-landing-page', status: 'success', error: 'None', isLoggedin: false });
+});
+app.post('/chart', (req, res) => {
+    // console.log(`######## post chart is called, req.cookies.userLoginInfo= ${req.cookies.userLoginInfo}`);
+    const URL = `${req.protocol}://${req.headers.host}/api/server/getProjectsIssues/query`;
+    axios({
+            method: 'POST',
+            url: URL,
+            data: {
+                userLoginInfo: req.cookies.userLoginInfo
+            }
+            })
+            .then((result) => {
+                console.log(`!!!! 1 axios get projects and issues data`);
+                return result.data;
+            })
+            .then((data) => {
+                console.log(`!!! 2 axios get projects and issues data= ${JSON.stringify(data)}`);
+                res.json(data);
+            })
+            .catch((err) => {
+                console.log(`Error ${err}`);
+                res.json({ actionType: 'get projects and issues data', status: 'fail', error: 'fail to get projects and issues data in post route' });
+            });
 });
 
 app.all('*', (req, res) => {

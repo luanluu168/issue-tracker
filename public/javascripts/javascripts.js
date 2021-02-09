@@ -50,7 +50,7 @@ const handleVerifyIsHumanClick = () => {
 };
 
 // for faster access
-let        signupButton = $('button[name="signup-submit"]')
+let        signupButton = $('button[name="signup-submit"]');
 let        signinButton = $('button[name="signin-submit"]');
 let  landingStartButton = $('a[name="landing-start-button"]');
 let   saveProfileButton = $('button[name="save-profile-button"]');
@@ -182,7 +182,7 @@ const loadingButtonSetup = (obj, spinnerSize) => {
 
 // ------ to-top button --------
 const    toTopButton = $('#to-top-button');
-const DEFAULT_HEIGHT = 200;
+const DEFAULT_HEIGHT = 150;
 window.onscroll = () => {
   const currentScrollPos = window.pageYOffset;
   if(toTopButton) {

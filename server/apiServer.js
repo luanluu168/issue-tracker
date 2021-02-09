@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { createProject, getProjects, deleteProject, updateProject } = require('../database/projects');
+const { createProject, getProjects, deleteProject, updateProject, getProjectsWithinDays } = require('../database/projects');
 const { createIssue, getIssues, deleteIssue, updateIssue } = require('../database/issues');
 const       morgan = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -143,5 +143,18 @@ app.post('/api/server/update-issue/query', (req, res) => {
     }
 });
 
+app.post('/api/server/getProjectsIssues/query', (req, res) => {
+    // console.log(`!!! api server getProjectsIssues query is called, req.body= ${JSON.stringify(req.body)}, req.body.userLoginInfo= ${JSON.stringify(req.body.userLoginInfo)}`);
+    const userInCookie = JSON.parse(req.body.userLoginInfo);
+    const userId = userInCookie.aId;
+    // console.log(`userId= ${userId}`);
+
+    getProjectsWithinDays(userId)
+        .then((projects) => {
+            console.log(`@@@@ projects= ${projects}, projects.length= ${projects.length}`);
+            res.json(projects);
+        })
+        .catch((e) => { console.log(`${e}`) });  
+});
 
 app.listen(PORT, () => console.log(`apiServer is listening on port ${PORT}`));

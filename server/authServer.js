@@ -20,6 +20,7 @@ const       client = process.env.PRODUCTION == 'NO' ? redis.createClient() : red
 const       crypto = require('crypto');
 const       sgMail = require('@sendgrid/mail');
 const { getTimeStampFormat, getStringTimeWithoutGMT } = require('../utils/utils');
+const          dns = require('dns');
 const         PORT = process.env.AUTH_SERVER_PORT || 4002;
 const          app = express();
 
@@ -195,7 +196,7 @@ const handleSignupWithVerifyEmail = (req, res) => {
                 </head>
                 <body>
                     <div style="text-align:center;width:100%;">
-                        <table style="box-sizing:border-box;border-spacing:0;border-collapse:separate!important;border-top:3px solid gray;border-left:3px solid gray;border-right:3px solid gray;" width="100%">
+                        <table style="box-sizing:border-box;border-spacing:0;border-collapse:separate!important;border-top:3px solid gray;border-left:3px solid gray;border-right:3px solid gray;border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);border-image-slice: 1;" width="100%">
                             <tbody>
                                 <tr>
                                     <td style="background-color:rgb(228, 228, 235);"><a href="https://issue-tracker-ex.herokuapp.com/"><img src="https://i.ibb.co/Kb1CQWr/web-logo-landing.png" alt="web-logo-landing" border="0"></a></td>
@@ -255,7 +256,7 @@ const handleSignupWithVerifyEmail = (req, res) => {
                             </tbody>
                         </table>
 
-                        <table style="border-bottom:3px solid gray;border-left:3px solid gray;border-right:3px solid gray;background-color:rgb(228, 228, 235);color:#000;font-size:15px" width="100%" height="80" cellpadding="0" cellspacing="0" border="0">
+                        <table style="border-bottom:3px solid gray;border-left:3px solid gray;border-right:3px solid gray;background-color:rgb(228, 228, 235);color:#000;font-size:15px;border-image: linear-gradient(to top right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);border-image-slice: 1;" width="100%" height="80" cellpadding="0" cellspacing="0" border="0">
                             <tbody>
                                 <tr>
                                     <td style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif">
@@ -295,18 +296,30 @@ const handleSignupWithVerifyEmail = (req, res) => {
     });
 }
 app.post('/auth/server/signup/query', (req, res) => {
-    // 1. find if the user email was already taken
-    const query = `SELECT id, name, email, password, role FROM "Users" WHERE email='${req.body.userEmail}'`;
-    console.log(`auth server signup query= ${query}`);
-    const findUserPromise = findUser(query);
-    findUserPromise
-        .then((result) => { // the case where user account already existed
-            res.render('auth/signup', { year: currentYear, actionType: 'register user', status: 'fail', error: 'Email was taken by another user' });
-        })
-        .catch((e) => { // the case where user account was not existed yet
-            // 2. ask user to verify their email and save the token to redis store
-            handleSignupWithVerifyEmail(req, res);
-         }); 
+    const processSignup = () => {
+        // 1. find if the user email was already taken
+        const query = `SELECT id, name, email, password, role FROM "Users" WHERE email='${req.body.userEmail}'`;
+        console.log(`auth server signup query= ${query}`);
+        const findUserPromise = findUser(query);
+        findUserPromise
+            .then((result) => { // the case where user account already existed
+                res.render('auth/signup', { year: currentYear, actionType: 'register user', status: 'fail', error: 'Email was taken by another user' });
+            })
+            .catch((e) => { // the case where user account was not existed yet
+                // 2. ask user to verify their email and save the token to redis store
+                handleSignupWithVerifyEmail(req, res);
+            }); 
+    };
+    const emailDomain = req.body.userEmail.split('@')[1];
+    dns.resolveMx(emailDomain, (error, domains) => {
+        if(error) { console.log(error) };
+
+        if(domains) {
+            processSignup();
+        } else {
+            res.render('auth/signup', { year: currentYear, actionType: 'Validate email domain in signup route', status: 'false', error: `Please enter a valid email domain` });
+        }
+    });
 });
 app.get('/auth/server/verify-email', (req, res, next) => {
     client.get(req.query.email, (error, cachedValue) => {

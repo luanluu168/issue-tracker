@@ -31,6 +31,10 @@ html(lang="en")
                             li.nav-item
                                 a.nav-link(class='my-auto' href='/home')
                                     | Home
+                        ul.navbar-nav
+                            li.nav-item
+                                a.nav-link(class='my-auto' href='/chart')
+                                    | Chart
                     ul.navbar-nav.ml-auto.mt-2.mt-lg-0
                         li.mt-2.mr-2
                             if isLoggedin && user
@@ -52,7 +56,7 @@ html(lang="en")
             //- footer
             div(class='my-3 pt-5 bg-transparent')
                 div(class='footer')
-                    | Copyright &copy; !{ div= year } Issue-Tracker, All right reserved
+                    | Copyright &copy; !{ div= year } Issue-Tracker, All rights reserved
         
             //- goto top button 
             button#to-top-button(type='button' name='to-top')
