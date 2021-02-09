@@ -40,20 +40,17 @@ app.get('/image/server/change-user-image', (req, res) => {
 app.post('/image/server/change-user-image', upload.single('userAvatar'), async (req, res) => {
     try {
         console.log(`!!!!!!!!!!! image server, req.body= ${JSON.stringify(req.body)}}, req.file= ${req.file}`);
+        let newImageLink = '';
         if (req.file) {
             const imageDir = '/upload/';
             await setUserImage(JSON.parse(req.cookies.userLoginInfo).email, req.file.filename, imageDir).catch((e) => console.log(e) );
             // update user cookie image
-            const newImageLink = `${imageDir}${req.file.filename}`;
-            let   userInCookie = JSON.parse(req.cookies.userLoginInfo);
-            userInCookie.image = newImageLink;
-            res.cookie("userLoginInfo", 
-                        JSON.stringify(userInCookie), 
-                        { maxAge: 2 * 60 * 60 * 1000 }); // expire in 2 hours
+            newImageLink = `${imageDir}${req.file.filename}`;
         }
         
         const changeUserName = (newName) => { 
             let  userInCookie = JSON.parse(req.cookies.userLoginInfo);
+            if(newImageLink != '') { userInCookie.image = newImageLink };
             userInCookie.name = newName;
             res.cookie("userLoginInfo", 
                         JSON.stringify(userInCookie), 
