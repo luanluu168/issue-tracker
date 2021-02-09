@@ -43,9 +43,22 @@ app.post('/image/server/change-user-image', upload.single('userAvatar'), async (
         if (req.file) {
             const imageDir = '/upload/';
             await setUserImage(JSON.parse(req.cookies.userLoginInfo).email, req.file.filename, imageDir).catch((e) => console.log(e) );
+            // update user cookie image
+            const newImageLink = `${imageDir}${req.file.filename}`;
+            let   userInCookie = JSON.parse(req.cookies.userLoginInfo);
+            userInCookie.image = newImageLink;
+            res.cookie("userLoginInfo", 
+                        JSON.stringify(userInCookie), 
+                        { maxAge: 2 * 60 * 60 * 1000 }); // expire in 2 hours
         }
         
-        const changeUserName = (newName) => { JSON.parse(req.cookies.userLoginInfo).name = newName };
+        const changeUserName = (newName) => { 
+            let  userInCookie = JSON.parse(req.cookies.userLoginInfo);
+            userInCookie.name = newName;
+            res.cookie("userLoginInfo", 
+                        JSON.stringify(userInCookie), 
+                        { maxAge: 2 * 60 * 60 * 1000 }); // expire in 2 hours
+        };
         // pass the setting of new user name and password to the auth server
         const URL = `${req.protocol}://${req.headers.host}/auth/server/edit-profile`;
         axios({
