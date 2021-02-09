@@ -26,11 +26,12 @@ block content
                                         if user.lastLogin
                                             small Last seen #{user.lastLogin}
                                     .mt-0
-                                        .custom-file
-                                            input#input-user-image-file.custom-file-input(type='file' name='userAvatar')
-                                            label(for='input-user-image-file' class='btn btn-primary font-weight-bold') 
+                                        .custom-file.my-1
+                                            input#input-user-image-file.custom-file-input(type='file' name='userAvatar' class='d-none')
+                                            label(for='input-user-image-file' name='input-user-image-label' class='btn btn-primary font-weight-bold .custom-file-label') 
                                                 i.fa.fa-fw.fa-camera
                                                 span(class='ml-1') Change Image
+                                            label(name='display-user-image-file-label' class='mx-1')
                                 .text-center.text-sm-right
                                     span.badge.badge-secondary #{user.role}
                                     .text-muted

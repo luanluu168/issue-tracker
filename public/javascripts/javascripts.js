@@ -209,3 +209,12 @@ window.onscroll = () => {
   }
 };
 // ------ end to-top button ----
+
+// ------ edit profile change image btn ------
+const         changeImageButton = $('#input-user-image-file');
+const displayUserImageFileLabel = $('label[name="display-user-image-file-label"]');
+changeImageButton.on('change', () => {
+  let fileName = changeImageButton.val();
+  displayUserImageFileLabel.text(fileName);
+});
+// ------ ned edit profile change image btn -----

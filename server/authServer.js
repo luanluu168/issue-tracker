@@ -432,12 +432,12 @@ app.get('/auth/server/edit-profile', (req, res, next) => {
                             password: data.password,
                             role: data.role,
                             image: data.image,
-                            createdOn: getStringTimeWithoutGMT(data.created_on),
-                            lastLogin: getStringTimeWithoutGMT(data.last_login),
+                            createdOn: data.created_on,
+                            lastLogin: data.last_login,
                             isSocialAccount: data.is_social_account,
                             isLoggedIn: true
                         };
-                        res.render('pages/editProfile', { year: currentYear, actionType: 'access user profile', status: 'success', code: '200', error: '', user: user, isLoggedIn: true });        
+                        res.render('pages/editProfile', { year: currentYear, actionType: 'access user profile', status: 'success', code: '200', error: '', user: user, isLoggedin: true });        
                     })
                     .catch( (e) => console.log(e) );
     }
