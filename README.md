@@ -1,8 +1,8 @@
 # issue-tracker
 ### use to track todos, bugs, and features for developers
 
-### Click to visit
-[!(<a href="https://imgbb.com/"><img src="https://i.ibb.co/c17mNkV/button-issue-tracker.png" alt="button-issue-tracker" border="0"></a>)](https://issue-tracker-ex.herokuapp.com/)
+## Click to visit
+[<a href="https://issue-tracker-ex.herokuapp.com/"><img src="https://i.ibb.co/c17mNkV/button-issue-tracker.png" alt="button-issue-tracker" border="0"></a>](https://issue-tracker-ex.herokuapp.com/)
 
 ## To Run
 #### 1. Install all dependencies if not do it yet
