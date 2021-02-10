@@ -4,6 +4,7 @@ const      express = require('express');
 const        axios = require('axios');
 const       morgan = require('morgan');
 const cookieParser = require('cookie-parser');
+const { currentYear } = require('../utils/utils');
 const         PORT = process.env.SECURITY_SERVER_PORT || 4004;
 const          app = express();
 
@@ -15,9 +16,6 @@ app.use(morgan('dev'));
 
 (process.env.PRODUCTION === 'NO') ? app.set('views', 'views') : app.set('views', '../views');
 app.set('view engine', 'pug');
-
-const       today = new Date();
-const currentYear = today ? today.getFullYear() : 2020;
 
 app.get('/security/server/verify-is-human', (req,res) => {
     res.render('pages/verifyIsHuman', { year: currentYear });

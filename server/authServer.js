@@ -19,7 +19,7 @@ const   RedisStore = require('connect-redis')(session);
 const       client = process.env.PRODUCTION == 'NO' ? redis.createClient() : redis.createClient(process.env.REDIS_URL);
 const       crypto = require('crypto');
 const       sgMail = require('@sendgrid/mail');
-const { getTimeStampFormat, getStringTimeWithoutGMT } = require('../utils/utils');
+const { getTimeStampFormat, PROTOCOL, currentYear } = require('../utils/utils');
 const          dns = require('dns');
 const         PORT = process.env.AUTH_SERVER_PORT || 4002;
 const          app = express();
@@ -96,9 +96,6 @@ app.set('view engine', 'pug');
 
 // Sendgrid email
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-const       today = new Date();
-const currentYear = today ? today.getFullYear() : 2020;
 
 app.get('/auth/server/signin', (req, res) => {
     if (req.cookies.recaptcha == undefined) {
@@ -184,7 +181,7 @@ const handleSignupWithVerifyEmail = (req, res) => {
         text: `
             Hello, thanks for registering on Issue-Tracker. 
             Please copy and past the address below to verify your account. 
-            ${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}
+            ${PROTOCOL}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}
         `,
         html: `
             <!doctype html>
@@ -224,7 +221,7 @@ const handleSignupWithVerifyEmail = (req, res) => {
                                                                 <tbody>
                                                                     <tr>
                                                                         <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;border-radius:2px;text-align:center" valign="top">
-                                                                            <a href='${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}'
+                                                                            <a href='${PROTOCOL}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}'
                                                                             target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; 
                                                                             border-radius: 3px; background-color: #0275d8; border-top: 12px solid #0275d8; border-bottom: 12px solid #0275d8; 
                                                                             border-right: 18px solid #0275d8; border-left: 18px solid #0275d8; display: inline-block;">Verify your account &rarr;</a>
@@ -238,7 +235,7 @@ const handleSignupWithVerifyEmail = (req, res) => {
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                        <a href='${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}'>${req.protocol}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}</a>
+                                                                        <a href='${PROTOCOL}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}'>${PROTOCOL}://${req.headers.host}/auth/server/verify-email?token=${newUser.emailToken}&email=${newUser.userEmail}</a>
                                                                         <td>
                                                                     </tr>
                                                                 </tbody>

@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const  morgan = require('morgan');
 const { getProjects } = require('../database/projects');
 const { getIssues } = require('../database/issues');
+const { PROTOCOL, currentYear } = require('../utils/utils');
 const     app = express();
 const    PORT = process.env.FRONTEND_SERVER_PORT || 4003;
 
@@ -18,9 +19,6 @@ app.use(express.urlencoded({ extended: true })); // to recognize the incoming Re
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(cookieParser());
 app.use(morgan('dev'));
-
-const       today = new Date();
-const currentYear = today ? today.getFullYear() : 2020;
 
 app.get('/', (req, res) => {
     if (req.cookies.userLoginInfo) {
@@ -284,7 +282,7 @@ app.get('/chart', (req, res) => {
 });
 app.post('/chart', (req, res) => {
     // console.log(`######## post chart is called, req.cookies.userLoginInfo= ${req.cookies.userLoginInfo}`);
-    const URL = `${req.protocol}://${req.headers.host}/api/server/getProjectsIssues/query`;
+    const URL = `${PROTOCOL}://${req.headers.host}/api/server/getProjectsIssues/query`;
     axios({
             method: 'POST',
             url: URL,

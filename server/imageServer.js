@@ -5,6 +5,7 @@ const { setUserImage } = require('../database/users');
 const       morgan = require('morgan');
 const        axios = require('axios');
 const cookieParser = require('cookie-parser');
+const { PROTOCOL } = require('../utils/utils');
 const       multer = require('multer');
 const      storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -57,7 +58,7 @@ app.post('/image/server/change-user-image', upload.single('userAvatar'), async (
                         { maxAge: 2 * 60 * 60 * 1000 }); // expire in 2 hours
         };
         // pass the setting of new user name and password to the auth server
-        const URL = `${req.protocol}://${req.headers.host}/auth/server/edit-profile`;
+        const URL = `${PROTOCOL}://${req.headers.host}/auth/server/edit-profile`;
         axios({
                 method: 'POST',
                 url: URL,
@@ -71,7 +72,7 @@ app.post('/image/server/change-user-image', upload.single('userAvatar'), async (
                 .then((data) => {
                     console.log(`!!!!!!!!!!! update change-user-image route successfully`);
                     changeUserName(req.body.userName);
-                    res.redirect(`${req.protocol}://${req.headers.host}/auth/server/edit-profile`);
+                    res.redirect(`${PROTOCOL}://${req.headers.host}/auth/server/edit-profile`);
                 })
                 .catch((err) => res.send(`Error ${err}`));
     } catch (error) {

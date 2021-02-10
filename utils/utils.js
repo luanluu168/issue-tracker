@@ -1,3 +1,4 @@
+require('dotenv').config();
 const getTimeStampFormat = (daysFromNow = 0) => {
     const twoDigitsOf = (value) => {
         return ('0' + value).slice(-2)
@@ -11,7 +12,14 @@ const getStringTimeWithoutGMT = (timeStamp) => {
     return timeStamp.toString().slice(0, timeStamp.toString().indexOf('GMT'))
 };
 
+const    PROTOCOL = (process.env.PRODUCTION === 'NO') ? 'http' : 'https';
+const       today = new Date();
+const currentYear = today ? today.getFullYear() : 2020;
+
 module.exports = {
     getTimeStampFormat,
-    getStringTimeWithoutGMT
+    getStringTimeWithoutGMT,
+    PROTOCOL,
+    today,
+    currentYear
 };
