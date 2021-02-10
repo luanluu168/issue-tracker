@@ -31,26 +31,28 @@ block content
                 
         //- view data table 
         if listings
-            .container-fluid.d-flex.flex-wrap.justify-content-center
-                each list in listings
-                    ul(value=list.id class='projects-listing-ul-style')
-                        form(action='/crud-project' method='POST')
-                            li= 'Name: ' + list.name
-                            li(class='text-truncate')= 'End date: ' + list.end_date
-                            li(class='text-truncate')= 'Created on: ' + list.created_on
-                            li(class='text-truncate')= 'Status: ' + list.status
-                            li(class='d-flex flex-wrap justify-content-center') 
-                                input(class='d-none' name='projectId' value=list.id)
-                                input(class='d-none' name='projectName' value=list.name)
-                                button.btn.btn-primary.crud-btn(type='submit' class='m-1 px-3' name='crudProjectBtn' value='detail'
-                                                        data-whatid=list.id 
-                                                        data-whatname=list.name) Detail
-                                button.btn.btn-danger.crud-btn(type='submit' class='m-1' name='crudProjectBtn' value='delete') Delete
-                                button.btn.btn-success.crud-btn(type='button' class='m-1' name='crudProjectBtn' value='update' 
-                                                        data-whatid=list.id 
-                                                        data-whatname=list.name 
-                                                        data-toggle='modal' 
-                                                        data-target='#updateProjectModal') Update
+            .container-fluid
+                .row
+                    each list in listings
+                        .col-xl-3.col-lg-4.col-sm-6
+                            ul(value=list.id class='projects-listing-ul-style')
+                                form(action='/crud-project' method='POST')
+                                    li= 'Name: ' + list.name
+                                    li(class='text-truncate')= 'End date: ' + list.end_date
+                                    li(class='text-truncate')= 'Created on: ' + list.created_on
+                                    li(class='text-truncate')= 'Status: ' + list.status
+                                    li(class='d-flex flex-wrap justify-content-center') 
+                                        input(class='d-none' name='projectId' value=list.id)
+                                        input(class='d-none' name='projectName' value=list.name)
+                                        button.btn.btn-primary.crud-btn(type='submit' class='m-1 px-3' name='crudProjectBtn' value='detail'
+                                                                data-whatid=list.id 
+                                                                data-whatname=list.name) Detail
+                                        button.btn.btn-danger.crud-btn(type='submit' class='m-1' name='crudProjectBtn' value='delete') Delete
+                                        button.btn.btn-success.crud-btn(type='button' class='m-1' name='crudProjectBtn' value='update' 
+                                                                data-whatid=list.id 
+                                                                data-whatname=list.name 
+                                                                data-toggle='modal' 
+                                                                data-target='#updateProjectModal') Update
 
                 #updateProjectModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='modalLabel' aria-hidden='true')
                     .modal-dialog(role='document').modal-lg
