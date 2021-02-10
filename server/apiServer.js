@@ -146,13 +146,24 @@ app.post('/api/server/update-issue/query', (req, res) => {
 app.post('/api/server/getProjectsIssues/query', (req, res) => {
     // console.log(`!!! api server getProjectsIssues query is called, req.body= ${JSON.stringify(req.body)}, req.body.userLoginInfo= ${JSON.stringify(req.body.userLoginInfo)}`);
     const userInCookie = JSON.parse(req.body.userLoginInfo);
-    const userId = userInCookie.aId;
-    // console.log(`userId= ${userId}`);
+    const       userId = userInCookie.aId;
 
     getProjectsWithinDays(userId)
         .then((projects) => {
-            console.log(`@@@@ projects= ${projects}, projects.length= ${projects.length}`);
-            res.json(projects);
+            // get issues
+            let issuesPromises = [];
+            projects.forEach((p) => {
+                issuesPromises.push(
+                    getIssues(p.id)
+                        .then((issue) => issue)
+                        .catch((err) => { console.log(`Error in getProjectIssues route, ${err}`) }));
+            });
+
+            Promise.all(issuesPromises).then((issuesArrays) => {
+                const issueResult = issuesArrays.flat();
+                // console.log(`@@@@@@ promise.all, issuesPromises= ${JSON.stringify(issuesPromises)}, issueResult= ${JSON.stringify(issueResult)}, issueResult.length= ${issueResult.length}, issuesArrays= ${issuesArrays.length}`);
+                res.json({ projects: projects, issues: issueResult });
+            })
         })
         .catch((e) => { console.log(`${e}`) });  
 });
