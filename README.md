@@ -1,6 +1,9 @@
 # issue-tracker
 ### use to track todos, bugs, and features for developers
 
+### Click to visit
+[![Click to visit](<a href="https://ibb.co/mGF4csp"><img src="https://i.ibb.co/mGF4csp/button-issue-tracker.png" alt="button-issue-tracker" border="0"></a>)](https://issue-tracker-ex.herokuapp.com/)
+
 ## To Run
 #### 1. Install all dependencies if not do it yet
 ```
@@ -30,3 +33,15 @@ pm2 kill
 
 ## Frontend: PUG
 ## Microservices in backend: Express Redis
+
+## Create your dot env
+```
+GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET
+SESSION_SECRET
+DATABASE_URL
+REDIS_URL
+RECAPTCHA_SITE_KEY
+RECAPTCHA_SECRET_KEY
+SENDGRID_API_KEY
+```
