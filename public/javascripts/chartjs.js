@@ -46,22 +46,22 @@ const renderChart = (data, labels, issueData, issueLabels) => {
                     label: 'Projects',
                     backgroundColor: 'rgba(159,170,174,0.8)',
                     borderWidth: 2,
-                    hoverBackgroundColor: 'rgb(2, 117, 216, 0.8)',
-                    hoverBorderColor: "blue",
+                    hoverBackgroundColor: 'rgb(0,255,174,0.8)',
+                    hoverBorderColor: "green",
                     scaleStepWidth: 1,
                     data: data,
                     borderColor: 'rgb(21, 205, 114, 1)',
-                    backgroundColor: 'rgb(21, 205, 114, 0.2)'
+                    backgroundColor: 'rgb(21, 205, 114, 0.5)'
                 },
                 {
                     label: 'Issues',
                     data: issueData,
                     borderWidth: 2,
-                    hoverBackgroundColor: 'rgb(2, 117, 216, 0.8)',
-                    hoverBorderColor: "blue",
+                    hoverBackgroundColor: 'rgb(255, 50, 0, 0.8)',
+                    hoverBorderColor: "red",
                     scaleStepWidth: 1,
                     borderColor: 'rgba(255, 0, 0, 1)',
-                    backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                    backgroundColor: 'rgba(255, 0, 0, 0.5)',
                 }
             ]
         },
@@ -108,7 +108,7 @@ const renderChart = (data, labels, issueData, issueLabels) => {
 
 const getChartData = () => {
     // console.log(`getChartData is called`);
-    $("#loadingMessage").html('<img src="/assets/spinner360.gif" alt="" srcset="">');
+    $("#loadingMessage").html('<img src="/assets/spinner360.gif" alt="" srcset=""><h4 class="font-weight-bold">Loading...</h4>');
     
     fetch('/chart', {
         headers: {
@@ -149,7 +149,10 @@ const getChartData = () => {
                 project: projectGroups[date]
             };
         });
+        // sort projectGroupArrays by key
+        projectGroupArrays.sort((item1, item2) => (item1.date > item2.date) ? 1 : -1);
         // console.log(`projectGroupArrays= ${JSON.stringify(projectGroupArrays)}`);
+
 
         projectGroupArrays.forEach((item) => {
             projectData.push(item.project.length);
@@ -174,6 +177,8 @@ const getChartData = () => {
                 issue: issueGroups[date]
             };
         });
+        // sort projectGroupArrays by key
+        issueGroupArrays.sort((item1, item2) => (item1.date > item2.date) ? 1 : -1);
         // console.log(`issueGroupArrays= ${JSON.stringify(issueGroupArrays)}`);
 
         issueGroupArrays.forEach((item) => {
