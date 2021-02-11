@@ -322,7 +322,7 @@ app.get('/auth/server/verify-email', (req, res, next) => {
     client.get(req.query.email, (error, cachedValue) => {
         if(error) { console.log(`Error in client.get: ${error}`) };
         if (!cachedValue) { // token not exists or expired
-            return res.render('auth/server/signup', { year: currentYear, actionType: 'server send token email', status: 'fail', error: '<p>Your token is invalid. Please register again</p>' });
+            return res.render('auth/signup', { year: currentYear, actionType: 'server send token email', status: 'fail', error: '<p>Your token is invalid. Please register again</p>' });
         }
         // the case where token is in the cache
         user = JSON.parse(cachedValue);
@@ -340,7 +340,7 @@ app.get('/auth/server/verify-email', (req, res, next) => {
         promise.then((data) => {
                     // clear the cache and return to the signin page
                     client.del(req.query.email);
-                    res.render('auth/signin', { year: currentYear, actionType: 'signup', status: 'success', error: 'Register successfully, please sign-in' });
+                    res.render('auth/signin', { year: currentYear, actionType: 'signup', status: 'success', error: '<p>Account registers successfully, please sign-in</p>' });
                 })
                 .catch( (e) => {
                     console.log(`Error signup @ authServer: ${e}`);
