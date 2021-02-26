@@ -1,8 +1,19 @@
 # issue-tracker
-### use to track todos, bugs, and features for developers
+### use to track todos, bugs, and features for people
 
-## Click to visit
-[<a href="https://issue-tracker-ex.herokuapp.com/"><img src="https://i.ibb.co/c17mNkV/button-issue-tracker.png" alt="button-issue-tracker" border="0"></a>](https://issue-tracker-ex.herokuapp.com/)
+## [Click to Visit!](https://issue-tracker-ex.herokuapp.com/)
+
+## Create .env file that looks the following way:
+```
+DATABASE_URL=postgres://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>
+SESSION_SECRET=<your_secret>
+GOOGLE_CLIENT_ID=<your_google_client_id>
+GOOGLE_CLIENT_SECRET=<your_google_client_secret>
+REDIS_URL=<your_redis_url>
+RECAPTCHA_SITE_KEY=<your_recaptcha_client_id>
+RECAPTCHA_SECRET_KEY=<your_recaptcha_secret>
+SENDGRID_API_KEY=<your_sendgrid_client_id>
+```
 
 ## To Run
 #### 1. Install all dependencies if not do it yet
@@ -31,17 +42,5 @@ npm stop
 pm2 kill
 ```
 
-## Frontend: PUG
-## Microservices in backend: Express Redis
-
-## Create your dot env
-```
-GOOGLE_CLIENT_ID
-GOOGLE_CLIENT_SECRET
-SESSION_SECRET
-DATABASE_URL
-REDIS_URL
-RECAPTCHA_SITE_KEY
-RECAPTCHA_SECRET_KEY
-SENDGRID_API_KEY
-```
+Frontend: PUG
+Microservices in backend: Express Redis
