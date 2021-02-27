@@ -218,3 +218,8 @@ changeImageButton.on('change', () => {
   displayUserImageFileLabel.text(fileName);
 });
 // ------ ned edit profile change image btn -----
+
+const closeSignupAlert = $('#closeSignupAlert');
+closeSignupAlert.on('click', () => {
+  $(this).hide();
+});

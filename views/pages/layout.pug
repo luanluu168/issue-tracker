@@ -8,7 +8,8 @@ html(lang="en")
         //-  favicon
         link(rel='icon' type='image/x-icon' href='/assets/favicon.ico')
         //-  Bootstrap CSS
-        link(rel='stylesheet' type="text/css" href='/vendors/bootstrap.min.css')
+        link(rel='stylesheet' type="text/css" href='/vendors/bootstrap/bootstrap.min.css')
+        //-  Fontawesome
         link(rel='stylesheet' type="text/css" href='/vendors/fontawesome-free-5.13.0-web/css/all.min.css')
         //-  css
         link(rel='stylesheet' type="text/css" href='/stylesheets/landing.css')
@@ -34,7 +35,7 @@ html(lang="en")
                         ul.navbar-nav
                             li.nav-item
                                 a.nav-link(class='my-auto' href='/chart')
-                                    | Chart
+                                    | History
                     ul.navbar-nav.ml-auto.mt-2.mt-lg-0
                         li.mt-2.mr-2
                             if isLoggedin && user
@@ -66,9 +67,9 @@ html(lang="en")
                 i.fa.fa-arrow-up.text-primary.fa-2x(aria-hidden='true')
 
         //-  JavaScript: jQuery first, then Popper.js, then Bootstrap JS
-        script(src='/vendors/jquery-3.3.1.slim.min.js')
-        script(src='/vendors/popper.min.js')
-        script(src='/vendors/bootstrap.min.js')
+        script(src='/vendors/jquery/jquery-3.3.1.slim.min.js')
+        script(src='/vendors/popper/popper.min.js')
+        script(src='/vendors/bootstrap/bootstrap.min.js')
         script(src='/vendors/fontawesome-free-5.13.0-web/js/all.min.js')
         script(src='https://www.google.com/recaptcha/api.js')
         script(src='/javascripts/javascripts.js')
