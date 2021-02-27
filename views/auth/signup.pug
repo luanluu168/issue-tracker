@@ -3,6 +3,13 @@ extends layout.pug
 block content
     //-  Sign up
     div(class='container-sm pt-3 pb-5 mx-4')
+        .alert.alert-info.alert-dismissible(role='alert')
+            button#closeSignupAlert.close(type='button' data-dismiss='alert')
+                span(aria-hidden='true') &times;
+                span.sr-only Close
+            marquee
+                p
+                | Note: For those users who use non Google signup will need to verify their emails later.
         if error
             h4.d-flex.justify-content-center.alert.alert-secondary.font-weight-bold.text-danger.text-center !{error}
         div(class='d-flex justify-content-center')
@@ -78,8 +85,23 @@ block content
                         span(aria-hidden='true') &times;
                 .modal-body
                     h3 AGREEMENT TO TERMS
-                    p Comming soon
-                    h3 PRIVACY STATEMENT
-                    p Comming soon
+                    p 
+                    | These Terms of Use constitute a legally binding agreement made between you and Issue-Tracker
+                    p
+                    | By accessing the website, you must agree that you have read, understood, and agree to all of these Terms of Use.
+                    p
+                    | We will alert you about any changes of these Terms of Use. However, it is your responsibility to periodically review and check the update of these Terms of Use.
+                    h5.mt-3 COOKIES
+                    p
+                    | This site uses cookies to provide necessary functionality and improve users experience. By continuing to use this site, you consent to our site of cookies.
+                    h5.mt-3 PRIVACY STATEMENT
+                    p
+                    | We care about data privacy and security. By using the website, you must agree to be bound by our Privacy Policy, which is incorporated into these Terms of Use. Also, please notice that
+                    | the wedsite is hosted in the United States.
+                    p 
+                    | If you access the Site from the European Union, Asia, or any other region of the world with laws or other requirements governing personal data collection, use, or disclosure 
+                    | that differ from applicable laws in the United States, then through your continued use of the Site, you are transferring your data to the United States, and you expressly consent to have your data transferred to and processed in the United States.
+                    
+
                 .modal-footer
                     button.btn.btn-secondary(type='button' name='agreeTerms' data-dismiss='modal' value='close' class='auth-button') Close
