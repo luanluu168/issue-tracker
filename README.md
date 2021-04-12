@@ -1,7 +1,5 @@
 # issue-tracker
-### use to track todos, bugs, and features for people
-
-## [Click to Visit!](https://issue-tracker-ex.herokuapp.com/)
+### use to track todos, bugs, and features
 
 ## Create .env file that looks the following way:
 ```
