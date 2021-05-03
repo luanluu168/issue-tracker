@@ -1,28 +1,23 @@
 # issue-tracker
 ### use to track todos, bugs, and features
 
-## Create .env file that looks the following way:
-```
-DATABASE_URL=postgres://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>
-SESSION_SECRET=<your_secret>
-GOOGLE_CLIENT_ID=<your_google_client_id>
-GOOGLE_CLIENT_SECRET=<your_google_client_secret>
-REDIS_URL=<your_redis_url>
-RECAPTCHA_SITE_KEY=<your_recaptcha_client_id>
-RECAPTCHA_SECRET_KEY=<your_recaptcha_secret>
-SENDGRID_API_KEY=<your_sendgrid_client_id>
-```
+## Requrements
 
-## To Run
-#### 1. Install all dependencies if not do it yet
+- Node & npm or yarn
+
+## Installation
+#### 1. Install dependencies
 ```
 npm i
 ```
-#### 2. Install pm2 if not do it yet
+#### 2. Install pm2 globally
 ```
 npm install pm2 -g
 ```
-#### 3. Run the app
+
+## Development
+
+#### 3. Start express development server
 ```
 npm test
 ```
@@ -31,7 +26,7 @@ npm test
 pm2 start process.config.js
 ```
 
-## To Stop
+#### To Stop
 ```
 npm stop
 ```
@@ -39,6 +34,3 @@ npm stop
 ```
 pm2 kill
 ```
-
-Frontend: PUG
-Microservices in backend: Express Redis
